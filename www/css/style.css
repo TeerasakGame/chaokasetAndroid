@@ -1,0 +1,99 @@
+/* Empty. Add your own CSS if you like */
+@font-face {
+    font-family: 'kanitlight';
+    src: local('../lib/ionic/fonts/kanitlight'),
+         url('../lib/ionic/fonts/kanit-light-webfont.eot') format('embedded-opentype'),
+         url('../lib/ionic/fonts/kanit-light-webfont.woff') format('woff'),
+         url('../lib/ionic/fonts/kanit-light-webfont.ttf') format('truetype'),
+         url('../lib/ionic/fonts/kanit-light-webfont.svg#kanitlight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*,h1,h2,h3,h4,h5,h6,.button {
+  font-family: 'kanitlight', sans-serif;
+}
+
+
+.my-text-datecrop {
+  font-size: 23px;
+  color: #35BE57;
+}
+.text-nameCrop {
+/*margin-top: 200px;*/
+  font-size: 28px;
+  color: #35BE57;
+}
+
+.text-green {
+  color: #35BE57;
+}
+
+.text-right{
+  text-align:right;
+}
+
+label.item.has-error {
+  border-bottom: 2px solid red;
+}
+
+label.item.has-error-lr {
+  border-left: 2px solid red;
+  border-right: 2px solid red;
+}
+
+label.item.valid-lr {
+  border-left: 2px solid green;
+  border-right: 2px solid green;
+}
+
+.form-errors {
+  margin: 5px 0
+}
+
+.form-error {
+  padding: 2px 0 2px 16px;
+  color: red;
+}
+
+.login-background {
+  /*  background-image: url('/img/chaokaset_logo.png');
+    width: 100%;*/
+    background:url('../img/rice.jpg') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            background-size: cover;
+}
+
+.login {
+  margin-top: 50px;
+}
+.pic-profile-container {
+  width: 100%;
+  height:190px;
+  background-image: url("../img/rice.jpg");
+  background-size: cover;
+}
+.pic-profile {
+  margin-top: 60px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 0px 3px rgba(213,212,212,0.3);
+}
+
+.mfb-button.md-fab.md-mini {
+      line-height: 4rem;
+      width: 4rem;
+      height: 4rem;
+}
+
+.border-not {
+    border-color: red;
+}
+.fixDiv{
+  /*position: fixed;*/
+  top:0px;
+  left:0px;
+  position: absolute;
+}

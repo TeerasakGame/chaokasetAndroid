@@ -1,0 +1,65 @@
+<ion-side-menus enable-menu-with-back-views="false">
+  <ion-side-menu-content >
+    <ion-nav-bar class="bar bar-header bar-balanced">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left">
+    <ion-header-bar class="bar-light">
+      <!--<h1 class="title">ชาวเกษตร</h1>-->
+        <img class="col-offset-33" src="img/chaokaset_logo.png" height="100%">
+    </ion-header-bar>
+        <ion-content>
+      <ion-list>
+        <ion-item nav-clear menu-close class="item-avatar">
+          <img src="{{ pic }}">
+          <h2><b>{{ name }}</b></h2>
+          <p>ข้อมูลส่วนตัว</p>
+        </ion-item>
+        <ion-item class="item-divider">
+          <b>การเพาะปลูก</b>
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/crop" class="item-icon-left">
+          <i class="icon ion-leaf"></i>จัดการแปลงเพาะปลูก
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/calendar" class="item-icon-left">
+          <i class="icon ion-android-calendar"></i>ปฎิทินการเพาะปลูก
+        </ion-item>
+        <!--<ion-item nav-clear menu-close href="#/app/browse" class="item-icon-left">
+          <i class="icon ion-ios-pulse-strong"></i>ไทม์ไลนการเพาะปลูก
+        </ion-item>-->
+        <ion-item nav-clear menu-close href="" class="item-icon-left" >
+          <i class="icon ion-ios-people icon-detail-user"></i>สังคมชาวเกษตร
+        </ion-item>
+        <ion-item class="item-divider">
+          <b>การซื้อ-ขายสินค้า</b>
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/topicsell" class="item-icon-left">
+          <i class="icon ion-android-cart"></i>สินค้าทางการเกษตร
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/topicsell" class="item-icon-left">
+          <i class="icon ion-happy-outline"></i>สินค้าบริการ
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/managegoodstopic" class="item-icon-left">
+          <i class="icon ion-ios-compose icon-detail-user"></i>จัดการประกาศขาย
+        </ion-item>
+        <ion-item class="item-divider">
+
+        </ion-item>
+        <ion-item nav-clear menu-close class="item-icon-left" href="#/logout">
+          <i class="icon ion-ios-compose ion-log-out"></i>ออกจากระบบ
+        </ion-item>
+        <br><br>
+
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>

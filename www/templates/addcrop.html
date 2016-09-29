@@ -1,0 +1,81 @@
+<ion-view view-title="เพิ่มแปลงเพาะปลูก">
+  <ion-content>
+    <from>
+    <div class="item item-divider text-green">
+      ข้อมูลแปลงเพาะปลูก
+    </div>
+    <label class="item item-input">
+      <span class="input-label">ชื่อแปลง</span>
+      <input type="text" name="name" ng-model="register.name" placeholder="กรุณากรอกชื่อแปลง" required/>
+    </label>
+    <label class="item item-input item-select"
+     <div class="input-label">
+       ชื่อพืช
+     </div>
+     <select>
+       <option>Blue</option>
+       <option selected>Green</option>
+       <option>Red</option>
+     </select>
+   </label>
+   <label class="item item-input item-select">
+    <div class="input-label">
+      ชื่อพันธิ์ุ
+    </div>
+    <select>
+      <option>Blue</option>
+      <option selected>Green</option>
+      <option>Red</option>
+    </select>
+    </label>
+    <div class="item item-divider text-green">
+      แผนการเพาะปลูก
+    </div>
+    <label class="item item-input item-select">
+     <div class="input-label">
+       ชื่อแผน
+     </div>
+     <select>
+       <option>Blue</option>
+       <option selected>Green</option>
+       <option>Red</option>
+     </select>
+   </label>
+   <div class="item item-divider text-green">
+     ขนาดพื้นที่
+   </div>
+   <div class="row list">
+     <div class="col col-33">
+       <label class="item item-input item-stacked-label">
+        <span class="input-label">ไร่</span>
+        <input type="number" placeholder="ไร่" value="0">
+      </label>
+     </div>
+     <div class="col col-33">
+       <label class="item item-input item-stacked-label">
+        <span class="input-label">งาน</span>
+        <input type="number" placeholder="งาน" value="0">
+      </label>
+     </div>
+     <div class="col col-33">
+       <label class="item item-input item-stacked-label">
+        <span class="input-label">วา</span>
+        <input type="number" placeholder="วา">
+      </label>
+     </div>
+   </div>
+   <!--<label class="item item-input">
+     <span class="input-label">ชื่อแปลง</span>
+     <input type="text" name="name" ng-model="register.name" placeholder="กรุณากรอกชื่อ" required>
+   </label>-->
+
+   <div class="item item-divider text-green">
+     ที่อยู่ของแปลงเพาะปลูก
+   </div>
+   <center><img ng-src="img/Map Marker-96.png" ng-click="map()"></center>
+     <button class="button button-full button-positive">
+        เพิ่มแปลงเพาะปลูก
+     </button>
+  </from>
+  </ion-content>
+</ion-view>
