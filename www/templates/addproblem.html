@@ -1,0 +1,34 @@
+<ion-view view-title="เพิ่มปัญหาการเพาะปลูก">
+  <ion-content>
+    <label class="item item-input">
+      <span class="input-label">หัวข้อ</span>
+      <input type="text" name="name" ng-model="name" placeholder="กรุณากรอกชื่อกิจกรรม" required>
+      <!--<textarea class="textarear" rows="4" placeholder="รายละเอียด..."></textarea>-->
+    </label>
+    <label class="item item-input item-select">
+      <div class="input-label">
+        ประเภทปัญหา
+      </div>
+      <select>
+        <option selected>ดิน</option>
+        <option>น้ำ</option>
+        <option>ศัตรูพืช</option>
+        <option>โรค</option>
+      </select>
+    </label>
+
+    <label class="item item-input item-stacked-label">
+      <span class="input-label">รายละเอียด</span>
+      <textarea class="textarear" rows="6" placeholder="รายละเอียด..."></textarea>
+    </label>
+    <div class="item item-divider text-green">
+      รูปภาพ
+    </div>
+    <div class="item item-image" ng-click="showDetail()">
+      <img src="{{image}}"  height="280px">
+    </div>
+    <button class="button button-full button-positive" ng-click="summit()">
+      บันทึกปัญหา
+    </button>
+  </ion-content>
+</ion-view>

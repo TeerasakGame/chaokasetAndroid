@@ -282,7 +282,7 @@ $scope.error="";
                    params : {'id':$scope.id}
                };
            //var server = "http://172.18.6.120/index.php/services/file";
-           var server = "http://172.18.6.120/chaokaset/upload/profile/upload.php";
+           var server = ip_server+"/upload/profile/upload.php";
            var filePath = $scope.pic;
            $cordovaFileTransfer.upload(encodeURI(server), filePath, options)
                .then(function(result) {
@@ -394,8 +394,30 @@ $scope.error="";
    $state.go("login");
 })
 
-.controller('AddCropCtrl',function($state,$ionicModal,$scope){
+.controller('AddCropCtrl',function($state,$ionicModal,$scope,$cordovaGeolocation,$http){
   console.log('add crop');
+  $scope.crop = { name: '', seed: '', plan:'',rai:'',nan:'',wa:'',lat:'',long:'',plant:''};
+  $scope.seeds = [];
+  $scope.plans = [];
+  $scope.location = [];
+  $http.get(ip_server+'/index.php/services/getplant_select').then(function(res){
+    $scope.plants = res.data;
+  });
+  $scope.choseplant = function(){
+    //alert($scope.crop.plant);
+    $http.get(ip_server+'/index.php/services/getseed_select/'+$scope.crop.plant).then(function(res_seed){
+      $scope.seeds = res_seed.data;
+      //$scope.plans = [{"pla_id": "","pla_name": "","pla_detail": "","pla_time": "","seed_id": ""}];
+    });
+  };
+
+  $scope.choseseed = function(){
+    //alert($scope.crop.seed);
+    $http.get(ip_server+'/index.php/services/getplan_select/'+$scope.crop.seed).then(function(res_plan){
+      $scope.plans = res_plan.data;
+    });
+  };
+
   $ionicModal.fromTemplateUrl('templates/map.html', {
     scope: $scope
   }).then(function(modal) {
@@ -409,11 +431,145 @@ $scope.error="";
 
   // Open the login modal
   $scope.map = function() {
+  //  alert("MAP : "+$scope.lat+"  "+$scope.long);
+
+  var options = {timeout: 10000, enableHighAccuracy: true};
+
+    $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+      var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+      var mapOptions = {
+        center: latLng,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+
+      $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      var marker = new google.maps.Marker({
+          map: $scope.map,
+          animation: google.maps.Animation.DROP,
+          position: latLng
+      });
+
+      var infoWindow = new google.maps.InfoWindow({
+          content: "คุณอยู่ที่นี่ !"
+      });
+      infoWindow.open($scope.map, marker);
+
+      $scope.click_map = function(){
+          google.maps.event.addListenerOnce($scope.map,"click",function(position){
+            marker.setMap(null);
+            marker = new google.maps.Marker({
+              map : $scope.map,
+              anitmation : google.maps.Animation.DROP,
+              position : position.latLng
+            });
+            $scope.map.panTo(position.latLng);
+            $scope.lat = position.latLng.lat();
+            $scope.long = position.latLng.lng();
+            $scope.location = $scope.lat+"  "+$scope.long;
+          });
+        }
+
+    }, function(error){
+      console.log("Could not get location");
+      alert("กรุณาเปิด GPS");
+    });
     $scope.modal.show();
   };
 
+  var posOptions = {timeout: 10000, enableHighAccuracy: false};
+
+ $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+     $scope.lat = position.coords.latitude
+     $scope.long = position.coords.longitude
+     $scope.location = $scope.lat+"  "+$scope.long;
+   }, function(err) {
+      alert("กรุณาเปิด GPS");
+   });
+
+   $scope.doSummit = function(form){
+     if(form.$valid) {
+
+     }
+   };
+})
+
+.controller('CropDetailCtrl',function($scope){
+  console.log('Detail');
+})
+
+.controller('CropTimelineCtrl',function($scope, $state){
+  $scope.timeline = [{
+     date: new Date(),
+     title: "การเตรียมดิน",
+     author: "วันที่ 1 ส.ค.59 - 10 ส.ค.59",
+     profilePicture: "img/chaokaset_logo.png",
+     Picture:"true",
+     text: "รายละเอียด",
+     a:'0',
+     type: "picture"
+
+   }, {
+     date: new Date(),
+     title: "กู้เงิน",
+     author: "วันที่ 2 ส.ค.59",
+     profilePicture: "",
+     Picture:"false",
+     text: "รายละเอียด",
+     a:'1',
+     type: "video"
+
+   }, {
+     date: new Date(),
+     title: "เพลี้ยลง",
+     author: "วันที่ 10 ส.ค.59",
+     profilePicture: "img/chaokaset_logo.png",
+     Picture:"true",
+     text: "รายละเอียด",
+     a:'1',
+     type: "location"
+
+   }, {
+     date: new Date(),
+     title: "เอาน้ำเข้านา",
+     author: "วันที่ 12 ส.ค.59",
+     profilePicture: "img/chaokaset_logo.png",
+     Picture:"5555",
+     text: "รายละเอียด",
+     a:'1',
+     type: "picture"
+   }]
+   $scope.addActivities = function(){
+     console.log("add Act");
+     $state.go("app.addActivities");
+   };
+
+   $scope.addAccount = function(){
+     $state.go("app.addAccount");
+   };
+
+   $scope.addProblem = function(){
+
+     $state.go("app.addProblem");
+   };
+
+   $scope.settingsTimeline = function(){
+     $state.go("app.settingsTimeline");
+   };
 
 })
+
+.controller('CropAccountCtrl',function(){
+
+})
+
+.controller('CropProblemCtrl',function(){
+
+})
+
+
 
 
 .controller('PlaylistsCtrl', function($scope) {

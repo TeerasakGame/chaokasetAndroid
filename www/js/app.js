@@ -69,6 +69,55 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
       }
     })
 
+    .state('app.tab.cropDetail', {
+    url: '/cropdetail',
+    views: {
+      'tab-detail': {
+        templateUrl: 'templates/cropdetail.html',
+        controller: 'CropDetailCtrl'
+      }
+    }
+  })
+
+  .state('app.tab.cropTimeline', {
+    url: '/croptimeline',
+    views: {
+      'tab-timeline': {
+        templateUrl: 'templates/croptimeline.html',
+        controller: 'CropTimelineCtrl'
+      }
+    }
+  })
+
+  .state('app.tab.cropAccount', {
+    url: '/cropaccount',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/cropaccount.html',
+        controller: 'CropAccountCtrl'
+      }
+    }
+  })
+
+  .state('app.tab.cropProblem', {
+    url: '/cropproblem',
+    views: {
+      'tab-problem': {
+        templateUrl: 'templates/cropproblem.html',
+        controller: 'CropProblemCtrl'
+      }
+    }
+  })
+
+  .state('app.tab', {
+    url: '/menucropdetail',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/menucropdetail.html',
+      }
+    }
+  })
+
   .state('app.search', {
     url: '/search',
     views: {

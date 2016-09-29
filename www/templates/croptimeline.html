@@ -1,0 +1,62 @@
+
+<ion-view view-title="แผนการเพาะปลูก">
+  <nav mfb-menu position="br" resting-icon="ion-plus-round" active-icon="ion-close-round"  toggling-method="click" effect="slidein">
+    <button mfb-button icon="ion-android-alert" label="เพิ่มปัญหา" ng-click="addProblem()"></button>
+    <button mfb-button icon="ion-social-usd" label="เพิ่มบัญชี" ng-click="addAccount()"></button>
+    <button mfb-button icon="ion-leaf" label="เพิ่มกิจกรรม" ng-click="addActivities()"></button>
+  </nav>
+  <ion-content>
+
+    <label class="item item-input item-select">
+      <div class="input-label">
+        การแสดงผล
+      </div>
+      <select>
+        <option selected>ทั้งหมด</option>
+        <option>การเพาะปลูก</option>
+        <option>การจัดการน้ำ</option>
+        <option>การจัดการดิน</option>
+        <option>ปัญชีการเพาะปลูก</option>
+        <option>ปัญหาการเพาะปลูก</option>
+      </select>
+    </label>
+
+    <ion-scroll zooming="true" direction="y">
+    <section  id="cd-timeline" class="cd-container">
+        <div class="list" ng-repeat="activity in timeline">
+          <div class="cd-timeline-block">
+            <div class="cd-timeline-icon dark" ng-if="activity.a =='0'">
+              <i class="ion-leaf timelineIcon" ng-if="(activity.type =='picture')"></i>
+              <i class="ion-social-usd" ng-if="activity.type =='video' "></i>
+              <i class="ion-android-alert timelineIcon" ng-if="activity.type =='location'"></i>
+              <i class="ion-android-textsms timelineIcon" ng-if="activity.type =='text'"></i>
+            </div>
+            <div class="cd-timeline-icon positive" ng-if="activity.a =='1'">
+              <i class="ion-leaf timelineIcon" ng-if="(activity.type =='picture')"></i>
+              <i class="ion-social-usd" ng-if="activity.type =='video' "></i>
+              <i class="ion-android-alert timelineIcon" ng-if="activity.type =='location'"></i>
+              <i class="ion-android-textsms timelineIcon" ng-if="activity.type =='text'"></i>
+            </div>
+            <!-- cd-timeline-img -->
+            <div class="cd-timeline-content positive" ng-if="activity.a =='1'">
+              <h3 class="marginBottom0 marginTop0">{{activity.title}}</h3>
+              <p class="marginTop5 cd-author"> {{activity.author}}</p>
+              <div class="item item-image marginTop5" ng-if="activity.Picture =='true'">
+                <img src="{{activity.profilePicture}}">
+              </div>
+              <p class="timelineText">{{activity.text}}</p>
+            </div>
+            <div class="cd-timeline-content dark" ng-if="activity.a =='0'">
+              <h3 class="marginBottom0 marginTop0">{{activity.title}}</h3>
+              <p class="marginTop5 cd-author"> {{activity.author}}</p>
+              <div class="item item-image marginTop5" ng-if="activity.Picture =='true'">
+                <img src="{{activity.profilePicture}}">
+              </div>
+              <p class="timelineText">{{activity.text}}</p>
+            </div>
+          </div>
+        </div>
+      </section >
+    </ion-scroll>
+  </ion-content>
+</ion-view>

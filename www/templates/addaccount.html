@@ -1,0 +1,28 @@
+<ion-view view-title="เพิ่มบัญชี">
+  <ion-content>
+    <label class="item item-input item-select">
+      <div class="input-label">
+        ประเภทบัญชี
+      </div>
+      <select>
+        <option selected>รายรับ</option>
+        <option>รายจ่าย</option>
+      </select>
+    </label>
+    <label class="item item-input">
+      <span class="input-label">จำนวนเงิน</span>
+      <input type="number" name="name" ng-model="" placeholder="กรุณากรอกจำนวนเงิน" required>
+    </label>
+    <label class="item item-input item-stacked-label">
+      <span class="input-label">รายละเอียด</span>
+      <textarea class="textarear" rows="6" placeholder="รายละเอียด..."></textarea>
+    </label>
+
+    <!--<button class="button button-full button-positive" ng-click="summit()">
+      <center><h2>บันทึกบัญชี</h2></center>
+    </button>-->
+  </ion-content>
+  <ion-footer-bar  class="bar-positive" ng-click="summit()">
+      <div class="title">บันทึกบัญชี</div>
+  </ion-footer-bar>
+</ion-view>

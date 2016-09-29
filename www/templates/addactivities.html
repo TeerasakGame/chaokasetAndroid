@@ -1,0 +1,52 @@
+<ion-view view-title="เพิ่มกิจกรรมการเพาะปลูก">  <ion-content>
+
+      <!--<div class="item item-divider text-green">
+        กิจกรรม
+      </div>-->
+
+      <label class="item item-input">
+        <span class="input-label">ชื่อกิจกรรม</span>
+        <input type="text" name="name" ng-model="register.name" placeholder="กรุณากรอกชื่อกิจกรรม" required>
+      </label>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          ประเภทกิจกรรม
+        </div>
+        <select>
+          <option>ดูแลรักษา</option>
+          <option selected>จัดการน้ำ</option>
+          <option>โรค</option>
+          <option>แมลง</option>
+          <option>ศัตรูพืช</option>
+        </select>
+      </label>
+      <label class="item item-input">
+        <span class="input-label">วันเริ่ม</span>
+        <input type="date">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">วันสิ้นสุด</span>
+        <input type="date">
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">รายละเอียด</span>
+        <textarea class="textarear" rows="6" placeholder="รายละเอียด..."></textarea>
+      </label>
+
+
+      <!--<button class="button button-full button-positive" ng-click="summit()">
+        บันทึกกิจกรรม
+      </button>-->
+
+      <!--<div class="bar-footer">
+        <button class="button button-full button-positive" ng-click="summit()">
+          บันทึกกิจกรรม
+        </button>
+      </div>-->
+
+
+  </ion-content>
+  <ion-footer-bar  align-title="center"class="bar-positive" ng-click="summit()">
+      <div class="title"><h4>บันทึกกิจกรรม</h4></div>
+  </ion-footer-bar>
+</ion-view>
