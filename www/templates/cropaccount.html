@@ -3,46 +3,34 @@
     <center><div class="row">
       <div class="col col-33">
         <h3>รายรับ</h3>
-        <h4 style="color:green;">10000</h4>
+        <h4 style="color:green;">{{total.plus | number:2}}</h4>
       </div>
       <div class="col col-33">
         <h3>รายจ่าย</h3>
-        <h4 style="color:red;">1000</h4>
+        <h4 style="color:red;">{{total.minus| number:2 }}</h4>
       </div>
       <div class="col col-33">
         <h3>คงเหลือ</h3>
-        <h4>9000</h4>
+        <h4>{{total.plus - total.minus | number:2}}</h4>
       </div>
     </div></center>
     <div class="list">
       <div class="item item-divider">
         รายการบัญชี
       </div>
-      <a class="item item-icon-left">
-        <i class="icon ion-plus-round" style="color:green;"></i>
+      <a class="item item-icon-left" ng-repeat="accaccount in accaccounts">
+          <i class="icon ion-plus-round" style="color:green;" ng-if="accaccount.cropa_type == '0'"></i>
+          <i class="icon ion-minus-round" style="color:red;" ng-if="accaccount.cropa_type == '1'"></i>
         <div class="row">
           <div class="col col-75">
-            <h2>กู้เงิน</h2>
-            <p>1 สิงหาคม 2559</p>
+            <h2>{{accaccount.cropa_name}}</h2>
+            <p>{{accaccount.date_name }}</p>
           </div>
           <div class="col" align="right">
-            <b>10000</b>
+            <b>{{accaccount.cropa_amount | number:2}}</b>
           </div>
         </div>
       </a>
-      <a class="item item-icon-left" href="#">
-        <i class="icon ion-minus-round" style="color:red;"></i>
-        <div class="row">
-          <div class="col col-75">
-            <h2>ซื้อปุ๋ย</h2>
-            <p>1 สิงหาคม 2559</p>
-          </div>
-          <div class="col" align="right">
-            <b>1000</b>
-          </div>
-        </div>
-      </a>
-
     </div>
   </ion-content>
 </ion-view>

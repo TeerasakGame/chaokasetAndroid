@@ -323,11 +323,17 @@ $scope.error="";
 
 })
 
-.controller('CropCtrl',function($scope, $http, $state, $ionicViewService){
+.controller('CropCtrl',function($scope, $http, $state, $ionicViewService,$ionicHistory){
+
   $ionicViewService.nextViewOptions({
     disableAnimate: true,
     disableBack: true
   });
+
+  $scope.$on("$ionicView.enter", function () {
+   $ionicHistory.clearCache();
+   $ionicHistory.clearHistory();
+});
 
 /*  $scope.name = localStorage.getItem('name');
   var path = localStorage.getItem('pic');
@@ -379,6 +385,7 @@ $scope.error="";
     console.log("add crop fn");
     $state.go("app.addCrop");
   }
+  //$window.location.reload();
 })
 
 .controller('LogoutCtrl', function($state) {
@@ -387,6 +394,7 @@ $scope.error="";
    localStorage.removeItem('login');
    localStorage.removeItem('pic');
    localStorage.removeItem('id');
+   localStorage.removeItem('crop_id');
  /*  localStorage.setItem('name',"");
    localStorage.setItem('login',"");
    localStorage.setItem('pic',"");
@@ -491,16 +499,43 @@ $scope.error="";
 
    $scope.doSummit = function(form){
      if(form.$valid) {
-
+       var isUser = localStorage.getItem('id');
+       var data = "name="+$scope.crop.name+"&id_user="+idUser+"&plan="+$scope.crop.plan+"&rai="+$scope.crop.rai+"&nan="+$scope.crop.nan+"&wa="+$scope.crop.wa+"&lat="+$scope.lat+"&long="+$scope.long;
+       alert(data);
      }
    };
 })
 
-.controller('CropDetailCtrl',function($scope){
+.controller('GetIdCropCtrl',function($state,$stateParams){
+  var id = $stateParams.id;
+  alert(id);
+  localStorage.removeItem('crop_id');
+  localStorage.setItem('crop_id',id);
+  $state.go("app.tab.cropTimeline", {}, { reload: true });
+})
+
+.controller('CropDetailCtrl',function($scope,$http,$state){
   console.log('Detail');
+  $scope.crop_id = localStorage.getItem('crop_id');
+  var data = "crop_id="+$scope.crop_id;
+  //console.log(data);
+  var ip = ip_server+'/index.php/services/showcrop';
+   $http.post(ip, data, config)
+     .success(function (data, status, headers, config) {
+         //alert(JSON.stringify(data.data));
+         $scope.crop= data.data;
+     })
+     .error(function (data, status, header, config) {
+         //alert("error: "+JSON.stringify(data) );
+         console.log("login error");
+         $scope.error = "ติดต่อ server ไม่ได้";
+         alert($scope.error);
+         //$state.go("app.login");
+     })
 })
 
 .controller('CropTimelineCtrl',function($scope, $state){
+  $scope.crop_id = localStorage.getItem('crop_id');
   $scope.timeline = [{
      date: new Date(),
      title: "การเตรียมดิน",
@@ -561,12 +596,44 @@ $scope.error="";
 
 })
 
-.controller('CropAccountCtrl',function(){
-
+.controller('CropAccountCtrl',function($scope,$http){
+  $scope.crop_id = localStorage.getItem('crop_id');
+  var data = "crop_id="+$scope.crop_id;
+  //console.log(data);
+  var ip = ip_server+'/index.php/services/showaccaccount';
+   $http.post(ip, data, config)
+     .success(function (data, status, headers, config) {
+         //alert(JSON.stringify(data.data));
+         $scope.accaccounts = data.data.all;
+         $scope.total = data.data.total;
+     })
+     .error(function (data, status, header, config) {
+         //alert("error: "+JSON.stringify(data) );
+         console.log("login error");
+         $scope.error = "ติดต่อ server ไม่ได้";
+         alert($scope.error);
+         //$state.go("app.login");
+     })
 })
 
-.controller('CropProblemCtrl',function(){
-
+.controller('CropProblemCtrl',function($scope,$http){
+  $scope.crop_id = localStorage.getItem('crop_id');
+  var data = "crop_id="+$scope.crop_id;
+  //console.log(data);
+  var ip = ip_server+'/index.php/services/showproblem';
+   $http.post(ip, data, config)
+     .success(function (data, status, headers, config) {
+         //alert(JSON.stringify(data.data));
+         $scope.problems = data.data;
+        // $scope.total = data.total;
+     })
+     .error(function (data, status, header, config) {
+         //alert("error: "+JSON.stringify(data) );
+         console.log("login error");
+         $scope.error = "ติดต่อ server ไม่ได้";
+         alert($scope.error);
+         //$state.go("app.login");
+     })
 })
 
 

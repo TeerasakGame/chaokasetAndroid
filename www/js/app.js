@@ -59,6 +59,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
       controller: 'LogoutCtrl'
   })
 
+  .state('getidcrop',{
+      url: '/getidcrop/:id',
+      controller: 'GetIdCropCtrl'
+  })
+
   .state('app.addCrop', {
       url: '/addcrop',
       views: {

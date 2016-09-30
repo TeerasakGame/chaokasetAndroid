@@ -1,10 +1,10 @@
-<ion-view view-title="ภาพรวมการเพาะปลูก">
+<ion-view view-title="ภาพรวมการเพาะปลูก {{crop_id}}">
 
   <ion-content>
     <div class="list">
     <ion-item class="item">
-      <h1 class="text-center text-nameCrop">ข้าว</h1>
-      <center><h2 class="text-center">กข 45</h2></center>
+      <h1 class="text-center text-nameCrop">{{crop.crop_name}}</h1>
+      <center><h2 class="text-center">{{crop.plat_name}} {{crop.seed_name}}</h2></center>
       <div class="col col-bottom">
         <center><img src="img/chaokaset_logo.png" width="150px" height="150px" ></center>
       </div>
@@ -12,20 +12,21 @@
 
     <ion-item class="item area-card">
       <h2 class="text-center">ขนาดพื้นที่</h2>
-      <h1 class="text-center my-text-datecrop">10 ไร่ 2 งาน 200 ตารางวา</h1>
+      <h1 class="text-center my-text-datecrop">{{crop.crop_rai}} ไร่ {{crop.crop_nan}} งาน {{crop.crop_wa}} ตารางวา</h1>
     </ion-item>
     <ion-item class="item area-card">
+      <h2 class="text-center my-text-datecrop">{{crop.pla_name}}</h2>
       <h2 class="text-center">ระยะเวลาเพาะปลูก</h2>
-      <h1 class="text-center my-text-datecrop">120 วัน</h1>
+      <h1 class="text-center my-text-datecrop">{{crop.pla_time}} วัน</h1>
     </ion-item>
     <div class="row">
-      <ion-item class="item datestart-card">
+      <ion-item class="item datestart-card col col-50">
         <h2 class="text-center my-padding-datecrop">วันที่เริ่มต้น</h2>
-        <h1 class="text-center my-text-datecrop">1 สิงหาคม 2559</h1>
+        <h3 class="text-center text-green ">{{crop.start_name}}</h3>
       </ion-item>
-      <ion-item class="item dateend-card">
+      <ion-item class="item dateend-card col col-50">
         <h2 class="text-center">วันที่สิ้นสุด</h2>
-        <h1 class="text-center my-text-datecrop">30 ธันวาคม 2559</h1>
+        <h3 class="text-center text-green ">{{crop.end_name}}</h3>
       </ion-item>
     </div>
   </div>

@@ -13,7 +13,7 @@
 			</div>
 		</div>-->
     <ion-list show-delete="shouldShowDelete" show-reorder="shouldShowReorder"  can-swipe="listCanSwipe">
-      <ion-item ng-repeat="a in api" class="item-thumbnail-left" ui-sref="app.tab.cropTimeline">
+      <ion-item ng-repeat="a in api" class="item-thumbnail-left" href="#/getidcrop/{{a.crop_id}}">
         <img ng-src="img/rice_icon.png">
         <h2>{{a.crop_name}}</h2>
         <p>{{a.plat_name}}</p>
@@ -25,6 +25,7 @@
           <i class="icon ion-trash-b"></i>&nbsp;&nbsp;ลบ&nbsp;
         </ion-option-button>
       </ion-item>
+
     </ion-list>
     <div class="list">
     <a class="item" href="#" onclick="window.open('https://www.youtube.com/watch?v=j3-8gLCYhQY', '_system', 'location=yes'); return false;">

@@ -1,11 +1,11 @@
 <ion-view view-title="ปัญหาการเพาะปลูก">
   <ion-content>
-    <div class="list">
+    <div class="list" ng-repeat="problem in problems">
       <a class="item item-button-right item item-thumbnail">
-        <h2>ดินแข็งต้องทำไง</h2>
-        <p>1 สิงหาคม 2559</p>
+        <h2>{{problem.cropp_name}}</h2>
+        <p>{{problem.date_name}}</p>
         <button class="button button-clear button-positive">
-          <i class="icon ion-chatbubbles"></i>&nbsp;&nbsp;1
+          <i class="icon ion-chatbubbles"></i>&nbsp;&nbsp;{{problem.count_ans}}
         </button>
       </a>
     </div>
