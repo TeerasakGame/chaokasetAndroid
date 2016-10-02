@@ -17,25 +17,25 @@
      </div>
 
      <select name="plant" ng-model="crop.plant" ng-init="crop.plant='0'" ng-change="choseplant()" >
-       <!--<option value="0">-- กรุณาเลือก --</option>-->
+      <option value="0">-- กรุณาเลือก --</option>
        <option ng-repeat="plant in plants" ng-bind="plant.plat_name" ng-value="plant.plat_id"></option>
      </select>
    </label>
-   <div class="form-errors" ng-show="FormCrop.plant.$error && FormCrop.$submitted" ng-messages="FormCrop.plant.$error">
+   <!--<div class="form-errors" ng-show="FormCrop.plant.$error && FormCrop.$submitted" ng-messages="FormCrop.plant.$error">
        <div class="form-error" ng-message="required"><b>กรุณาเลือกพืช</b></div>
-   </div>
+   </div>-->
    <label class="item item-input item-select">
     <div class="input-label">
       ชื่อพันธิ์ุ
     </div>
-    <select name="seed" ng-model="crop.seed" ng-init="" ng-change="choseseed()" >
+    <select name="seed" ng-model="crop.seed"  ng-change="choseseed()" >
       <option ng-repeat="seed in seeds" ng-bind="seed.seed_name" ng-value="seed.seed_id"></option>
     </select>
 
     </label>
-    <div class="form-errors" ng-show="FormCrop.seed.$error && FormCrop.$submitted" ng-messages="FormCrop.seed.$error">
+    <!--<div class="form-errors" ng-show="FormCrop.seed.$error && FormCrop.$submitted" ng-messages="FormCrop.seed.$error">
         <div class="form-error" ng-message="required"><b>กรุณาเลือกพันธุ์พืช</b></div>
-    </div>
+    </div>-->
     <div class="item item-divider text-green">
       แผนการเพาะปลูก
     </div>
@@ -47,9 +47,9 @@
        <option ng-repeat="plan in plans" ng-bind="plan.pla_name" ng-value="plan.pla_id"></option>
      </select>
    </label>
-   <div class="form-errors" ng-show="FormCrop.plan.$error && FormCrop.$submitted" ng-messages="FormCrop.plan.$error">
+   <!--<div class="form-errors" ng-show="FormCrop.plan.$error && FormCrop.$submitted" ng-messages="FormCrop.plan.$error">
        <div class="form-error" ng-message="required"><b>กรุณาเลือกแผน</b></div>
-   </div>
+   </div>-->
    <div class="item item-divider text-green">
      ขนาดพื้นที่
    </div>
@@ -86,11 +86,11 @@
      ที่อยู่ของแปลงเพาะปลูก
    </div>
    {{location}}
-   <input type="hidden" name="latLng"   value="{{location}}" required>
+   <input type="hidden" name="latLng"   value="{{location}}" >
    <center><img ng-src="img/Map Marker-96.png" ng-click="map()"></center>
-   <div class="form-errors" ng-show="FormCrop.latLng.$error && FormCrop.$submitted" ng-messages="FormCrop.latLng.$error">
+   <!--<div class="form-errors" ng-show="FormCrop.latLng.$error && FormCrop.$submitted" ng-messages="FormCrop.latLng.$error">
        <div class="form-error" ng-message="required"><b>กรุณาระบุตำแหน้งแปลงเพาะปลูก</b></div>
-   </div>
+   </div>-->
      <button class="button button-full button-positive">
         เพิ่มแปลงเพาะปลูก
      </button>

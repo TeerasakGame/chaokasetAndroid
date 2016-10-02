@@ -123,6 +123,25 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
     }
   })
 
+  .state('app.addAccount', {
+    url: '/addaccount',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/addaccount.html',
+        controller: 'AddAccountCtrl'
+      }
+    }
+  })
+  .state('app.editAccount', {
+    url: '/editaccount/:data',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/editaccount.html',
+        controller: 'EditAccountCtrl'
+      }
+    }
+  })
+
   .state('app.search', {
     url: '/search',
     views: {

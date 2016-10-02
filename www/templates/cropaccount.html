@@ -1,5 +1,9 @@
 <ion-view view-title="บัญชีการเพาะปลูก">
   <ion-content>
+    <ion-refresher
+	    pulling-text="อัพเดตข้อมูล"
+	    on-refresh="doRefresh()">
+  	</ion-refresher>
     <center><div class="row">
       <div class="col col-33">
         <h3>รายรับ</h3>
@@ -11,26 +15,39 @@
       </div>
       <div class="col col-33">
         <h3>คงเหลือ</h3>
-        <h4>{{total.plus - total.minus | number:2}}</h4>
+          <h4 style="color:green;" ng-if="(total.ans == 'plus')">{{total.plus - total.minus | number:2}}</h4>
+          <h4 style="color:red;" ng-if="(total.ans == 'minus')">{{total.plus - total.minus | number:2}}</h4>
       </div>
     </div></center>
-    <div class="list">
+
       <div class="item item-divider">
         รายการบัญชี
       </div>
-      <a class="item item-icon-left" ng-repeat="accaccount in accaccounts">
+      <ion-list show-delete="shouldShowDelete" show-reorder="shouldShowReorder"  can-swipe="listCanSwipe">
+        <ion-item ng-repeat="accaccount in accaccounts" class="item item-icon-left" href="">
           <i class="icon ion-plus-round" style="color:green;" ng-if="accaccount.cropa_type == '0'"></i>
           <i class="icon ion-minus-round" style="color:red;" ng-if="accaccount.cropa_type == '1'"></i>
-        <div class="row">
-          <div class="col col-75">
-            <h2>{{accaccount.cropa_name}}</h2>
-            <p>{{accaccount.date_name }}</p>
+          <div class="row">
+            <div class="col col-75">
+              <h2>{{accaccount.cropa_name}}</h2>
+              <p>{{accaccount.date_name }}</p>
+            </div>
+            <div class="col col-25" >
+              <b align="right">{{accaccount.cropa_amount | number:2}}</b>
+            </div>
           </div>
-          <div class="col" align="right">
-            <b>{{accaccount.cropa_amount | number:2}}</b>
-          </div>
-        </div>
-      </a>
-    </div>
+          <ion-option-button class="button-energized" ng-click="edit({{accaccount.cropa_id}});">
+            <i class="icon ion-android-create"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;แก้ไข
+          </ion-option-button>
+          <ion-option-button class="button-assertive" ng-click="del({{accaccount.cropa_id}})">
+            <i class="icon ion-trash-b"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ลบ
+          </ion-option-button>
+        </ion-item>
+
+      </ion-list>
+
+
+
   </ion-content>
+  <nav mfb-menu position="br" resting-icon="ion-plus-round" active-icon="ion-plus-round" ng-click="add()"  menu-state="myVar">
 </ion-view>

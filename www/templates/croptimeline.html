@@ -25,35 +25,60 @@
     <section  id="cd-timeline" class="cd-container">
         <div class="list" ng-repeat="activity in timeline">
           <div class="cd-timeline-block">
-            <div class="cd-timeline-icon dark" ng-if="activity.a =='0'">
-              <i class="ion-leaf timelineIcon" ng-if="(activity.type =='picture')"></i>
-              <i class="ion-social-usd" ng-if="activity.type =='video' "></i>
-              <i class="ion-android-alert timelineIcon" ng-if="activity.type =='location'"></i>
-              <i class="ion-android-textsms timelineIcon" ng-if="activity.type =='text'"></i>
+
+            <div class="cd-timeline-icon dark" ng-if="activity.status =='1'">
+              <i class="ion-android-time timelineIcon" ng-if="(activity.data =='plan')"></i>
+              <i class="ion-social-bitcoin timelineIcon" ng-if="activity.data =='account' "></i>
+              <i class="ion-help timelineIcon" ng-if="activity.data =='problem'"></i>
             </div>
-            <div class="cd-timeline-icon positive" ng-if="activity.a =='1'">
-              <i class="ion-leaf timelineIcon" ng-if="(activity.type =='picture')"></i>
-              <i class="ion-social-usd" ng-if="activity.type =='video' "></i>
-              <i class="ion-android-alert timelineIcon" ng-if="activity.type =='location'"></i>
-              <i class="ion-android-textsms timelineIcon" ng-if="activity.type =='text'"></i>
+
+            <div class="cd-timeline-icon positive" ng-if="activity.status =='0'">
+              <i class="ion-android-time timelineIcon royal" ng-if="(activity.data =='plan')"></i>
+              <i class="ion-social-bitcoin timelineIcon energized" ng-if="activity.data =='account' "></i>
+              <i class="ion-help timelineIcon assertive" ng-if="activity.data =='problem'"></i>
             </div>
-            <!-- cd-timeline-img -->
-            <div class="cd-timeline-content positive" ng-if="activity.a =='1'">
+
+            <div class="cd-timeline-content royal" ng-if="activity.data =='plan'">
               <h3 class="marginBottom0 marginTop0">{{activity.title}}</h3>
-              <p class="marginTop5 cd-author"> {{activity.author}}</p>
-              <div class="item item-image marginTop5" ng-if="activity.Picture =='true'">
-                <img src="{{activity.profilePicture}}">
+              <p class="marginTop5 cd-author"> {{activity.date}}</p>
+              <div class="item item-image marginTop5" ng-if="activity.status_pic =='true'">
+                <img src="{{activity.pic}}">
+              </div>
+              <p class="timelineText">{{activity.text}}</p>
+              {{activity.vdo}}
+              <div align="right">
+                <a ng-if="activity.status_vdo == 'true'" onclick="window.open({{activity.vdo}}, '_system', 'location=yes'); return false;">
+                  <button class="button button-outline button-small button-positive" >
+                   วิดิโอแนะนำ
+                  </button>
+                </a>
+
+
+
+              <button class="button button-outline button-small button-positive">
+                รายงานความก้าวหน้า
+              </button>
+            </div>
+            </div>
+
+            <div class="cd-timeline-content energized" ng-if="activity.data =='account'">
+              <h3 class="marginBottom0 marginTop0" ng-if="activity.type =='1'" style="color:green;">รายรับ {{activity.text | number:2}} บาท</h3>
+              <h3 class="marginBottom0 marginTop0" ng-if="activity.type =='0'" style="color:red;">รายจ่าย {{activity.text | number:2}} บาท</h3>
+              <p class="marginTop5 cd-author"> {{activity.date}}</p>
+              <div class="item item-image marginTop5" ng-if="activity.status_pic =='true'">
+                <img src="{{activity.pic}}">
+              </div>
+              <p class="timelineText">{{activity.title}}</p>
+            </div>
+            <div class="cd-timeline-content assertive" ng-if="activity.data =='problem'">
+              <h3 class="marginBottom0 marginTop0">{{activity.title}}</h3>
+              <p class="marginTop5 cd-author"> {{activity.date}}</p>
+              <div class="item item-image marginTop5" ng-if="activity.status_pic =='true'">
+                <img src="{{activity.pic}}">
               </div>
               <p class="timelineText">{{activity.text}}</p>
             </div>
-            <div class="cd-timeline-content dark" ng-if="activity.a =='0'">
-              <h3 class="marginBottom0 marginTop0">{{activity.title}}</h3>
-              <p class="marginTop5 cd-author"> {{activity.author}}</p>
-              <div class="item item-image marginTop5" ng-if="activity.Picture =='true'">
-                <img src="{{activity.profilePicture}}">
-              </div>
-              <p class="timelineText">{{activity.text}}</p>
-            </div>
+
           </div>
         </div>
       </section >
