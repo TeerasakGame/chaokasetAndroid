@@ -1,16 +1,17 @@
 <ion-view view-title="เพิ่มแปลงเพาะปลูก">
   <ion-content>
     <form ng-submit="doSummit(FormCrop)" name="FormCrop" novalidate="">
+    {{crop}}
     <div class="item item-divider text-green">
       ข้อมูลแปลงเพาะปลูก
     </div>
     <label class="item item-input">
       <span class="input-label">ชื่อแปลง</span>
-      <input type="text" name="name" ng-model="crop.name" placeholder="กรุณากรอกชื่อแปลง" required/>
+      <input type="text" name="name" ng-model="crop.name" placeholder="กรุณากรอกชื่อแปลง"/>
     </label>
-    <div class="form-errors" ng-show="FormCrop.name.$error && FormCrop.$submitted" ng-messages="FormCrop.name.$error">
+    <!--<div class="form-errors" ng-show="FormCrop.name.$error && FormCrop.$submitted" ng-messages="FormCrop.name.$error">
         <div class="form-error" ng-message="required"><b>กรุณากรอกชื่อแปลง</b></div>
-    </div>
+    </div>-->
     <label class="item item-input item-select"
      <div class="input-label">
        ชื่อพืช
@@ -41,10 +42,10 @@
     </div>
     <label class="item item-input item-select">
      <div class="input-label">
-       ชื่อแผน {{crop.plan}}
+       ชื่อแผน
      </div>
-     <select name="plan" ng-model="crop.plan" ng-init="" ng-change="choseplan()" >
-       <option ng-repeat="plan in plans" ng-bind="plan.pla_name" ng-value="plan.pla_id"></option>
+     <select name="plan" ng-model="crop.plan" >
+       <option ng-repeat="plan in plans" ng-bind="plan.pla_name" value="{{plan.pla_id}}"></option>
      </select>
    </label>
    <!--<div class="form-errors" ng-show="FormCrop.plan.$error && FormCrop.$submitted" ng-messages="FormCrop.plan.$error">
@@ -57,25 +58,25 @@
      <div class="col col-33">
        <label class="item item-input item-stacked-label">
         <span class="input-label">ไร่</span>
-        <input type="number" name="rai" placeholder="ไร่" value="0" ng-model="crop.rai">
+        <input type="number" name="rai" placeholder="ไร่" ng-model="crop.rai">
       </label>
      </div>
      <div class="col col-33">
        <label class="item item-input item-stacked-label">
         <span class="input-label">งาน</span>
-        <input type="number" name="nan" placeholder="งาน" value="0" ng-model="crop.nan">
+        <input type="number" name="nan" placeholder="งาน" ng-model="crop.nan">
       </label>
      </div>
      <div class="col col-33">
        <label class="item item-input item-stacked-label">
         <span class="input-label">วา</span>
-        <input type="number" name="wa" placeholder="วา" ng-model="crop.wa" required>
+        <input type="number" name="wa" placeholder="วา" ng-model="crop.wa">
       </label>
      </div>
    </div>
-   <div class="form-errors" ng-show="FormCrop.wa.$error && FormCrop.$submitted" ng-messages="FormCrop.wa.$error">
+   <!--<div class="form-errors" ng-show="FormCrop.wa.$error && FormCrop.$submitted" ng-messages="FormCrop.wa.$error">
        <div class="form-error" ng-message="required"><b>กรุณากรอกขนาดพื้นที่</b></div>
-   </div>
+   </div>-->
 
    <!--<label class="item item-input">
      <span class="input-label">ชื่อแปลง</span>
@@ -86,8 +87,9 @@
      ที่อยู่ของแปลงเพาะปลูก
    </div>
    {{location}}
-   <input type="hidden" name="latLng"   value="{{location}}" >
-   <center><img ng-src="img/Map Marker-96.png" ng-click="map()"></center>
+   <div ng-click="map()">
+    <center><img ng-src="img/Map Marker-96.png"></center>
+  </div>
    <!--<div class="form-errors" ng-show="FormCrop.latLng.$error && FormCrop.$submitted" ng-messages="FormCrop.latLng.$error">
        <div class="form-error" ng-message="required"><b>กรุณาระบุตำแหน้งแปลงเพาะปลูก</b></div>
    </div>-->
