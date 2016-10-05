@@ -18,10 +18,10 @@
         <h2>{{a.crop_name}}</h2>
         <p>{{a.plat_name}}</p>
         <p>{{a.seed_name}}</p>
-        <ion-option-button class="button-energized" ng-click="">
+        <ion-option-button class="button-energized" ng-click="edit({{a.crop_id}});">
           <i class="icon ion-android-create"></i>&nbsp;แก้ไข
         </ion-option-button>
-        <ion-option-button class="button-assertive" ng-click="">
+        <ion-option-button class="button-assertive" ng-click="del({{a.crop_id}});">
           <i class="icon ion-trash-b"></i>&nbsp;&nbsp;ลบ&nbsp;
         </ion-option-button>
       </ion-item>

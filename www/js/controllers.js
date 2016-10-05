@@ -50,7 +50,7 @@ $scope.pic = ip_server+path;
     disableBack: true
   });*/
   //ปรพกาศตัวแปรเป็น obj เอาไว้ใส่ค่า user
-$scope.error="";
+  $scope.error="";
   $scope.user = { username: '', password : ''};
   var check = localStorage.getItem('login');
   //alert(check);
@@ -323,23 +323,19 @@ $scope.error="";
 
 })
 
-.controller('CropCtrl',function($scope, $http, $state, $ionicViewService,$ionicHistory){
-
+.controller('CropCtrl',function($scope, $http, $state, $ionicViewService,$ionicHistory,$ionicPopup){
+  //refresh
   $scope.doRefresh = function() {
     var data = "use_id="+localStorage.getItem('id');
-    //console.log(data);
     var ip = ip_server+'/index.php/services/getcrop';
      $http.post(ip, data, config)
        .success(function (data, status, headers, config) {
-           //alert(JSON.stringify(data.data));
            $scope.api = data.data;
        })
        .error(function (data, status, header, config) {
-           //alert("error: "+JSON.stringify(data) );
            console.log("login error");
            $scope.error = "ติดต่อ server ไม่ได้";
            alert($scope.error);
-           //$state.go("app.login");
        }).finally(function() {
       // Stop the ion-refresher from spinning
       $scope.$broadcast('scroll.refreshComplete');
@@ -354,59 +350,48 @@ $scope.error="";
   $scope.$on("$ionicView.enter", function () {
    $ionicHistory.clearCache();
    //$ionicHistory.clearHistory();
-});
+  });
 
-/*  $scope.name = localStorage.getItem('name');
-  var path = localStorage.getItem('pic');
-  $scope.pic = ip_server+path;*/
-
-  $scope.myVar = 'closed';
   var data = "use_id="+localStorage.getItem('id');
   //console.log(data);
   var ip = ip_server+'/index.php/services/getcrop';
-   $http.post(ip, data, config)
+  $http.post(ip, data, config)
      .success(function (data, status, headers, config) {
-         //alert(JSON.stringify(data.data));
          $scope.api = data.data;
      })
      .error(function (data, status, header, config) {
-         //alert("error: "+JSON.stringify(data) );
-         console.log("login error");
          $scope.error = "ติดต่อ server ไม่ได้";
          alert($scope.error);
-         //$state.go("app.login");
      });
 
 
   $scope.shouldShowDelete = false;
   $scope.shouldShowReorder = false;
   $scope.listCanSwipe = true;
-  $scope.doRefresh = function() {
-    var data = "use_id="+localStorage.getItem('id');
-    //console.log(data);
-    var ip = ip_server+'/index.php/services/getcrop';
-     $http.post(ip, data, config)
-       .success(function (data, status, headers, config) {
-           //alert(JSON.stringify(data.data));
-           $scope.api = data.data;
-       })
-       .error(function (data, status, header, config) {
-           //alert("error: "+JSON.stringify(data) );
-           console.log("login error");
-           $scope.error = "ติดต่อ server ไม่ได้";
-           alert($scope.error);
-           //$state.go("app.login");
-       }).finally(function() {
-      // Stop the ion-refresher from spinning
-      $scope.$broadcast('scroll.refreshComplete');
-    })
-  };
-  console.log('Crop');
+
   $scope.add = function(){
     console.log("add crop fn");
     $state.go("app.addCrop");
   }
-  //$window.location.reload();
+  $scope.edit = function(id) {
+    alert(id);
+  }
+  $scope.del = function(id) {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'ยืนยันการลบ',
+      template: 'คุณต้องการลบข้อมูลนี้ ?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+      alert('You are sure')
+
+      } else {
+        console.log('You are not sure');
+      }
+    })
+  };
+
+
 })
 
 .controller('LogoutCtrl', function($state) {
@@ -568,7 +553,7 @@ $scope.error="";
      })
 })
 
-.controller('CropTimelineCtrl',function($scope, $state,$http){
+.controller('CropTimelineCtrl',function($scope, $state,$http,$ionicActionSheet){
   $scope.crop_id = localStorage.getItem('crop_id');
   var data = "crop_id="+$scope.crop_id;
   var ip = ip_server+'/index.php/services/showplan';
@@ -597,6 +582,50 @@ $scope.error="";
 
    $scope.settingsTimeline = function(){
      $state.go("app.settingsTimeline");
+   };
+   $scope.showDetail = function(id,data) {
+     $ionicActionSheet.show({
+       //titleText: 'การนำเข้ารูป',
+       buttons: [
+          { text: '<center><i class="ion-android-remove-circle">  ซ่อน</i></center>' },
+         { text: '<center><i class="ion-ios-compose">  แก้ไข</i></center>' },
+         { text: '<center><i class="ion-trash-a"> ลบ</i></center>' },
+       ],
+       cancelText: 'ยกเลิก',
+       cancel: function() {
+         console.log('CANCELLED');
+       },
+       buttonClicked: function(index) {
+           switch (index) {
+             case 0:
+               alert(id+" "+data);
+               break;
+             case 1:
+                alert(id+" "+data);
+               break;
+             case 2:
+                alert(id+" "+data);
+               break;
+           }
+         console.log('BUTTON CLICKED', index);
+         return true;
+       },
+     });
+   };
+   $scope.doRefresh = function() {
+     var data = "crop_id="+$scope.crop_id;
+     var ip = ip_server+'/index.php/services/showplan';
+      $http.post(ip, data, config)
+        .success(function (data, status, headers, config) {
+            $scope.timeline= data.data;
+        })
+        .error(function (data, status, header, config) {
+            $scope.error = "ติดต่อ server ไม่ได้";
+            alert($scope.error);
+        }).finally(function() {
+       // Stop the ion-refresher from spinning
+       $scope.$broadcast('scroll.refreshComplete');
+     })
    };
 
 })

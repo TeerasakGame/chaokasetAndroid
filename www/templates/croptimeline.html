@@ -6,25 +6,114 @@
     <button mfb-button icon="ion-leaf" label="เพิ่มกิจกรรม" ng-click="addActivities()"></button>
   </nav>
   <ion-content>
-
+    <ion-refresher
+	    pulling-text="อัพเดตข้อมูล"
+	    on-refresh="doRefresh()">
+  	</ion-refresher>
     <label class="item item-input item-select">
       <div class="input-label">
         การแสดงผล
       </div>
-      <select>
-        <option selected>ทั้งหมด</option>
-        <option>การเพาะปลูก</option>
-        <option>การจัดการน้ำ</option>
-        <option>การจัดการดิน</option>
-        <option>ปัญชีการเพาะปลูก</option>
-        <option>ปัญหาการเพาะปลูก</option>
+      <select ng-model="select" ng-init="select=''">
+        <option value="">ทั้งหมด</option>
+        <option value="plan">การเพาะปลูก</option>
+        <option value="account">ปัญชีการเพาะปลูก</option>
+        <option value="problem">ปัญหาการเพาะปลูก</option>
       </select>
     </label>
 
     <ion-scroll zooming="true" direction="y">
     <section  id="cd-timeline" class="cd-container">
-        <div class="list" ng-repeat="activity in timeline">
-          <div class="cd-timeline-block">
+        <div class="list" ng-repeat="activity in timeline | filter : {data:select||undefined}">
+        <!--<div class="list">-->
+          <div class="cd-timeline-block" >
+            <div ng-if="activity.data =='plan'">
+              <div class="cd-timeline-icon">
+                <i class="ion-android-time timelineIcon royal"></i>
+              </div>
+              <div class="cd-timeline-content royal">
+                <div class="row">
+                  <div class="col-90">
+                    <h4 class="marginBottom0 marginTop0">{{activity.title}}</h4>
+                  </div>
+                  <div class="col-10">
+                    <div align="right" style="margin-top:-10px">
+                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan');">
+                        <i class="ion-chevron-down" style="color:gray;"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <h5 class="marginTop5 cd-author" style="margin-left:5px">{{activity.date}}</h5>
+                <div style="margin-left:5px" class="timelineText">{{activity.text}}</div>
+
+                <div align="right">
+                  <!--<a  onclick="window.open('https://www.youtube.com/watch?v=j3-8gLCYhQY', '_system', 'location=yes'); return false;">
+                    <button class="button button-outline button-small button-positive" >
+                     วิดิโอแนะนำ
+                   </button>
+                 </a>-->
+                  <button class="button button-clear button-small button-positive">
+                    <i class="ion-document" style="font-size: 25px;color:gray;"></i>
+                  </button>
+                  <button class="button button-clear button-small button-positive">
+                     <i class="ion-images" style="font-size: 25px;color:gray;"></i>
+                   </button>
+                </div>
+              </div>
+            </div>
+            <div ng-if="activity.data =='account'">
+              <div class="cd-timeline-icon">
+                <i class="ion-social-bitcoin timelineIcon energized"></i>
+              </div>
+              <div class="cd-timeline-content energized">
+                <div class="row">
+                  <div class="col-90">
+                    <h4 class="marginBottom0 marginTop0" ng-if="activity.type =='1'" style="color:green;">+ {{activity.text | number:2}} บาท</h4>
+                    <h4 class="marginBottom0 marginTop0" ng-if="activity.type =='0'" style="color:red;">- {{activity.text | number:2}} บาท</h4>
+                  </div>
+                  <div class="col-10">
+                    <div align="right" style="margin-top:-10px">
+                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'account');">
+                        <i class="ion-chevron-down" style="color:gray;"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-left:5px">
+                <h5 class="marginTop5 cd-author">{{activity.date}}</h5>
+                <div class="timelineText">{{activity.title}}</div>
+              </div>
+
+              </div>
+            </div>
+            <div ng-if="activity.data =='problem'">
+              <div class="cd-timeline-icon">
+                <i class="ion-help assertive timelineIcon "></i>
+              </div>
+              <div class="cd-timeline-content assertive">
+                <div class="row">
+                  <div class="col-90">
+                    <h4 class="marginBottom0 marginTop0">{{activity.title}}</h4>
+                  </div>
+                  <div class="col-10">
+                    <div align="right" style="margin-top:-10px">
+                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'problem');">
+                        <i class="ion-chevron-down" style="color:gray;"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-left:5px"><h5 class="marginTop5 cd-author">{{activity.date}}</h5>
+                <div class="timelineText">{{activity.text}}</div>
+              </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <!--<div class="cd-timeline-block">
 
             <div class="cd-timeline-icon dark" ng-if="activity.status =='1'">
               <i class="ion-android-time timelineIcon" ng-if="(activity.data =='plan')"></i>
@@ -52,10 +141,7 @@
                    วิดิโอแนะนำ
                   </button>
                 </a>
-
-
-
-              <button class="button button-outline button-small button-positive">
+              <button class="button button-outline button-small button-positive" ng-if="activity.status =='0'">
                 รายงานความก้าวหน้า
               </button>
             </div>
@@ -79,7 +165,7 @@
               <p class="timelineText">{{activity.text}}</p>
             </div>
 
-          </div>
+          </div>-->
         </div>
       </section >
     </ion-scroll>

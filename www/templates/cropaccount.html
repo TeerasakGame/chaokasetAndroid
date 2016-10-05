@@ -24,16 +24,16 @@
         รายการบัญชี
       </div>
       <ion-list show-delete="shouldShowDelete" show-reorder="shouldShowReorder"  can-swipe="listCanSwipe">
-        <ion-item ng-repeat="accaccount in accaccounts" class="item item-icon-left" href="">
+        <ion-item ng-repeat="accaccount in accaccounts" class="item item-icon-left" >
           <i class="icon ion-plus-round" style="color:green;" ng-if="accaccount.cropa_type == '0'"></i>
           <i class="icon ion-minus-round" style="color:red;" ng-if="accaccount.cropa_type == '1'"></i>
           <div class="row">
-            <div class="col col-75">
+            <div class="col col-60">
               <h2>{{accaccount.cropa_name}}</h2>
               <p>{{accaccount.date_name }}</p>
             </div>
-            <div class="col col-25">
-              <b align="right">{{accaccount.cropa_amount | number:2}}</b>
+            <div class="col col-40 text-right">
+              <b >{{accaccount.cropa_amount | number:2}}</b>
             </div>
           </div>
           <ion-option-button class="button-energized" ng-click="edit({{accaccount.cropa_id}});">

@@ -51,11 +51,17 @@ Main components
 
 .timelineText {
   color: black;
+  font-size: 15px;
 }
 
 .timelineIcon {
   font-size: 25px;
-  color: white;
+  /*color: white;*/
+}
+
+.timelineIconPlan {
+  font-size: 25px;
+  color: red;
 }
 
 .cd-author {
@@ -82,7 +88,7 @@ Main components
 
 .cd-timeline-block {
   position: relative;
-  margin: 2em 0;
+  margin: 0em 0;
 }
 
 .cd-timeline-block:after {
@@ -113,10 +119,10 @@ Main components
   background: white;
   text-align: center;
 }
-
+/*
 .cd-timeline-icon i {
-  color: #33cd5f;
-}
+  color: red;
+}*/
 
 .cd-timeline-picture {
   position: absolute;

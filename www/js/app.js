@@ -13,7 +13,6 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
-
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
@@ -25,7 +24,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-    .state('app', {
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
@@ -74,7 +73,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
       }
     })
 
-    .state('app.tab.cropDetail', {
+  .state('app.tab.cropDetail', {
     url: '/cropdetail',
     views: {
       'tab-detail': {
