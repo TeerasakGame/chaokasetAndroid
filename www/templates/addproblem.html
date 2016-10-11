@@ -1,34 +1,52 @@
 <ion-view view-title="เพิ่มปัญหาการเพาะปลูก">
   <ion-content>
+    <form ng-submit="doSummit(Form)" name="Form" novalidate="">
     <label class="item item-input">
       <span class="input-label">หัวข้อ</span>
-      <input type="text" name="name" ng-model="problems.name" placeholder="กรุณากรอกชื่อกิจกรรม" required>
-      <!--<textarea class="textarear" rows="4" placeholder="รายละเอียด..."></textarea>-->
+      <input type="text" name="name" ng-model="problems.name" placeholder="กรุณากรอกชื่อปัญหา" required>
     </label>
+    <div class="form-errors" ng-show="Form.name.$error && Form.$submitted" ng-messages="Form.name.$error">
+        <div class="form-error" ng-message="required"><b>กรุณากรอกชื่อปัญหา</b></div>
+    </div>
     <label class="item item-input item-select">
       <div class="input-label">
         ประเภทปัญหา
       </div>
-      <select>
-        <option selected>ดิน</option>
-        <option>น้ำ</option>
-        <option>ศัตรูพืช</option>
-        <option>โรค</option>
+      <select name="type" ng-model="problems.type">
+        <option ng-repeat="type in types" ng-selected="{{type.tpro_id == problems.type}}" ng-bind="type.tpro_name" ng-value="type.tpro_id"></option>
       </select>
     </label>
 
     <label class="item item-input item-stacked-label">
       <span class="input-label">รายละเอียด</span>
-      <textarea class="textarear" rows="6" placeholder="รายละเอียด..."></textarea>
+      <textarea class="textarear" rows="6" placeholder="รายละเอียด..." name="detail" ng-model="problems.detail" required></textarea>
     </label>
+    <div class="form-errors" ng-show="Form.detail.$error && Form.$submitted" ng-messages="Form.detail.$error">
+        <div class="form-error" ng-message="required"><b>กรุณากรอกรายละเอียดของปัญหา</b></div>
+    </div>
     <div class="item item-divider text-green">
-      รูปภาพ
+      <div class="row">
+        <div class="col-80">
+        รูปภาพ
+      </div>
+      <div class="col-20 text-right" ng-click="getpic()" >
+        <!--<img src="{{image}}" height="10px" width="10px">-->
+        <i class="ion-android-add-circle" style="font-size: 23px;color:green;"></i> เพิ่มรูป
+      </div>
     </div>
-    <div class="item item-image" ng-click="showDetail()">
-      <img src="{{image}}"  height="280px">
-    </div>
-    <button class="button button-full button-positive" ng-click="summit()">
+  </div>
+
+
+ <ion-gallery ion-gallery-items="items" ion-zoom-events="true" ion-item-action="itemAction(item)" ng-click="check(items)"></ion-gallery>
+
+    <!--<button class="button button-full button-positive" ng-click="summit()">
       บันทึกปัญหา
-    </button>
+    </button>-->
+    <div class="bar bar-footer">
+      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
+    </div>
+    </form>
   </ion-content>
+
 </ion-view>

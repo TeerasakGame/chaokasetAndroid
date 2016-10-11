@@ -1,0 +1,42 @@
+<ion-view view-title="รายละเอียดปัญหา">
+  <ion-content>
+
+    <div class="padding">
+      <h3  class="text-green"><center>{{problem.cropp_name}}</center></h3>
+      <ion-gallery ion-gallery-items="items" ion-zoom-events="true"></ion-gallery>
+      <p style="text-indent: 2.5em;color:gray;margin-top:10px">{{problem.cropp_detail}}</p>
+    </div>
+
+    <div class="item item-divider">
+      <i class="icon ion-chatbubbles text-green"></i>   <b class="text-green">ความคิดเห็น</b> ({{count}})
+    </div>
+
+    <ol class="chat" style="margin-top:0;background-color:#F8FDF8;" ng-repeat="chat in chats">
+        <li class="other" style="margin-left:-10px;margin-top:0" ng-if="chat.use_id !== id_user">
+            <div class="avatar"><img src="{{ip_pic}}{{chat.use_pic}}" draggable="false"/></div>
+          <div class="msg">
+            <p>{{chat.anp_detail}}</p>
+            <time>{{chat.use_name}}</time></br>
+            <time>{{chat.anp_date}}</time>
+          </div>
+        </li>
+        <li class="self" style="margin-top:0em" ng-if="chat.use_id == id_user">
+            <div class="avatar"><img src="{{ip_pic}}{{chat.use_pic}}" draggable="false"/></div>
+          <div class="msg">
+            <p>{{chat.anp_detail}}</p>
+            <time>{{chat.use_name}}</time></br>
+            <time>{{chat.anp_date}}</time>
+          </div>
+        </li>
+    </ol>
+    <div style="margin-bottom:10em;background-color:#F8FDF8;" ><font color="#F8FDF8">1</font></div>
+  </ion-content>
+  <div class="bar bar-footer item-input-inset footer-item-input-insert">
+    <label class="item-input-wrapper">
+      <input type="text" placeholder="พิมพ์ข้อความแสดงความคิดเห็น" ng-model="text" >
+    </label>
+    <button class="button button-clear button-positive" ng-disabled="text == ''" ng-click="send()">
+      <i class="ion-android-send" style="font-size: 25px"></i>
+    </button>
+  </div>
+</ion-view>

@@ -325,6 +325,10 @@ $scope.pic = ip_server+path;
 
 .controller('CropCtrl',function($scope, $http, $state, $ionicViewService,$ionicHistory,$ionicPopup){
   //refresh
+  $scope.$on("$ionicView.enter", function () {
+   $ionicHistory.clearCache();
+   //$ionicHistory.clearHistory();
+  });
   $scope.doRefresh = function() {
     var data = "use_id="+localStorage.getItem('id');
     var ip = ip_server+'/index.php/services/getcrop';
@@ -347,10 +351,7 @@ $scope.pic = ip_server+path;
     disableBack: true
   });
 
-  $scope.$on("$ionicView.enter", function () {
-   $ionicHistory.clearCache();
-   //$ionicHistory.clearHistory();
-  });
+
 
   var data = "use_id="+localStorage.getItem('id');
   //console.log(data);
@@ -553,7 +554,7 @@ $scope.pic = ip_server+path;
      })
 })
 
-.controller('CropTimelineCtrl',function($scope, $state,$http,$ionicActionSheet){
+.controller('CropTimelineCtrl',function($scope,$state,$http,$ionicActionSheet,$cordovaImagePicker){
   $scope.crop_id = localStorage.getItem('crop_id');
   var data = "crop_id="+$scope.crop_id;
   var ip = ip_server+'/index.php/services/showplan';
@@ -627,6 +628,29 @@ $scope.pic = ip_server+path;
        $scope.$broadcast('scroll.refreshComplete');
      })
    };
+  $scope.images = [];
+
+  $scope.getpic = function(id){
+    //alert("ok : "+id);
+    var options = {
+      maximumImagesCount: 10,
+      width: 800,
+      height: 800,
+      quality: 100
+    };
+
+    $cordovaImagePicker.getPictures(options)
+      .then(function (results) {
+        for (var i = 0; i < results.length; i++) {
+          console.log('Image URI: ' + results[i]);
+          $scope.images.push(results[i]);
+          //alert($scope.images);
+        }
+      }, function(error) {
+        // error getting photos
+      });
+  }
+
 
 })
 
@@ -699,9 +723,21 @@ $scope.pic = ip_server+path;
           var ip = ip_server+'/index.php/services/deleteaccount';
            $http.post(ip, data, config)
              .success(function (data, status, headers, config) {
-                 //alert(JSON.stringify(data.data));
-                 //alert("ลบ");
-                 $state.go("app.cropAccount",{reload:true});
+                 $scope.crop_id = localStorage.getItem('crop_id');
+                 var data = "crop_id="+$scope.crop_id;
+                 var ip = ip_server+'/index.php/services/showaccaccount';
+                  $http.post(ip, data, config)
+                    .success(function (data, status, headers, config) {
+                        $scope.accaccounts = data.data.all;
+                        $scope.total = data.data.total;
+                    })
+                    .error(function (data, status, header, config) {
+                        //alert("error: "+JSON.stringify(data) );
+                        console.log("login error");
+                        $scope.error = "ติดต่อ server ไม่ได้";
+                        alert($scope.error);
+                        //$state.go("app.login");
+                    })
              })
              .error(function (data, status, header, config) {
                  //alert("error: "+JSON.stringify(data) );
@@ -717,20 +753,26 @@ $scope.pic = ip_server+path;
     };
 
 
-
-
-
 })
 
-.controller('CropProblemCtrl',function($scope,$http){
+.controller('CropProblemCtrl',function($scope,$http,$state,$ionicHistory,$ionicPopup){
+  $scope.$on("$ionicView.enter", function () {
+   $ionicHistory.clearCache();
+   //$ionicHistory.clearHistory();
+  });
+  $scope.shouldShowDelete = false;
+  $scope.shouldShowReorder = false;
+  $scope.listCanSwipe = true;
   $scope.crop_id = localStorage.getItem('crop_id');
+  //alert("crop_id : "+$scope.crop_id);
   var data = "crop_id="+$scope.crop_id;
-  //console.log(data);
+  console.log(data);
   var ip = ip_server+'/index.php/services/showproblem';
    $http.post(ip, data, config)
      .success(function (data, status, headers, config) {
          //alert(JSON.stringify(data.data));
          $scope.problems = data.data;
+         console.log($scope.problems);
         // $scope.total = data.total;
      })
      .error(function (data, status, header, config) {
@@ -739,10 +781,76 @@ $scope.pic = ip_server+path;
          $scope.error = "ติดต่อ server ไม่ได้";
          alert($scope.error);
          //$state.go("app.login");
-     })
+     });
+
+     $scope.doRefresh = function() {
+       var data = "crop_id="+$scope.crop_id;
+       var ip = ip_server+'/index.php/services/showproblem';
+        $http.post(ip, data, config)
+          .success(function (data, status, headers, config) {
+              $scope.problems = data.data;
+          })
+          .error(function (data, status, header, config) {
+              $scope.error = "ติดต่อ server ไม่ได้";
+              alert($scope.error);
+          }).finally(function() {
+         // Stop the ion-refresher from spinning
+         $scope.$broadcast('scroll.refreshComplete');
+       })
+     };
+
+     $scope.add = function(){
+       $state.go("app.addProblem");
+     };
+
+     $scope.del = function(id) {
+       var confirmPopup = $ionicPopup.confirm({
+         title: 'ยืนยันการลบ',
+         template: 'คุณต้องการลบปัญหานี้ ?'
+       });
+       confirmPopup.then(function(res) {
+         if(res) {
+         //  alert('You are sure');
+           var data = "id="+id;
+
+           var ip = ip_server+'/index.php/services/delproblem';
+            $http.post(ip, data, config)
+              .success(function (data, status, headers, config) {
+                  console.log("delproblem");
+                  var data = "crop_id="+$scope.crop_id;
+                  var ip = ip_server+'/index.php/services/showproblem';
+                   $http.post(ip, data, config)
+                     .success(function (data, status, headers, config) {
+                         $scope.problems = data.data;
+                     })
+                     .error(function (data, status, header, config) {
+                         $scope.error = "ติดต่อ server ไม่ได้";
+                         alert($scope.error);
+                     })
+
+              })
+              .error(function (data, status, header, config) {
+                  //alert("error: "+JSON.stringify(data) );
+                  console.log("error");
+                  $scope.error = "ติดต่อ server ไม่ได้";
+                  alert($scope.error);
+                  //$state.go("app.login");
+              })
+         } else {
+           console.log('You are not sure');
+         }
+       })
+     };
+     $scope.detail = function(id){
+       console.log("detail : "+id);
+        $state.go("app.detailProblem",{cropp_id:id});
+     }
 })
 
 .controller('AddAccountCtrl',function($scope,$ionicHistory,$state,$http){
+  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
+    viewData.enableBack = true;
+  })
   $scope.account = { status: true,type:"0",num:"",detail:""};
   $scope.close = function(){
     $state.go("app.tab.cropAccount");
@@ -752,13 +860,14 @@ $scope.pic = ip_server+path;
     //  alert(JSON.stringify($scope.account));
       $scope.crop_id = localStorage.getItem('crop_id');
       var data = "crop_id="+$scope.crop_id+"&num="+$scope.account.num+"&detail="+$scope.account.detail+"&type="+$scope.account.type+"&status="+$scope.account.status;
-      //console.log(data);
+      console.log(data);
       //alert(JSON.stringify(data));
       var ip = ip_server+'/index.php/services/addaccaccount';
+      console.log(ip);
        $http.post(ip, data, config)
          .success(function (data, status, headers, config) {
-
-           $state.go("app.tab.cropAccount",{reload:true});
+           console.log("ok");
+           $state.go("app.tab.cropAccount");
        })
          .error(function (data, status, header, config) {
              $scope.error = "ติดต่อ server ไม่ได้";
@@ -772,6 +881,9 @@ $scope.pic = ip_server+path;
 })
 
 .controller('EditAccountCtrl',function($stateParams,$scope,$http,$state){
+  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
+    viewData.enableBack = true;
+  })
   $scope.id = $stateParams.data;
   //alert($scope.data);
   $scope.account = { num:""};
@@ -817,10 +929,25 @@ $scope.pic = ip_server+path;
    };
  })
 
- .controller('AddProblemCtrl',function($scope, $state, $ionicActionSheet, $cordovaCamera){
+ .controller('AddProblemCtrl',function($scope, $state, $ionicActionSheet, $cordovaCamera, $http, $cordovaImagePicker,$ionicHistory){
+   $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
+     viewData.enableBack = true;
+   })
+   $scope.$on("$ionicView.enter", function () {
+    $ionicHistory.clearCache();
+    //$ionicHistory.clearHistory();
+   });
+   $scope.problems = {name:"",detail:"",type:1};
    $scope.image = "img/Add_Image.png";
+   $http.get(ip_server+'/index.php/services/gettypeproblem').then(function(res){
+     $scope.types = res.data.data;
+   });
+
    $scope.summit = function(){
      $state.go("app.tab.cropTimeline");
+   };
+   $scope.close = function(){
+     $state.go("app.tab.cropProblem");
    };
    $scope.showDetail = function() {
      $ionicActionSheet.show({
@@ -879,6 +1006,103 @@ $scope.pic = ip_server+path;
        },
      });
    };
+
+   $scope.doSummit = function(form){
+     if(form.$valid) {
+       alert(JSON.stringify($scope.problems+$scope.images));
+     }
+   };
+   $scope.images = [];
+   $scope.items = [];
+
+   $scope.getpic = function(id){
+     //alert("ok : "+id);
+     var options = {
+       maximumImagesCount: 10,
+       quality: 100
+     };
+
+     $cordovaImagePicker.getPictures(options)
+       .then(function (results) {
+         for (var i = 0; i < results.length; i++) {
+           console.log('Image URI: ' + results[i]);
+           $scope.images.push(results[i]);
+           //alert($scope.images);
+           $scope.items.push({src:results[i]});
+         }
+       }, function(error) {
+         // error getting photos
+       });
+   };
+   $scope.check = function(text){
+     alert("ok "+text);
+   }
+   /*$scope.items = [
+  {
+    src:'http://www.wired.com/images_blogs/rawfile/2013/11/offset_WaterHouseMarineImages_62652-2-660x440.jpg',
+    sub: 'This is a <b>subtitle</b>'
+  },
+  {
+    src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
+    sub: ''
+  },
+  {
+    src:'http://www.wired.com/images_blogs/rawfile/2013/11/offset_WaterHouseMarineImages_62652-2-660x440.jpg',
+    thumb:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg'
+  },
+  {
+    src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
+    sub: ''
+  },
+  {
+    src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
+    sub: ''
+  },
+  {
+    src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
+    sub: ''
+  },*/
+
+ })
+
+ .controller('DetailProblemCtrl',function($scope,$stateParams,$http){
+  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
+    viewData.enableBack = true;
+  })
+  $scope.text = "";
+  $scope.items = [];
+  $scope.ip_pic = ip_server;
+  $scope.id_user = localStorage.getItem('id');
+  var id = $stateParams.cropp_id;
+  var data = "cropp_id="+id;
+  var ip = ip_server+'/index.php/services/problemdetail';
+  $http.post(ip, data, config).success(function (data, status, headers, config) {
+    $scope.problem = data.data;
+    $scope.items = data.data.pic;
+    $scope.chats = data.data.chat;
+    $scope.count = data.data.count;
+  }).error(function (data, status, header, config) {
+    $scope.error = "ติดต่อ server ไม่ได้";
+    alert($scope.error);
+  });
+
+  $scope.send = function(){
+    alert($scope.text);
+    var data = "cropp_id="+id+"&text="+$scope.text+"&use_id="+$scope.id_user;
+    var ip = ip_server+'/index.php/services/addansproblem';
+    $http.post(ip, data, config).success(function (data, status, headers, config) {
+      $scope.chats = data.data;
+      $scope.count = data.count;
+    }).error(function (data, status, header, config) {
+      $scope.error = "ติดต่อ server ไม่ได้";
+      alert($scope.error);
+    });
+    $scope.text = "";
+  }
+
+
+
+
  })
 
 

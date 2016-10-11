@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCordova','ngMessages','MyApp.Directives','ng-mfb'])
+angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCordova','ngMessages','MyApp.Directives','ng-mfb','ion-gallery'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -150,14 +150,24 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
    }
  })
  .state('app.addProblem', {
-  url: '/addproblem',
-  views: {
-    'menuContent': {
-      templateUrl: 'templates/addproblem.html',
-      controller: 'AddProblemCtrl'
+    url: '/addproblem',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/addproblem.html',
+        controller: 'AddProblemCtrl'
+      }
     }
-  }
-})
+  })
+
+  .state('app.detailProblem',{
+    url: '/detailproblem/:cropp_id',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/detailproblem.html',
+        controller: 'DetailProblemCtrl'
+      }
+    }
+  })
 
   .state('app.search', {
     url: '/search',
