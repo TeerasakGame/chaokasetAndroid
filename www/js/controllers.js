@@ -6,42 +6,13 @@ angular.module('starter.controllers', [])
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-  $scope.name = localStorage.getItem('name');
-//$scope.login = localstorage.getItem(login);
-var path = localStorage.getItem('pic');
-$scope.pic = ip_server+path;
-  // Form data for the login modal
-  $scope.loginData = {};
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
+  //
+  $scope.$on('$ionicView.loaded', function(e) {
+    $scope.name = localStorage.getItem('name');
+    var path = localStorage.getItem('pic');
+    $scope.pic = ip_server+path;
   });
 
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
 })
 
 .controller('LoginCtrl',function($scope, $cordovaOauth, $http, $state,$ionicViewService){
@@ -50,13 +21,11 @@ $scope.pic = ip_server+path;
     disableBack: true
   });*/
   //ปรพกาศตัวแปรเป็น obj เอาไว้ใส่ค่า user
+
   $scope.error="";
   $scope.user = { username: '', password : ''};
   var check = localStorage.getItem('login');
-  //alert(check);
-
   if(check === true || check === "true"){
-    //alert("login แล้ว");
     $state.go("app.crop");
   }
 
@@ -198,7 +167,7 @@ $scope.pic = ip_server+path;
                     sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
                     correctOrientation: true,
                   //  encodingType: Camera.EncodingType.JPEG,
-                    quality: 100,
+                    quality: 30,
                     allowEdit: true,
                     popoverOptions: CameraPopoverOptions,
                     targetWidth: 400,
@@ -217,7 +186,7 @@ $scope.pic = ip_server+path;
             case 1:
                 //alert("222");
                 var options = {
-                    quality: 100,
+                    quality: 30,
                     destinationType: Camera.DestinationType.FILE_URI,
                     sourceType: Camera.PictureSourceType.CAMERA,
                     allowEdit: true,
@@ -396,7 +365,7 @@ $scope.pic = ip_server+path;
 })
 
 .controller('LogoutCtrl', function($state) {
-  alert("logout");
+   alert("logout");
    localStorage.removeItem('name');
    localStorage.removeItem('login');
    localStorage.removeItem('pic');
@@ -534,8 +503,13 @@ $scope.pic = ip_server+path;
   $state.go("app.tab.cropTimeline", {}, { reload: true });
 })
 
-.controller('CropDetailCtrl',function($scope,$http,$state){
+.controller('CropDetailCtrl',function($scope,$http,$state,$ionicLoading){
   console.log('Detail');
+  $scope.$on('$ionicView.beforeEnter', function(){
+    $ionicLoading.show({
+           template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
+    });
+
   $scope.crop_id = localStorage.getItem('crop_id');
   var data = "crop_id="+$scope.crop_id;
   //console.log(data);
@@ -543,30 +517,41 @@ $scope.pic = ip_server+path;
    $http.post(ip, data, config)
      .success(function (data, status, headers, config) {
          //alert(JSON.stringify(data.data));
+         $ionicLoading.hide();
          $scope.crop= data.data;
      })
      .error(function (data, status, header, config) {
          //alert("error: "+JSON.stringify(data) );
+         $ionicLoading.hide();
          console.log("login error");
          $scope.error = "ติดต่อ server ไม่ได้";
          alert($scope.error);
          //$state.go("app.login");
      })
+    });
 })
 
-.controller('CropTimelineCtrl',function($scope,$state,$http,$ionicActionSheet,$cordovaImagePicker){
+.controller('CropTimelineCtrl',function($scope,$state,$http,$ionicActionSheet,$cordovaImagePicker,$filter,$cordovaFileTransfer,$ionicLoading){
+  $scope.$on('$ionicView.beforeEnter', function(){
+    $ionicLoading.show({
+           template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
+    });
+
+  $scope.items = [{src:"img/ionic.png"},{src:"img/ionic.png"}];
   $scope.crop_id = localStorage.getItem('crop_id');
   var data = "crop_id="+$scope.crop_id;
   var ip = ip_server+'/index.php/services/showplan';
    $http.post(ip, data, config)
      .success(function (data, status, headers, config) {
          $scope.timeline= data.data;
+         $ionicLoading.hide();
      })
      .error(function (data, status, header, config) {
+        $ionicLoading.hide();
          $scope.error = "ติดต่อ server ไม่ได้";
          alert($scope.error);
      });
-
+});
    $scope.addActivities = function(){
      console.log("add Act");
      $state.go("app.addActivities");
@@ -577,21 +562,34 @@ $scope.pic = ip_server+path;
    };
 
    $scope.addProblem = function(){
-
      $state.go("app.addProblem");
    };
 
-   $scope.settingsTimeline = function(){
-     $state.go("app.settingsTimeline");
+   $scope.addMul = function(){
+     $state.go("app.addmultimedia");
    };
-   $scope.showDetail = function(id,data) {
+
+   $scope.addNote = function(){
+      $state.go("app.addnote");
+   };
+
+
+   $scope.showDetail = function(id,data,status,i) {
+     //alert(status);
+     if (status === 'false' || status === false){
+       $scope.botton = [{ text: '<center><div>แสดงข้อมูล</div></center>' },
+      { text: '<center><i class="ion-ios-compose">  แก้ไข</i></center>' },
+      { text: '<center><i class="ion-trash-a"> ลบ</i></center>' },];
+     }else{
+       $scope.botton = [{ text: '<center><div>ซ่อนข้อมูล</div></center>' },
+      { text: '<center><i class="ion-ios-compose">  แก้ไข</i></center>' },
+      { text: '<center><i class="ion-trash-a"> ลบ</i></center>' },];
+     }
      $ionicActionSheet.show({
        //titleText: 'การนำเข้ารูป',
-       buttons: [
-          { text: '<center><i class="ion-android-remove-circle">  ซ่อน</i></center>' },
-         { text: '<center><i class="ion-ios-compose">  แก้ไข</i></center>' },
-         { text: '<center><i class="ion-trash-a"> ลบ</i></center>' },
-       ],
+
+       buttons:  $scope.botton ,
+
        cancelText: 'ยกเลิก',
        cancel: function() {
          console.log('CANCELLED');
@@ -599,7 +597,7 @@ $scope.pic = ip_server+path;
        buttonClicked: function(index) {
            switch (index) {
              case 0:
-               alert(id+" "+data);
+                $scope.event(i,status,id,data);
                break;
              case 1:
                 alert(id+" "+data);
@@ -612,6 +610,25 @@ $scope.pic = ip_server+path;
          return true;
        },
      });
+   };
+   $scope.event = function(index,status,id,topic){
+     //ssalert(index+"  "+$scope.timeline[index].title);
+     if (status === 'false' || status === false){
+        $scope.timeline[index].status_show = 'true';
+     }else{
+       $scope.timeline[index].status_show = 'false';
+     }
+     var data = "id="+id+"&topic="+topic+"&status="+$scope.timeline[index].status_show;
+     var ip = ip_server+'/index.php/services/updatestatusshow';
+      $http.post(ip, data, config)
+        .success(function (data, status, headers, config) {
+
+        })
+        .error(function (data, status, header, config) {
+            $scope.error = "ติดต่อ server ไม่ได้";
+            //alert($scope.error);
+        });
+
    };
    $scope.doRefresh = function() {
      var data = "crop_id="+$scope.crop_id;
@@ -630,21 +647,52 @@ $scope.pic = ip_server+path;
    };
   $scope.images = [];
 
-  $scope.getpic = function(id){
+  $scope.getpic = function(id,index){
     //alert("ok : "+id);
     var options = {
       maximumImagesCount: 10,
-      width: 800,
-      height: 800,
-      quality: 100
+      quality: 30
     };
 
     $cordovaImagePicker.getPictures(options)
       .then(function (results) {
         for (var i = 0; i < results.length; i++) {
           console.log('Image URI: ' + results[i]);
-          $scope.images.push(results[i]);
-          //alert($scope.images);
+          //$scope.images.push(results[i]);
+          $scope.timeline[index].pic.push({src:results[i]});
+          $scope.date = new Date();
+          var date = $filter('date')($scope.date, 'yyyyMMdd_HHmmss');
+          $scope.name_pic = 'detail_'+localStorage.getItem('id')+'_'+id +'_'+i+date+'.jpg';
+          //alert($scope.name_pic);
+          var options = {
+                  fileKey: "file",
+                  chunkedMode: false,
+                  mimeType: "image/jpg",
+                  headers:{'headerParam':'headerValue'},
+                  httpMethod:"POST",
+                  params : {'name_pic':$scope.name_pic},
+              };
+          var server = ip_server+"/upload/pic/upload_pic.php";
+        //  alert(server);
+          var filePath = results[i];
+          $cordovaFileTransfer.upload(encodeURI(server), filePath, options).then(function(result) {
+
+          }, function(err) {
+                // Error
+                alert("ERROR : "+JSON.stringify(err));
+          }, function (progress) {
+                // constant progress updates
+          });
+          var data = "cropd_id="+id +"&name="+$scope.name_pic;
+        //  alert(data);
+          var ip = ip_server+'/index.php/services/addpiccrop';
+          $http.post(ip, data, config).success(function (data, status, headers, config) {
+            //ok
+          //  alert("uppic ok");
+          }).error(function (data, status, header, config) {
+            $scope.error = "ติดต่อ server ไม่ได้ uppic";
+            alert($scope.error);
+          });
         }
       }, function(error) {
         // error getting photos
@@ -654,7 +702,7 @@ $scope.pic = ip_server+path;
 
 })
 
-.controller('CropAccountCtrl',function($scope,$http,$state,$ionicHistory,$ionicPopup){
+.controller('CropAccountCtrl',function($scope,$http,$state,$ionicHistory,$ionicPopup,$ionicLoading){
   $scope.shouldShowDelete = false;
   $scope.shouldShowReorder = false;
   $scope.listCanSwipe = true;
@@ -681,10 +729,14 @@ $scope.pic = ip_server+path;
       $scope.$broadcast('scroll.refreshComplete');
     })
   };
-  $scope.$on("$ionicView.enter", function () {
+/*  $scope.$on("$ionicView.enter", function () {
    $ionicHistory.clearCache();
    //$ionicHistory.clearHistory();
-});
+});*/
+$scope.$on('$ionicView.beforeEnter', function () {
+  $ionicLoading.show({
+         template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
+  });
   $scope.crop_id = localStorage.getItem('crop_id');
   var data = "crop_id="+$scope.crop_id;
   //console.log(data);
@@ -694,14 +746,18 @@ $scope.pic = ip_server+path;
          //alert(JSON.stringify(data.data));
          $scope.accaccounts = data.data.all;
          $scope.total = data.data.total;
+         $ionicLoading.hide();
      })
      .error(function (data, status, header, config) {
          //alert("error: "+JSON.stringify(data) );
+         $ionicLoading.hide();
          console.log("login error");
          $scope.error = "ติดต่อ server ไม่ได้";
          alert($scope.error);
          //$state.go("app.login");
      })
+  })
+
     $scope.add = function(){
       $state.go("app.addAccount",{reload:true});
     };
@@ -755,11 +811,15 @@ $scope.pic = ip_server+path;
 
 })
 
-.controller('CropProblemCtrl',function($scope,$http,$state,$ionicHistory,$ionicPopup){
+.controller('CropProblemCtrl',function($scope,$http,$state,$ionicHistory,$ionicPopup,$ionicLoading){
   $scope.$on("$ionicView.enter", function () {
    $ionicHistory.clearCache();
    //$ionicHistory.clearHistory();
   });
+  $scope.$on('$ionicView.beforeEnter', function () {
+    $ionicLoading.show({
+           template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
+    });
   $scope.shouldShowDelete = false;
   $scope.shouldShowReorder = false;
   $scope.listCanSwipe = true;
@@ -774,14 +834,17 @@ $scope.pic = ip_server+path;
          $scope.problems = data.data;
          console.log($scope.problems);
         // $scope.total = data.total;
+        $ionicLoading.hide();
      })
      .error(function (data, status, header, config) {
          //alert("error: "+JSON.stringify(data) );
+         $ionicLoading.hide();
          console.log("login error");
          $scope.error = "ติดต่อ server ไม่ได้";
          alert($scope.error);
          //$state.go("app.login");
      });
+    });
 
      $scope.doRefresh = function() {
        var data = "crop_id="+$scope.crop_id;
@@ -844,6 +907,10 @@ $scope.pic = ip_server+path;
      $scope.detail = function(id){
        console.log("detail : "+id);
         $state.go("app.detailProblem",{cropp_id:id});
+     }
+     $scope.edit = function(id){
+       //alert(id);
+       $state.go("app.editProblem",{cropp_id:id});
      }
 })
 
@@ -929,7 +996,7 @@ $scope.pic = ip_server+path;
    };
  })
 
- .controller('AddProblemCtrl',function($scope, $state, $ionicActionSheet, $cordovaCamera, $http, $cordovaImagePicker,$ionicHistory){
+ .controller('AddProblemCtrl',function($scope, $state, $ionicActionSheet, $cordovaCamera, $http, $cordovaImagePicker,$ionicHistory,$cordovaFileTransfer,$filter){
    $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
      viewData.enableBack = true;
    })
@@ -938,88 +1005,21 @@ $scope.pic = ip_server+path;
     //$ionicHistory.clearHistory();
    });
    $scope.problems = {name:"",detail:"",type:1};
-   $scope.image = "img/Add_Image.png";
+
    $http.get(ip_server+'/index.php/services/gettypeproblem').then(function(res){
      $scope.types = res.data.data;
    });
 
-   $scope.summit = function(){
-     $state.go("app.tab.cropTimeline");
-   };
    $scope.close = function(){
      $state.go("app.tab.cropProblem");
-   };
-   $scope.showDetail = function() {
-     $ionicActionSheet.show({
-       //titleText: 'การนำเข้ารูป',
-       buttons: [
-         { text: '<center>จากเครื่อง</center>' },
-         { text: '<center>จากกล้อง</center>' },
-       ],
-       cancelText: 'ยกเลิก',
-       cancel: function() {
-         console.log('CANCELLED');
-       },
-       buttonClicked: function(index) {
-           switch (index) {
-             case 0:
-             //  alert("111");
-               var options = {
-                     destinationType: Camera.DestinationType.FILE_URI,
-                     sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
-                     correctOrientation: true,
-                     quality: 100,
-                     allowEdit: true,
-                   }
-               $cordovaCamera.getPicture(options).then(function(imageData){
-                 $scope.image = imageData;
-                 //$scope.imgURI = "data:image/jped;base64," + results;
-               },function(err){
-
-               });
-               break;
-             case 1:
-                 //alert("222");
-                 var options = {
-                     quality: 100,
-                     destinationType: Camera.DestinationType.DATA_URL,
-                     sourceType: Camera.PictureSourceType.CAMERA,
-                     allowEdit: true,
-                     encodingType: Camera.EncodingType.JPEG,
-                     //  targetWidth: 300,
-                     //targetHeight: 400,
-                     popoverOptions: CameraPopoverOptions,
-                     saveToPhotoAlbum: true,
-                     correctOrientation:true
-                     };
-
-                 $cordovaCamera.getPicture(options).then(function(imageData) {
-                 var image = document.getElementById('myImage');
-                 $scope.image = "data:image/jpeg;base64," + imageData;
-                 }, function(err) {
-                 // error
-                 });
-               break;
-           }
-         console.log('BUTTON CLICKED', index);
-         return true;
-       },
-     });
-   };
-
-   $scope.doSummit = function(form){
-     if(form.$valid) {
-       alert(JSON.stringify($scope.problems+$scope.images));
-     }
    };
    $scope.images = [];
    $scope.items = [];
 
    $scope.getpic = function(id){
-     //alert("ok : "+id);
      var options = {
        maximumImagesCount: 10,
-       quality: 100
+       quality: 30
      };
 
      $cordovaImagePicker.getPictures(options)
@@ -1027,41 +1027,74 @@ $scope.pic = ip_server+path;
          for (var i = 0; i < results.length; i++) {
            console.log('Image URI: ' + results[i]);
            $scope.images.push(results[i]);
-           //alert($scope.images);
            $scope.items.push({src:results[i]});
          }
        }, function(error) {
-         // error getting photos
        });
    };
-   $scope.check = function(text){
-     alert("ok "+text);
-   }
-   /*$scope.items = [
-  {
-    src:'http://www.wired.com/images_blogs/rawfile/2013/11/offset_WaterHouseMarineImages_62652-2-660x440.jpg',
-    sub: 'This is a <b>subtitle</b>'
-  },
-  {
-    src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
-    sub: ''
-  },
-  {
-    src:'http://www.wired.com/images_blogs/rawfile/2013/11/offset_WaterHouseMarineImages_62652-2-660x440.jpg',
-    thumb:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg'
-  },
-  {
-    src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
-    sub: ''
-  },
-  {
-    src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
-    sub: ''
-  },
-  {
-    src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
-    sub: ''
-  },*/
+
+  $scope.removeItem = function(index){
+    $scope.images.splice(index, 1);
+  }
+
+   $scope.doSummit = function(form){
+     if(form.$valid) {
+       var crop_id = localStorage.getItem('crop_id');
+       var data = "crop_id="+crop_id+"&name="+$scope.problems.name+"&detail="+$scope.problems.detail+"&type="+$scope.problems.type;
+       var ip = ip_server+'/index.php/services/addproblem';
+       $http.post(ip, data, config).success(function (data, status, headers, config) {
+        //  alert("cropp_id : "+data.data);
+          $scope.cropp_id = data.data;
+          var len = $scope.images.length;
+      //    alert("pic : "+len); //undefined
+          if (len > 0){
+            for(var i = 0; i < len; i++){
+          //    alert("name "+i+" : "+$scope.images[i]);
+              $scope.date = new Date();
+              var date = $filter('date')($scope.date, 'yyyyMMdd_HHmmss');
+              $scope.name_pic = 'problem_'+localStorage.getItem('id')+'_'+$scope.cropp_id +'_'+i+date+'.jpg';
+
+              var options = {
+                      fileKey: "file",
+                    //  fileName: "image.jpg",
+                      chunkedMode: false,
+                      mimeType: "image/jpg",
+                      headers:{'headerParam':'headerValue'},
+                      httpMethod:"POST",
+                      params : {'name_pic':$scope.name_pic},
+                  };
+              var server = ip_server+"/upload/problem/upload_problem.php";
+            //  alert(server);
+              var filePath = $scope.images[i];
+              $cordovaFileTransfer.upload(encodeURI(server), filePath, options).then(function(result) {
+            //    alert("ok");
+              }, function(err) {
+                    // Error
+                    alert("ERROR : "+JSON.stringify(err));
+              }, function (progress) {
+                    // constant progress updates
+              });
+              var data = "cropp_id="+$scope.cropp_id +"&name="+$scope.name_pic;
+            //  alert(data);
+              var ip = ip_server+'/index.php/services/addpicproblem';
+              $http.post(ip, data, config).success(function (data, status, headers, config) {
+               //ok
+              }).error(function (data, status, header, config) {
+                $scope.error = "ติดต่อ server ไม่ได้ uppic";
+                alert($scope.error);
+              });
+            };
+          }
+
+          $state.go("app.tab.cropProblem");
+
+       }).error(function (data, status, header, config) {
+         $scope.error = "ติดต่อ server ไม่ได้";
+         alert($scope.error);
+       });
+
+     }
+   };
 
  })
 
@@ -1074,6 +1107,7 @@ $scope.pic = ip_server+path;
   $scope.ip_pic = ip_server;
   $scope.id_user = localStorage.getItem('id');
   var id = $stateParams.cropp_id;
+  //alert(id);
   var data = "cropp_id="+id;
   var ip = ip_server+'/index.php/services/problemdetail';
   $http.post(ip, data, config).success(function (data, status, headers, config) {
@@ -1099,12 +1133,271 @@ $scope.pic = ip_server+path;
     });
     $scope.text = "";
   }
-
-
-
-
  })
 
+.controller('EditProblemCtrl', function($stateParams,$scope,$http,$cordovaImagePicker,$state,$cordovaFileTransfer,$filter){
+  //$scope.problems = [{name:''}];
+  $scope.cropp_id = $stateParams.cropp_id;
+$scope.images =[];
+  //$scope.problems = {detail:"xx"};
+  $http.get(ip_server+'/index.php/services/gettypeproblem').then(function(res){
+    $scope.types = res.data.data;
+  });
+  var data = "cropp_id="+$scope.cropp_id;
+  var ip = ip_server+'/index.php/services/problemdetailid';
+  $http.post(ip, data, config).success(function (data, status, headers, config) {
+    $scope.problem = data.data;
+    $scope.images = data.pic;
+    //var types = $scope.problem.tpro_id;
+
+  }).error(function (data, status, header, config) {
+    $scope.error = "ติดต่อ server ไม่ได้";
+    alert($scope.error);
+  });
+
+  $scope.getpic = function(id){
+    //alert("ok : "+id);
+    var options = {
+      maximumImagesCount: 10,
+      quality: 30
+    };
+
+    $cordovaImagePicker.getPictures(options)
+      .then(function (results) {
+        for (var i = 0; i < results.length; i++) {
+          console.log('Image URI: ' + results[i]);
+          $scope.images.push({src:results[i],id:null});
+        }
+      }, function(error) {
+        // error getting photos
+      });
+  };
+
+
+  $scope.removeItem = function(index){
+    //alert($scope.images[index].id);
+    if($scope.images[index].id == null){
+      $scope.images.splice(index, 1);
+    }else {
+      var data = "ppb_id="+$scope.images[index].id;
+      var ip = ip_server+'/index.php/services/delpicproblem';
+      $http.post(ip, data, config).success(function (data, status, headers, config) {
+        //ok
+      }).error(function (data, status, header, config) {
+        $scope.error = "ติดต่อ server ไม่ได้";
+        alert($scope.error);
+      });
+      $scope.images.splice(index, 1);
+    }
+  }
+
+  $scope.close = function(){
+    $state.go("app.tab.cropProblem");
+  };
+
+  $scope.doSummit = function(form){
+    if(form.$valid) {
+    //  alert(JSON.stringify($scope.problem));
+    //  alert(JSON.stringify($scope.images));
+      var data = "cropp_id="+$scope.problem.cropp_id+"&name="+$scope.problem.cropp_name+"&type="+$scope.problem.tpro_id+"&detail="+$scope.problem.cropp_detail;
+      var ip = ip_server+'/index.php/services/editproblem';
+      $http.post(ip, data, config).success(function (data, status, headers, config) {
+        //$state.go("app.tab.cropProblem");
+        $scope.cropp_id = data.data;
+        //alert($scope.cropp_id);
+        var len = $scope.images.length;
+      //  alert("len :"+len);
+        if (len > 0){
+          for(var i = 0; i < len; i++){
+            if($scope.images[i].id == null){
+              //alert("img : "+JSON.stringify($scope.images[i]));
+              //alert($scope.cropp_id);
+              $scope.date = new Date();
+              var date = $filter('date')($scope.date, 'yyyyMMdd_HHmmss');
+              $scope.name_pic = 'problem_'+localStorage.getItem('id')+'_'+$scope.cropp_id+'_'+i+date+'.jpg';
+
+            //  alert($scope.name_pic);
+              var options = {
+                      fileKey: "file",
+                      chunkedMode: false,
+                      mimeType: "image/jpg",
+                      headers:{'headerParam':'headerValue'},
+                      httpMethod:"POST",
+                      params : {'name_pic':$scope.name_pic},
+                  };
+              var server = ip_server+"/upload/problem/upload_problem.php";
+            //  alert(server);
+              var filePath = $scope.images[i].src;
+            //  alert(filePath);
+              $cordovaFileTransfer.upload(encodeURI(server), filePath, options).then(function(result) {
+                //alert("ok up");
+              }, function(err) {
+                    // Error
+                    alert("ERROR : "+JSON.stringify(err));
+              }, function (progress) {
+                    // constant progress updates
+              });
+              var data = "cropp_id="+$scope.cropp_id+"&name="+$scope.name_pic;
+            // alert(data);
+              var ip = ip_server+'/index.php/services/addpicproblem';
+              $http.post(ip, data, config).success(function (data, status, headers, config) {
+              //  alert("ok add");
+              }).error(function (data, status, header, config) {
+                $scope.error = "ติดต่อ server ไม่ได้ uppic";
+                alert($scope.error);
+              });
+            };
+          };
+          //$state.go("app.tab.cropProblem");
+        };
+          $state.go("app.tab.cropProblem");
+      }).error(function (data, status, header, config) {
+        $scope.error = "ติดต่อ server ไม่ได้";
+        alert($scope.error);
+      });
+
+    }
+  };
+
+})
+
+.controller('AddNoteCtrl',function($scope,$http,$filter,$state){
+  $scope.note = {detail:'',start_date:new Date(),end_date:new Date()};
+  var crop_id = localStorage.getItem('crop_id');
+  $scope.doSummit = function(form){
+    if(form.$valid) {
+      //alert(JSON.stringify($scope.note));
+      var start = $filter('date')($scope.note.start_date, 'yyyy-MM-dd HH:mm:ss');
+      var end = $filter('date')($scope.note.end_date, 'yyyy-MM-dd');
+      //alert(start+"  "+end);
+      var data = "crop_id="+crop_id+"&start="+start+"&end="+end+"&data="+$scope.note.detail;
+      var ip = ip_server+'/index.php/services/addnote';
+      $http.post(ip, data, config).success(function (data, status, headers, config) {
+        //alert(JSON.stringify(data));
+        $state.go("app.tab.cropTimeline");
+      }).error(function (data, status, header, config) {
+        $scope.error = "ติดต่อ server ไม่ได้";
+        alert($scope.error);
+      });
+    }
+  };
+  $scope.close = function(){
+    $state.go("app.tab.cropTimeline");
+  }
+})
+
+.controller('AddMultimediaCtrl', function($scope,$cordovaImagePicker,$cordovaCamera,$http,$filter,$cordovaFileTransfer,$state){
+  $scope.images = [];
+  $scope.mul = {detail:'',pic:''};
+  $scope.getpiconphone = function(){
+    var options = {
+      maximumImagesCount: 10,
+      quality: 30
+    };
+
+    $cordovaImagePicker.getPictures(options)
+      .then(function (results) {
+        for (var i = 0; i < results.length; i++) {
+          console.log('Image URI: ' + results[i]);
+          $scope.images.push(results[i]);
+          $scope.mul.pic = "ok";
+        }
+      }, function(error) {
+        // error getting photos
+      });
+  };
+
+  $scope.takepic = function(){
+    var options = {
+        quality: 30,
+        destinationType: Camera.DestinationType.FILE_URI,
+        sourceType: Camera.PictureSourceType.CAMERA,
+        popoverOptions: CameraPopoverOptions,
+        saveToPhotoAlbum: true,
+        correctOrientation:true,
+        };
+
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+    var image = document.getElementById('myImage');
+    $scope.images.push(imageData);
+      $scope.mul.pic = "ok";
+    }, function(err) {
+    // error
+    });
+  };
+
+  $scope.removeItem = function(index){
+    $scope.images.splice(index, 1);
+    var len = $scope.images.length;
+    if (len == 0){
+      $scope.mul.pic = '';
+    }
+  };
+
+  $scope.close = function(){
+    $state.go("app.tab.cropTimeline");
+  }
+  var crop_id = localStorage.getItem('crop_id');
+  $scope.doSummit = function(form){
+    if(form.$valid) {
+      //alert(JSON.stringify($scope.mul));
+      var data = "crop_id="+crop_id+"&detail="+$scope.mul.detail;
+      var ip = ip_server+'/index.php/services/addmultimedia';
+      $http.post(ip, data, config).success(function (data, status, headers, config) {
+        //alert(JSON.stringify(data));
+        var cropm_id = data.data;
+        var len = $scope.images.length;
+    //    alert("pic : "+len); //undefined
+        if (len > 0){
+          for(var i = 0; i < len; i++){
+        //    alert("name "+i+" : "+$scope.images[i]);
+            $scope.date = new Date();
+            var date = $filter('date')($scope.date, 'yyyyMMdd_HHmmss');
+            $scope.name_pic = 'mul_'+localStorage.getItem('id')+'_'+cropm_id +'_'+i+date+'.jpg';
+          //  alert(name_pic);
+            var options = {
+                    fileKey: "file",
+                  //  fileName: "image.jpg",
+                    chunkedMode: false,
+                    mimeType: "image/jpg",
+                    headers:{'headerParam':'headerValue'},
+                    httpMethod:"POST",
+                    params : {'name_pic':$scope.name_pic},
+                };
+            var server = ip_server+"/upload/pic/upload_pic.php";
+          //  alert(server);
+            var filePath = $scope.images[i];
+            $cordovaFileTransfer.upload(encodeURI(server), filePath, options).then(function(result) {
+          //    alert("ok");
+
+            }, function(err) {
+                  // Error
+                  alert("ERROR : "+JSON.stringify(err));
+            }, function (progress) {
+                  // constant progress updates
+            });
+            var data = "cropm_id="+cropm_id +"&name="+$scope.name_pic;
+          //  alert(data);
+            var ip = ip_server+'/index.php/services/addpicmul';
+            $http.post(ip, data, config).success(function (data, status, headers, config) {
+              //ok
+            //  alert("uppic ok");
+            }).error(function (data, status, header, config) {
+              $scope.error = "ติดต่อ server ไม่ได้ uppic";
+              alert($scope.error);
+            });
+          };
+        }//if
+        $state.go("app.tab.cropTimeline");
+      }).error(function (data, status, header, config) {
+        $scope.error = "ติดต่อ server ไม่ได้";
+        alert($scope.error);
+      });
+    }
+  };
+
+
+})
 
 .controller('PlaylistsCtrl', function($scope) {
   $scope.playlists = [
@@ -1116,6 +1409,7 @@ $scope.pic = ip_server+path;
     { title: 'Cowbell', id: 6 }
   ];
 })
+
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 });

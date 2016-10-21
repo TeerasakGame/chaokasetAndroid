@@ -119,6 +119,22 @@ Main components
   background: white;
   text-align: center;
 }
+
+.cd-timeline-icon2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border-color: #33cd5f;
+  border-style: solid;
+  border-width: 2px;
+  padding-top: 5px;
+  background: white;
+  text-align: center;
+  margin-top: 10px;
+}
 /*
 .cd-timeline-icon i {
   color: red;
@@ -147,13 +163,27 @@ Main components
 
 .cd-timeline-content {
   position: relative;
-  margin-left: 60px;
+  margin-left: 48px;
   background: white;
   border-radius: 0.25em;
   border-color: #33cd5f;
   border-style: solid;
   border-width: 2px;
-  margin-bottom: 10px;
+  /*margin-bottom: 5px;*/
+  margin-top: -10px;
+  padding: 10px;
+}
+
+.cd-timeline-content2 {
+  position: relative;
+  margin-left: 48px;
+  background: white;
+  border-radius: 0.25em;
+  border-color: white;
+  border-style: solid;
+  border-width: 2px;
+  margin-bottom: 5px;
+  margin-top: 15px;
   padding: 10px;
 }
 

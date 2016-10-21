@@ -1,0 +1,38 @@
+<ion-view view-title="เพิ่มบันทึก">
+  <ion-content>
+    <form ng-submit="doSummit(Form)" name="Form" novalidate="">
+
+    <label class="item item-input">
+      <span class="input-label">วันที่เริ่ม</span>
+      <input type="date" name="start" ng-model="note.start_date" required>
+    </label>
+    <div class="form-errors" ng-show="Form.start.$error && Form.$submitted" ng-messages="Form.start.$error">
+        <div class="form-error" ng-message="required"><b>กรุณาเลือกวันเริ่มต้น</b></div>
+    </div>
+
+    <label class="item item-input">
+      <span class="input-label">วันที่สิ้นสุด</span>
+      <input type="date" name="end" ng-model="note.end_date" placeholder="" min="{{note.start_date | date:'yyyy-MM-dd'}}" value="{{note.start_date | date:'yyyy-MM-dd'}}" required>
+    </label>
+    <div class="form-errors" ng-show="Form.end.$error && Form.$submitted" ng-messages="Form.end.$error">
+        <div class="form-error" ng-message="required"><b>กรุณาเลือกวันที่สิ้นสุด</b></div>
+        <div class="form-error" ng-message="min"><b>กรุณาเลือกว้นสิ้นสุดที่มีค่ามากกว่าหรือเท่ากับวันเริ่มต้น</b></div>
+    </div>
+
+
+    <label class="item item-input item-stacked-label">
+      <span class="input-label">รายละเอียด</span>
+      <textarea class="textarear" rows="6" placeholder="รายละเอียด..." name="detail" ng-model="note.detail" required></textarea>
+    </label>
+    <div class="form-errors" ng-show="Form.detail.$error && Form.$submitted" ng-messages="Form.detail.$error">
+        <div class="form-error" ng-message="required"><b>กรุณากรอกรายละเอียดของปัญหา</b></div>
+    </div>
+
+    <div class="bar bar-footer">
+      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
+    </div></form>
+
+  </ion-content>
+
+</ion-view>

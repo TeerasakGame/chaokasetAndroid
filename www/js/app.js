@@ -169,6 +169,36 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
     }
   })
 
+  .state('app.editProblem', {
+     url: '/editproblem/:cropp_id',
+     views: {
+       'menuContent': {
+         templateUrl: 'templates/editproblem.html',
+         controller: 'EditProblemCtrl'
+       }
+     }
+   })
+
+   .state('app.addnote', {
+     url: '/addnote',
+     views: {
+       'menuContent': {
+         templateUrl: 'templates/addnote.html',
+         controller: 'AddNoteCtrl'
+       }
+     }
+   })
+
+   .state('app.addmultimedia', {
+     url: '/addmultimedia',
+     views: {
+       'menuContent': {
+         templateUrl: 'templates/addmultimedia.html',
+         controller: 'AddMultimediaCtrl'
+       }
+     }
+   })
+
   .state('app.search', {
     url: '/search',
     views: {

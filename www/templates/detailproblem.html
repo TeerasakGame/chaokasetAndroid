@@ -3,7 +3,7 @@
 
     <div class="padding">
       <h3  class="text-green"><center>{{problem.cropp_name}}</center></h3>
-      <ion-gallery ion-gallery-items="items" ion-zoom-events="true"></ion-gallery>
+      <ion-gallery ion-gallery-items="items" ion-zoom-events="true" ng-if="items != null"></ion-gallery>
       <p style="text-indent: 2.5em;color:gray;margin-top:10px">{{problem.cropp_detail}}</p>
     </div>
 

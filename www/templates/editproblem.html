@@ -1,9 +1,11 @@
-<ion-view view-title="เพิ่มปัญหาการเพาะปลูก">
+<ion-view view-title="แก้ไขปัญหาการเพาะปลูก {{ cropp_id}}">
   <ion-content>
+
+    {{problems.type}}
     <form ng-submit="doSummit(Form)" name="Form" novalidate="">
     <label class="item item-input">
       <span class="input-label">หัวข้อ</span>
-      <input type="text" name="name" ng-model="problems.name" placeholder="กรุณากรอกชื่อปัญหา" required>
+      <input type="text" name="name" ng-model="problem.cropp_name" placeholder="กรุณากรอกชื่อปัญหา"  required>
     </label>
     <div class="form-errors" ng-show="Form.name.$error && Form.$submitted" ng-messages="Form.name.$error">
         <div class="form-error" ng-message="required"><b>กรุณากรอกชื่อปัญหา</b></div>
@@ -12,14 +14,14 @@
       <div class="input-label">
         ประเภทปัญหา
       </div>
-      <select name="type" ng-model="problems.type">
-        <option ng-repeat="type in types" ng-selected="{{type.tpro_id == problems.type}}" ng-bind="type.tpro_name" ng-value="type.tpro_id"></option>
+    <select name="type" ng-model="problem.tpro_id">
+        <option ng-repeat="type in types" ng-selected="{{type.tpro_id == problem.tpro_id}}" ng-bind="type.tpro_name" value="{{type.tpro_id}}"></option>
       </select>
     </label>
 
     <label class="item item-input item-stacked-label">
-      <span class="input-label">รายละเอียด</span>
-      <textarea class="textarear" rows="6" placeholder="รายละเอียด..." name="detail" ng-model="problems.detail" required></textarea>
+      <span class="input-label">รายละเอียด </span>
+      <textarea rows="6" placeholder="รายละเอียด..." name="detail" ng-model="problem.cropp_detail" required></textarea>
     </label>
     <div class="form-errors" ng-show="Form.detail.$error && Form.$submitted" ng-messages="Form.detail.$error">
         <div class="form-error" ng-message="required"><b>กรุณากรอกรายละเอียดของปัญหา</b></div>
@@ -40,7 +42,7 @@
       <div class="row" ng-if="$even">
           <div class="col col-50">
             <div class="item item-thumbnail-left" ng-if="images[$index] != null">
-              <img src="{{images[$index]}}">
+              <img src="{{images[$index].src}}">
               <div class="button button-assertive" ng-click="removeItem($index)">
                 ลบ
               </div>
@@ -48,7 +50,7 @@
           </div>
           <div class="col col-50">
             <div class="item item-thumbnail-left" ng-if="images[$index + 1] != null">
-              <img src="{{images[$index + 1]}}">
+              <img src="{{images[$index + 1].src}}">
               <div class="button button-assertive" ng-click="removeItem($index+1)">
                 ลบ
               </div>
@@ -57,10 +59,10 @@
       </div>
   </div>
 
-    <div class="bar bar-footer">
-      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
-      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
-    </div></form>
+  <div class="bar bar-footer">
+    <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+    <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
+  </div></form>
 
   </ion-content>
 
