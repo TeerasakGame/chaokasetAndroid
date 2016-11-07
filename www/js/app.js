@@ -132,7 +132,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
     }
   })
   .state('app.editAccount', {
-    url: '/editaccount/:data',
+    url: '/editaccount/:data/:redirect',
     views: {
       'menuContent': {
         templateUrl: 'templates/editaccount.html',
@@ -149,6 +149,17 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
      }
    }
  })
+
+ .state('app.editActivities', {
+  url: '/editactivities/:id',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/editactivities.html',
+      controller: 'EditActivitiesCtrl'
+    }
+  }
+ })
+
  .state('app.addProblem', {
     url: '/addproblem',
     views: {
@@ -170,7 +181,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
   })
 
   .state('app.editProblem', {
-     url: '/editproblem/:cropp_id',
+     url: '/editproblem/:cropp_id/:redirect',
      views: {
        'menuContent': {
          templateUrl: 'templates/editproblem.html',
@@ -189,6 +200,16 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
      }
    })
 
+   .state('app.editnote', {
+      url: '/editnote/:id',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/editnote.html',
+          controller: 'EditNoteCtrl'
+        }
+      }
+    })
+
    .state('app.addmultimedia', {
      url: '/addmultimedia',
      views: {
@@ -198,6 +219,26 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
        }
      }
    })
+
+   .state('app.editmultimedia', {
+      url: '/editmultimedia/:id',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/editmultimedia.html',
+          controller: 'EditMultimediaCtrl'
+        }
+      }
+    })
+
+    .state('app.editcrop', {
+       url: '/editcrop/:id',
+       views: {
+         'menuContent': {
+           templateUrl: 'templates/editcrop.html',
+           controller: 'EditCropCtrl'
+         }
+       }
+     })
 
   .state('app.search', {
     url: '/search',

@@ -21,17 +21,18 @@
         <ion-option-button class="button-energized" ng-click="edit({{a.crop_id}});">
           <i class="icon ion-android-create"></i>&nbsp;แก้ไข
         </ion-option-button>
-        <ion-option-button class="button-assertive" ng-click="del({{a.crop_id}});">
+        <ion-option-button class="button-assertive" ng-click="del({{a.crop_id}},$index);">
           <i class="icon ion-trash-b"></i>&nbsp;&nbsp;ลบ&nbsp;
         </ion-option-button>
       </ion-item>
 
     </ion-list>
     <div class="list">
-    <a class="item" href="#" onclick="window.open('https://www.youtube.com/watch?v=j3-8gLCYhQY', '_system', 'location=yes'); return false;">
+    <!--<a class="item" href="#" onclick="window.open('https://www.youtube.com/watch?v=j3-8gLCYhQY', '_system', 'location=yes'); return false;">
         Open a Browser
     </a>
-    </div>
+  </div>-->
+    <div style="margin-bottom:10%;"><font color="white">5</font></div>
   </ion-content>
 
   <nav mfb-menu position="br" resting-icon="ion-plus-round" active-icon="ion-plus-round" ng-click="add()"  menu-state="myVar">

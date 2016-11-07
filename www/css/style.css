@@ -6,6 +6,7 @@
   fill: #444;
 }
 
+
 @font-face {
     font-family: 'kanitlight';
     src: local('../lib/ionic/fonts/kanitlight'),
@@ -124,10 +125,14 @@ label.item.valid-lr {
 }
 
 #footer {
-  position : absolute;
+/*  position : absolute;
   bottom : 0;
   margin-top : 40px;
-  height : 50px;
+  height : 100px;*/
+  position: absolute;
+   right: 0;
+   bottom: 0;
+   left: 0;
 }
 
 .text{

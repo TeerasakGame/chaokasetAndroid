@@ -1,4 +1,4 @@
-<ion-view view-title="เพิ่มรูปภาพการเพาะปลูก">
+<ion-view view-title="แก้ไขรูปภาพการเพาะปลูก">
   <ion-content>
     <form ng-submit="doSummit(Form)" name="Form" novalidate="">
       <label class="item item-input">
@@ -20,20 +20,19 @@
       </div>
     </div>
   </div>
-
   <div ng-repeat="pic in images">
       <div class="row" ng-if="$even">
           <div class="col col-50">
-            <div class="item item-thumbnail-left" ng-if="images[$index] != null">
-              <img src="{{images[$index]}}">
+            <div class="item item-thumbnail-left" ng-if="images[$index].src != null">
+              <img src="{{images[$index].src}}">
               <div class="button button-assertive" ng-click="removeItem($index)">
                 ลบ
               </div>
             </div>
           </div>
           <div class="col col-50">
-            <div class="item item-thumbnail-left" ng-if="images[$index + 1] != null">
-              <img src="{{images[$index + 1]}}">
+            <div class="item item-thumbnail-left" ng-if="images[$index + 1].src != null">
+              <img src="{{images[$index + 1].src}}">
               <div class="button button-assertive" ng-click="removeItem($index+1)">
                 ลบ
               </div>

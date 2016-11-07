@@ -60,9 +60,9 @@
                      วิดิโอแนะนำ
                    </button>
                  </a>-->
-                  <!--<button class="button button-clear button-small button-positive">
-                    <i class="ion-document" style="font-size: 25px;color:gray;"></i>
-                  </button>-->
+                 <button class="button button-clear button-small button-positive" ng-click="getpiccamera({{activity.id}},{{$index}});">
+                    <i class="ion-android-camera" style="font-size: 25px;color:gray;"></i>
+                  </button>
                   <button class="button button-clear button-small button-positive" ng-click="getpic({{activity.id}},{{$index}});">
                      <i class="ion-images" style="font-size: 25px;color:gray;"></i>
                    </button>
@@ -82,7 +82,7 @@
                   </div>
                   <div class="col-10">
                     <div align="right" style="margin-top:-10px">
-                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'account',activity.status_show,{{$index}});">
                         <i class="ion-chevron-down" style="color:gray;"></i>
                       </button>
                     </div>
@@ -108,7 +108,7 @@
                   </div>
                   <div class="col-10">
                     <div align="right" style="margin-top:-10px">
-                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'problem',activity.status_show,{{$index}});">
                         <i class="ion-chevron-down" style="color:gray;"></i>
                       </button>
                     </div>
@@ -136,7 +136,7 @@
                   </div>
                   <div class="col-10">
                     <div align="right" style="margin-top:-10px">
-                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'note',activity.status_show,{{$index}});">
                         <i class="ion-chevron-down" style="color:gray;"></i>
                       </button>
                     </div>
@@ -162,7 +162,7 @@
                   </div>
                   <div class="col-10">
                     <div align="right" style="margin-top:-10px">
-                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'multimedia',activity.status_show,{{$index}});">
                         <i class="ion-chevron-down" style="color:gray;"></i>
                       </button>
                     </div>
@@ -247,6 +247,7 @@
       </div>
       </section >
     </ion-scroll>
+    <div style="margin-bottom:10%;"><font color="white">5</font></div>
 
   </ion-content>
 </ion-view>

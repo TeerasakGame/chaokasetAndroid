@@ -1,52 +1,49 @@
 <ion-view view-title="เพิ่มกิจกรรมการเพาะปลูก">  <ion-content>
-
-      <!--<div class="item item-divider text-green">
-        กิจกรรม
-      </div>-->
+  <form ng-submit="doSummit(Form)" name="Form" novalidate="">
 
       <label class="item item-input">
         <span class="input-label">ชื่อกิจกรรม</span>
-        <input type="text" name="name" ng-model="register.name" placeholder="กรุณากรอกชื่อกิจกรรม" required>
+        <input type="text" name="name" ng-model="atv.name" placeholder="กรุณากรอกชื่อกิจกรรม" required>
       </label>
+      <div class="form-errors" ng-show="Form.name.$error && Form.$submitted" ng-messages="Form.name.$error">
+          <div class="form-error" ng-message="required"><b>กรุณากรอกชื่อกิจกรรม</b></div>
+      </div>
       <label class="item item-input item-select">
         <div class="input-label">
           ประเภทกิจกรรม
         </div>
-        <select>
-          <option>ดูแลรักษา</option>
-          <option selected>จัดการน้ำ</option>
-          <option>โรค</option>
-          <option>แมลง</option>
-          <option>ศัตรูพืช</option>
+
+        <select name="type" ng-model="atv.type" >
+          <option ng-repeat="type in types" ng-bind="type.tgui_name" ng-selected="{{type.tgui_id == atv.type}}" ng-value="type.tgui_id"></option>
         </select>
       </label>
+
       <label class="item item-input">
         <span class="input-label">วันเริ่ม</span>
-        <input type="date" ng-value="{{1288323623006 | date:'yyyy-MM-dd HH:mm:ss'}}">
+        <input type="date" ng-model="atv.start" name="start" min="{{crop_start | date:'yyyy-MM-dd'}}">
       </label>
       <label class="item item-input">
         <span class="input-label">วันสิ้นสุด</span>
-        <input type="date">
+        <input name="end" type="date" ng-model="atv.end" min="{{atv.start | date:'yyyy-MM-dd'}}" required>
       </label>
+      <div class="form-errors" ng-show="Form.end.$error && Form.$submitted" ng-messages="Form.end.$error">
+          <div class="form-error" ng-message="required"><b>กรุณาเลือกวันที่สิ้นสุด</b></div>
+          <div class="form-error" ng-message="min"><b>กรุณาเลือกว้นสิ้นสุดที่มีค่ามากกว่าหรือเท่ากับวันเริ่มต้น</b></div>
+      </div>
+
       <label class="item item-input item-stacked-label">
         <span class="input-label">รายละเอียด</span>
-        <textarea class="textarear" rows="6" placeholder="รายละเอียด..."></textarea>
+        <textarea class="textarear" rows="6" placeholder="รายละเอียด..." name="detail" ng-model="atv.datail" required></textarea>
       </label>
+      <div class="form-errors" ng-show="Form.detail.$error && Form.$submitted" ng-messages="Form.detail.$error">
+          <div class="form-error" ng-message="required"><b>กรุณากรอกรายละเอียด</b></div>
+      </div>
 
-
-      <!--<button class="button button-full button-positive" ng-click="summit()">
-        บันทึกกิจกรรม
-      </button>-->
-
-      <!--<div class="bar-footer">
-        <button class="button button-full button-positive" ng-click="summit()">
-          บันทึกกิจกรรม
-        </button>
-      </div>-->
-
-
+      <div class="bar bar-footer" id="footer">
+        <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+        <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
+      </div>
+    </form>
   </ion-content>
-  <ion-footer-bar  align-title="center"class="bar-positive" ng-click="summit()">
-      <div class="title"><h4>บันทึกกิจกรรม</h4></div>
-  </ion-footer-bar>
+
 </ion-view>

@@ -1,0 +1,91 @@
+<ion-view view-title="แก้ไขกิจกรรมการเพาะปลูก">
+  <form ng-submit="doSummit(Form)" name="Form" novalidate="">
+  <ion-content style="margin-bottom:50px;">
+
+    <div class="item item-divider text-green">
+      รายละเอียดกิจกรรม
+    </div>
+      <label class="item item-input">
+        <span class="input-label">ชื่อกิจกรรม</span>
+        <input type="text" name="name" ng-model="atv.name" placeholder="กรุณากรอกชื่อกิจกรรม" required>
+      </label>
+      <div class="form-errors" ng-show="Form.name.$error && Form.$submitted" ng-messages="Form.name.$error">
+          <div class="form-error" ng-message="required"><b>กรุณากรอกชื่อกิจกรรม</b></div>
+      </div>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          ประเภทกิจกรรม
+        </div>
+        <select name="type" ng-model="atv.type" >
+          <option ng-repeat="type in types" ng-bind="type.tgui_name" ng-selected="type.tgui_id == atv.type" ng-value="type.tgui_id"></option>
+        </select>
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label">วันเริ่ม</span>
+        <input type="date" ng-model="atv.start" name="start" min="{{crop_start | date:'yyyy-MM-dd'}}">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">วันสิ้นสุด</span>
+        <input name="end" type="date" ng-model="atv.end" min="{{atv.start | date:'yyyy-MM-dd'}}" required>
+      </label>
+      <div class="form-errors" ng-show="Form.end.$error && Form.$submitted" ng-messages="Form.end.$error">
+          <div class="form-error" ng-message="required"><b>กรุณาเลือกวันที่สิ้นสุด</b></div>
+          <div class="form-error" ng-message="min"><b>กรุณาเลือกว้นสิ้นสุดที่มีค่ามากกว่าหรือเท่ากับวันเริ่มต้น</b></div>
+      </div>
+
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">รายละเอียด</span>
+        <textarea class="textarear" rows="4" placeholder="รายละเอียด..." name="detail" ng-model="atv.datail" ></textarea>
+      </label>
+      <div class="form-errors" ng-show="Form.detail.$error && Form.$submitted" ng-messages="Form.detail.$error">
+          <div class="form-error" ng-message="required"><b>กรุณากรอกรายละเอียด</b></div>
+      </div>
+      <div class="item item-divider text-green">
+        <div class="row">
+          <div class="col-80">
+          รูปภาพ
+        </div>
+        <div class="col-10 text-right" ng-click="getpiconphone()"  align="right">
+          <!--<img src="{{image}}" height="10px" width="10px">-->
+          <i class="ion-images" style="font-size: 23px;color:green;"></i>
+        </div>
+        <div class="col-10 text-right" ng-click="takepic()" >
+          <!--<img src="{{image}}" height="10px" width="10px">-->
+          <i class="ion-android-camera" style="font-size: 23px;color:green;"></i>
+        </div>
+      </div>
+    </div>
+    <div ng-repeat="pic in images">
+        <div class="row" ng-if="$even">
+            <div class="col col-50">
+              <div class="item item-thumbnail-left" ng-if="images[$index].src != null">
+                <img src="{{images[$index].src}}">
+                <div class="button button-assertive" ng-click="removeItem($index)">
+                  ลบ
+                </div>
+              </div>
+            </div>
+            <div class="col col-50">
+              <div class="item item-thumbnail-left" ng-if="images[$index + 1].src != null">
+                <img src="{{images[$index + 1].src}}">
+                <div class="button button-assertive" ng-click="removeItem($index+1)">
+                  ลบ
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  <!--  <div class="bar bar-footer" id="footer">
+      <button style="min-width: 50%;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+      <button type="submit" style="min-width: 50%;"  class="button button-positive">บันทึก</button>
+    </div>-->
+
+
+  </ion-content>
+ <div class="bar bar-footer">
+    <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+    <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
+  </div>
+</form>
+</ion-view>

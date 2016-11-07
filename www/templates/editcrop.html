@@ -1,4 +1,4 @@
-<ion-view view-title="เพิ่มแปลงเพาะปลูก">
+<ion-view view-title="แก้ไขแปลงเพาะปลูก">
   <ion-content>
     <form ng-submit="doSummit(FormCrop)" name="FormCrop" novalidate="">
     <div class="item item-divider text-green">
@@ -15,7 +15,7 @@
      <div class="input-label">
        ชื่อพืช
      </div>
-     <select ng-model="plant" ng-options="c.plant for c in test"></select>
+     <select ng-model="plant" ng-options="c.plant for c in test" ng-disabled="true"></select>
 
    </label>
    <!--<div class="form-errors" ng-show="FormCrop.plant.$error && FormCrop.$submitted" ng-messages="FormCrop.plant.$error">
@@ -29,7 +29,7 @@
       <option ng-repeat="seed in seeds" ng-bind="seed.seed_name" ng-value="seed.seed_id"></option>
     </select>-->
 
-    <select name="seed" ng-model="seed" ng-options="p.name for p in plant.seed" ng-change="changeseed(seed.seed_id)" required>
+    <select name="seed" ng-model="seed" ng-options="p.name for p in plant.seed" ng-change="changeseed(seed.seed_id)" ng-disabled="true" required>
       <option value="">-- กรุณาเลือก --</option>
 
     </select>
@@ -49,7 +49,7 @@
      <!--<select name="plan" ng-model="crop.plan" >
        <option ng-repeat="plan in plans" ng-bind="plan.pla_name" value="{{plan.pla_id}}"></option>
      </select>-->
-     <select name="plan" ng-model="plan" ng-options="o.name for o in seed.plan" ng-change="changeplan(plan.plan_id)" required><option value="">-- กรุณาเลือก --</option></select>
+     <select name="plan" ng-model="plan" ng-options="o.name for o in seed.plan" ng-change="changeplan(plan.plan_id)" ng-disabled="true" required><option value="">-- กรุณาเลือก --</option></select>
    </label>
    <div class="form-errors" ng-show="FormCrop.plan.$error && FormCrop.$submitted" ng-messages="FormCrop.plan.$error">
        <div class="form-error" ng-message="required"><b>กรุณาเลือกแผน</b></div>
@@ -96,7 +96,7 @@
        <div class="form-error" ng-message="required"><b>กรุณาระบุตำแหน้งแปลงเพาะปลูก</b></div>
    </div>-->
      <button class="button button-full button-positive">
-        เพิ่มแปลงเพาะปลูก
+        แก้ไขข้อมูลแปลงเพาะปลูก
      </button>
   </form>
   </ion-content>
