@@ -1,5 +1,5 @@
 
-<ion-view view-title="แผนการเพาะปลูก {{crop_id}}">
+<ion-view view-title="แผนการเพาะปลูก">
   <nav mfb-menu position="br" resting-icon="ion-plus-round" active-icon="ion-close-round"  toggling-method="click" effect="slidein">
     <button mfb-button icon="ion-image timelineIcon" label="เพิ่มรูปภาพ" ng-click="addMul();"></button>
     <button mfb-button icon="ion-document timelineIcon" style="color:brown" label="เพิ่มบันทึก" ng-click="addNote();"></button>
@@ -60,6 +60,11 @@
                      วิดิโอแนะนำ
                    </button>
                  </a>-->
+
+                  <button class="button button-clear button-small button-positive" ng-click="openvdo(activity.vdo);" ng-if="activity.status_vdo=='true'">
+                    <i class="ion-social-youtube" style="font-size: 25px;color:gray;"></i>
+                  </button>
+
                  <button class="button button-clear button-small button-positive" ng-click="getpiccamera({{activity.id}},{{$index}});">
                     <i class="ion-android-camera" style="font-size: 25px;color:gray;"></i>
                   </button>

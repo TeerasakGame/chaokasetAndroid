@@ -1,0 +1,281 @@
+
+<ion-view view-title="บริการ/รับจ้าง">
+
+
+  <ion-content class="has-subheader ">
+
+  	<ion-refresher
+	    pulling-text="อัพเดตข้อมูล"
+	    on-refresh="doRefresh()">
+  	</ion-refresher>
+
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="ชื่อสินค้า" ng-model="search">
+      </label>
+    </div>
+
+
+    <div class="list card" ng-repeat="p in product | filter : {product:search||undefined}">
+
+
+      <div class="item item-avatar">
+
+        <img src="{{'http://188.166.191.211/rest/'+p.profile}}">
+        <div class="row">
+          <div class="col col-60">
+            <h2>{{p.name}}</h2>
+            <p>{{p.date}}</p>
+          </div>
+          <div class="col col-40 text-right" style="padding-top:5px">
+            <b style="font-size:18px">{{p.distance | number:2}}</b></br>ก.ม.
+          </div>
+        </div>
+      </div>
+
+      <div class="item item-body">
+        <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search"></div>
+
+        <ion-slide-box>
+          <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://188.166.191.211/rest/'+img.pprd_path}}" height="250"></ion-slide>
+        </ion-slide-box>
+
+        <p>
+          {{p.detail}}
+        </p>
+        <div class="row">
+          <div class=" col col-40">
+            <b style="font-size:30px" class="text-left text-green">{{p.price | number}}</b></br>บาท/{{p.unit}}
+          </div>
+          <div class=" col col-60">
+            <div class="row text-right">
+              <a ng-click="like({{p.prd_id}},{{$index}});" class="subdued">{{p.like}} ถูกใจ</a>
+              <a href="#" class="subdued">{{p.comment}} ความคิดเห็น</a>
+            </div>
+            <div class="row" >
+              <i class="ion-ios-location"></i>  {{ p.location.changwat}}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+
+
+    <div style="margin-bottom:10%;"><font color="white">5</font></div>
+  </ion-content>
+
+  <ion-tabs class="tabs-icon-top tabs-background-stable tabs-color-balanced">
+
+    <ion-tab title="ล่าสุด" icon-on="ion-ios-refresh" icon-off="ion-ios-refresh-outline" >
+      <!-- Tab 1 content -->
+      <ion-view view-title="">
+       <ion-content>
+         <ion-refresher
+     	    pulling-text="อัพเดตข้อมูล"
+     	    on-refresh="doRefresh()">
+       	</ion-refresher>
+
+         <div class="list list-inset">
+           <label class="item item-input">
+             <i class="icon ion-search placeholder-icon"></i>
+             <input type="text" placeholder="ชื่อสินค้า" ng-model="search">
+           </label>
+         </div>
+
+         <div class="list card" ng-repeat="p in product | filter : {product:search||undefined}">
+
+
+           <div class="item item-avatar">
+
+             <img src="{{'http://188.166.191.211/rest/'+p.profile}}">
+             <div class="row">
+               <div class="col col-60">
+                 <h2>{{p.name}}</h2>
+                 <p>{{p.date}}</p>
+               </div>
+               <div class="col col-40 text-right" style="padding-top:5px">
+                 <b style="font-size:18px">{{p.distance | number:2}}</b></br>ก.ม.
+               </div>
+             </div>
+           </div>
+
+           <div class="item item-body">
+             <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search"></div>
+
+             <ion-slide-box>
+               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://188.166.191.211/rest/'+img.pprd_path}}" height="250px"></ion-slide>
+             </ion-slide-box>
+
+             <p>
+               {{p.detail}}
+             </p>
+             <div class="row">
+               <div class=" col col-40">
+                 <b style="font-size:30px" class="text-left text-green">{{p.price | number}}</b></br>บาท/{{p.unit}}
+               </div>
+               <div class=" col col-60">
+                 <div class="row text-right">
+                   <a ng-click="like({{p.prd_id}},{{$index}});" class="subdued">{{p.like}} ถูกใจ</a>
+                   <a href="#" class="subdued">{{p.comment}} ความคิดเห็น</a>
+                 </div>
+                 <div class="row" >
+                   <i class="ion-ios-location"></i>  {{ p.location.changwat}}
+                 </div>
+
+               </div>
+             </div>
+           </div>
+
+         </div>
+
+       </ion-content>
+     </ion-view>
+    </ion-tab>
+
+    <ion-tab title="ระยะทาง" icon-on="ion-ios-navigate" icon-off="ion-ios-navigate-outline" >
+      <!-- Tab 2 content -->
+      <ion-view view-title="">
+       <ion-content>
+         <ion-refresher
+     	    pulling-text="อัพเดตข้อมูล"
+     	    on-refresh="doRefresh()">
+       	</ion-refresher>
+
+         <div class="list list-inset">
+           <label class="item item-input">
+             <i class="icon ion-search placeholder-icon"></i>
+             <input type="text" placeholder="ชื่อสินค้า" ng-model="search">
+           </label>
+         </div>
+
+         <div class="list card" ng-repeat="p in product | filter : {product:search||undefined} | orderBy:'distance' ">
+
+
+           <div class="item item-avatar">
+
+             <img src="{{'http://188.166.191.211/rest/'+p.profile}}">
+             <div class="row">
+               <div class="col col-60">
+                 <h2>{{p.name}}</h2>
+                 <p>{{p.date}}</p>
+               </div>
+               <div class="col col-40 text-right" style="padding-top:5px">
+                 <b style="font-size:18px">{{p.distance | number:2}}</b></br>ก.ม.
+               </div>
+             </div>
+           </div>
+
+           <div class="item item-body">
+             <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search"></div>
+
+             <ion-slide-box>
+               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://188.166.191.211/rest/'+img.pprd_path}}" height="250px"></ion-slide>
+             </ion-slide-box>
+
+             <p>
+               {{p.detail}}
+             </p>
+             <div class="row">
+               <div class=" col col-40">
+                 <b style="font-size:30px" class="text-left text-green">{{p.price | number}}</b></br>บาท/{{p.unit}}
+               </div>
+               <div class=" col col-60">
+                 <div class="row text-right">
+                   <a ng-click="like({{p.prd_id}},{{$index}});" class="subdued">{{p.like}} ถูกใจ</a>
+                   <a href="#" class="subdued">{{p.comment}} ความคิดเห็น</a>
+                 </div>
+                 <div class="row" >
+                   <i class="ion-ios-location"></i>  {{ p.location.changwat}}
+                 </div>
+
+               </div>
+             </div>
+           </div>
+
+         </div>
+
+       </ion-content>
+     </ion-view>
+    </ion-tab>
+
+    <ion-tab title="ความนิยม" icon-on="ion-ios-heart" icon-off="ion-ios-heart-outline" >
+      <!-- Tab 3 content -->
+      <ion-view view-title="">
+       <ion-content>
+         <ion-refresher
+     	    pulling-text="อัพเดตข้อมูล"
+     	    on-refresh="doRefresh()">
+       	</ion-refresher>
+
+         <div class="list list-inset">
+           <label class="item item-input">
+             <i class="icon ion-search placeholder-icon"></i>
+             <input type="text" placeholder="ชื่อสินค้า" ng-model="search">
+           </label>
+         </div>
+
+         <div class="list card" ng-repeat="p in product | filter : {product:search||undefined} | orderBy:'-like' ">
+
+
+           <div class="item item-avatar">
+
+             <img src="{{'http://188.166.191.211/rest/'+p.profile}}">
+             <div class="row">
+               <div class="col col-60">
+                 <h2>{{p.name}}</h2>
+                 <p>{{p.date}}</p>
+               </div>
+               <div class="col col-40 text-right" style="padding-top:5px">
+                 <b style="font-size:18px">{{p.distance | number:2}}</b></br>ก.ม.
+               </div>
+             </div>
+           </div>
+
+           <div class="item item-body">
+             <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search"></div>
+
+             <ion-slide-box>
+               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://188.166.191.211/rest/'+img.pprd_path}}" height="250px"></ion-slide>
+             </ion-slide-box>
+
+             <p>
+               {{p.detail}}
+             </p>
+             <div class="row">
+               <div class=" col col-40">
+                 <b style="font-size:30px" class="text-left text-green">{{p.price | number}}</b></br>บาท/{{p.unit}}
+               </div>
+               <div class=" col col-60">
+                 <div class="row text-right">
+                   <a ng-click="like({{p.prd_id}},{{$index}});" class="subdued">{{p.like}} ถูกใจ</a>
+                   <a href="#" class="subdued">{{p.comment}} ความคิดเห็น</a>
+                 </div>
+                 <div class="row" >
+                   <i class="ion-ios-location"></i>  {{ p.location.changwat}}
+                 </div>
+
+               </div>
+             </div>
+           </div>
+
+         </div>
+
+       </ion-content>
+     </ion-view>
+    </ion-tab>
+
+  </ion-tabs>
+
+
+
+  <nav mfb-menu position="br" resting-icon="ion-plus-round" active-icon="ion-plus-round" ng-click="add();"  menu-state="myVar">
+
+  </nav>
+</ion-view>

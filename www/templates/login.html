@@ -7,8 +7,9 @@
     <form ng-submit="doLogin(myForm)" name="myForm" novalidate="">
       <label class="item item-input" ng-class="{ 'has-error-lr' : myForm.username.$invalid  && myForm.$submitted, 'valid-lr' : myForm.username.$valid  && myForm.$submitted}">
           <span class="input-label">อีเมล</span>
-          <input type="email" name="username" ng-model="user.username" placeholder="test@test.com" ng-value="" required>
+          <input type="email" name="username" ng-model="user.username" placeholder="test@test.com" ng-change="check();" required>
       </label>
+      <div class="form-error"><b>{{ erroremail }}</b></div>
       <div class="form-errors" ng-show="myForm.username.$error && myForm.$submitted" ng-messages="myForm.username.$error">
           <div class="form-error" ng-message="required"><b>กรุณากรอกอีเมล</b></div>
           <div class="form-error" ng-message="email"><b>รูปแบบข้อมูลไม่ถูกต้อง เช่น test@test.com</b></div>

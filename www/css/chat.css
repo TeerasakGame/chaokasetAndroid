@@ -95,14 +95,15 @@
     right: 0px;
     width: 0px;
     height: 0px;
-    border: 5px solid #fff;
+    border: 5px solid #D7FDFD;
     border-right-color: transparent;
     border-top-color: transparent;
     box-shadow: 0px 2px 0px #D4D4D4;
+    /*background: red;*/
 }
 
 .msg {
-    background: white;
+    background: #D7FDFD ;
     min-width: 50px;
     padding: 10px;
     border-radius: 2px;

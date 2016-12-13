@@ -12,9 +12,12 @@
 			  <p>{{a.Seed}}</p>
 			</div>
 		</div>-->
+    <center ng-if="alert == ''"></br><h3>{{alert}}</h3></center>
     <ion-list show-delete="shouldShowDelete" show-reorder="shouldShowReorder"  can-swipe="listCanSwipe">
-      <ion-item ng-repeat="a in api" class="item-thumbnail-left" href="#/getidcrop/{{a.crop_id}}">
-        <img ng-src="img/rice_icon.png">
+
+      <ion-item ng-repeat="a in api" class="item-thumbnail-left"  ng-click="cropTimeline({{a.crop_id}})">
+        <img ng-if="a.seed_id == 1 || a.seed_id == 2" ng-src="img/wheat.png">
+        <img ng-if="a.seed_id == 3 " ng-src="img/bamboo.png">
         <h2>{{a.crop_name}}</h2>
         <p>{{a.plat_name}}</p>
         <p>{{a.seed_name}}</p>
@@ -27,8 +30,8 @@
       </ion-item>
 
     </ion-list>
-    <div class="list">
-    <!--<a class="item" href="#" onclick="window.open('https://www.youtube.com/watch?v=j3-8gLCYhQY', '_system', 'location=yes'); return false;">
+    <!--<div class="list">
+    <a class="item" href="#" onclick="window.open('https://www.youtube.com/watch?v=j3-8gLCYhQY', '_system', 'location=yes'); return false;">
         Open a Browser
     </a>
   </div>-->

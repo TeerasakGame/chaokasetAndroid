@@ -31,3 +31,14 @@ angular.module('MyApp.Directives', []);
      }
    };
 });
+
+angular.module('MyApp.Directives', []).filter('searchfilter', function() {
+        return function (input, query) {
+            if(query == ""){
+            return input;
+          }else{
+            return input.replace(RegExp('('+ query + ')', 'g'), '<font color="green" >$1</font>');
+          }
+
+        }
+  })

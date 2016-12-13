@@ -24,17 +24,33 @@
     <div class="form-errors" ng-show="Form.detail.$error && Form.$submitted" ng-messages="Form.detail.$error">
         <div class="form-error" ng-message="required"><b>กรุณากรอกรายละเอียดของปัญหา</b></div>
     </div>
-    <div class="item item-divider text-green">
+  <!--  <div class="item item-divider text-green">
       <div class="row">
         <div class="col-80">
         รูปภาพ
       </div>
       <div class="col-20 text-right" ng-click="getpic()" >
-        <!--<img src="{{image}}" height="10px" width="10px">-->
+
         <i class="ion-android-add-circle" style="font-size: 23px;color:green;"></i> เพิ่มรูป
       </div>
     </div>
+  </div>-->
+
+  <div class="item item-divider text-green">
+    <div class="row">
+      <div class="col-80">
+      รูปภาพ
+    </div>
+    <div class="col-10 text-right" ng-click="getpic()"  align="right">
+      <!--<img src="{{image}}" height="10px" width="10px">-->
+      <i class="ion-images" style="font-size: 23px;color:green;"></i>
+    </div>
+    <div class="col-10 text-right" ng-click="takepic()" >
+      <!--<img src="{{image}}" height="10px" width="10px">-->
+      <i class="ion-android-camera" style="font-size: 23px;color:green;"></i>
+    </div>
   </div>
+</div>
 
   <div ng-repeat="pic in images">
       <div class="row" ng-if="$even">
@@ -42,7 +58,7 @@
             <div class="item item-thumbnail-left" ng-if="images[$index] != null">
               <img src="{{images[$index]}}">
               <div class="button button-assertive" ng-click="removeItem($index)">
-                ลบ
+                <i class="ion-close-round"></i>
               </div>
             </div>
           </div>
@@ -50,7 +66,7 @@
             <div class="item item-thumbnail-left" ng-if="images[$index + 1] != null">
               <img src="{{images[$index + 1]}}">
               <div class="button button-assertive" ng-click="removeItem($index+1)">
-                ลบ
+                <i class="ion-close-round"></i>
               </div>
             </div>
           </div>

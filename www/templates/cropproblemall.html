@@ -1,0 +1,50 @@
+<ion-view view-title="สังคมชาวเกษตร">
+  <ion-content>
+
+    <ion-refresher
+	    pulling-text="อัพเดตข้อมูล"
+	    on-refresh="doRefresh()">
+  	</ion-refresher>
+
+
+    <!--  <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="ชื่อปัญหา" >
+        </label>
+
+        <button class="button button-small">
+          ค้นหา
+        </button>
+      </div>-->
+      <div class="list list-inset">
+        <label class="item item-input">
+          <i class="icon ion-search placeholder-icon"></i>
+          <input type="text" placeholder="ชื่อปัญหา" ng-model="search">
+        </label>
+      </div>
+
+
+    <ion-list ng-repeat="problem in problems | filter : {cropp_name:search||undefined}">
+      <ion-item ui-sref="app.detailProblem({cropp_id:{{problem.cropp_id}}})">
+        <div class="row">
+          <div class="col-90">
+            <h2 class="text-red" ng-bind-html="problem.cropp_name | searchfilter:search"></h2>
+            <p><i class="ion-android-calendar"></i>  {{problem.date_name}}</p>
+            <i class="ion-android-person"></i>  {{problem.name}} </br>
+            <!--<i class="ion-android-pin"></i>  {{problem.location.changwat}}-->
+          </div>
+          <div class="col-10">
+            <button class="button button-clear button-positive">
+              <i class="icon ion-chatbubbles"></i>&nbsp;&nbsp;{{problem.count_ans}}
+            </button>
+          </div>
+        </div>
+
+      </ion-item>
+    </ion-list>
+    <h4><center>{{data}}</center></h4>
+    <div style="margin-bottom:10%;"><font color="white">5</font></div>
+
+  </ion-content>
+
+</ion-view>

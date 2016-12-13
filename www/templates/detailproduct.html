@@ -1,0 +1,43 @@
+<ion-view view-title="รายละเอียดสินค้า">
+  <ion-content>
+
+    <div class="padding">
+      <h3  class="text-green"><center>{{detail.prd_name}}</center></h3>
+      <ion-gallery ion-gallery-items="items" ion-zoom-events="true" ng-if="items != null"></ion-gallery>
+    </div>
+
+    <ul class="list">
+      <div class="item item-divider">
+        <b class="text-green">ราคา</b>
+      </div>
+      <li class="item">
+        {{detail.prd_price}} บาท ต่อ {{detail.prd_unit}}
+      </li>
+      <div class="item item-divider">
+        <b class="text-green">รายละเอียด</b>
+      </div>
+      <li class="item">
+        {{detail.prd_detail}}
+      </li>
+      <div class="item item-divider">
+        <b class="text-green">ติดต่อ</b>
+      </div>
+      <div ng-repeat="t in tel">
+        <a class="item item-icon-right" ng-href="tel:{{t.pdc_data}}">
+          {{t.pdc_data}}
+          <i class="icon ion-ios-telephone-outline"></i>
+        </a>
+      </div>
+    </ul>
+
+
+  </ion-content>
+  <ion-footer-bar>
+    <div class="button-bar">
+       <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="likena({{detail.prd_id}});"><i class="ion-ios-heart assertive" style="font-size: 25px;"></i> ชอบ ({{like}})</button>
+       <button style="min-width: 50%;border-radius: 0px;"  class="button button-stable" ><i class="ion-chatboxes positive" style="font-size: 25px;"></i> ความคิดเห็น ({{comment}})</button>
+    </div>
+  </ion-footer-bar>
+
+
+</ion-view>

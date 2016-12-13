@@ -1,0 +1,133 @@
+  <form ng-submit="doSummit(Form)" name="Form" novalidate="">
+<ion-view view-title="รายละเอียดบริการ">
+  <ion-content class="has-footer">
+
+    <label class="item item-input">
+      <span class="input-label">ชื่อบริการ</span>
+      <input type="text" name="name" ng-model="product.name" placeholder="กรุณากรอกชื่อสินค้า" required>
+    </label>
+    <div class="form-errors" ng-show="Form.name.$error && Form.$submitted" ng-messages="Form.name.$error">
+        <div class="form-error" ng-message="required"><b>กรุณากรอกชื่อบริการ</b></div>
+    </div>
+
+  <!--  <label class="item item-input item-select">
+      <div class="input-label">
+        ประเภทสินค้า
+      </div>
+      <select name="type_sell" ng-model="product.type">
+        <option ng-repeat="type in type" ng-selected="{{type.tsell_id == product.type}}" ng-bind="type.tsell_name" ng-value="type.tsell_id"></option>
+      </select>
+
+    </label>-->
+    <div class="item item-divider text-green">
+        ค่าจ้าง
+    </div>
+    <div class="row">
+      <div class="col col-50">
+        <label class="item item-input item-stacked-label">
+         <span class="input-label">ค่าจ้าง</span>
+         <input type="number" name="price" placeholder="บาท" ng-model="product.price"required>
+       </label>
+       <div class="form-errors" ng-show="Form.price.$error && Form.$submitted" ng-messages="Form.price.$error">
+           <div class="form-error" ng-message="required"><b>กรุณากรอกค่าจ้าง</b></div>
+       </div>
+      </div>
+      <div class="col col-50">
+        <label class="item item-input item-stacked-label">
+         <span class="input-label">ต่อ</span>
+         <input type="text" name="unit" placeholder="วัน เที่ยว เป็นต้น" ng-model="product.unit" required>
+       </label>
+       <div class="form-errors" ng-show="Form.unit.$error && Form.$submitted" ng-messages="Form.unit.$error">
+           <div class="form-error" ng-message="required"><b>กรุณากรอกค่าแรงตามอัตตรา</b></div>
+       </div>
+      </div>
+    </div>
+
+
+    <label class="item item-input item-stacked-label">
+      <span class="input-label">รายละเอียดบริการ</span>
+      <textarea class="textarear" rows="6" placeholder="เช่น ความสามารถ ขีดจำกัด เป็นต้น" name="detail" ng-model="product.detail" required></textarea>
+    </label>
+    <div class="form-errors" ng-show="Form.detail.$error && Form.$submitted" ng-messages="Form.detail.$error">
+        <div class="form-error" ng-message="required"><b>กรุณากรอกรายละเอียดบริการ</b></div>
+    </div>
+  <!--  <div class="item item-divider text-green">
+      <div class="row">
+        <div class="col-80">
+        รูปภาพ
+      </div>
+      <div class="col-20 text-right" ng-click="getpic()" >
+
+        <i class="ion-android-add-circle" style="font-size: 23px;color:green;"></i> เพิ่มรูป
+      </div>
+    </div>
+  </div>-->
+
+
+<div class="item item-divider text-green">
+  เบอร์ติดต่อ (ใส่ได้ 3 เบอร์)
+</div>
+<label class="item item-input" data-ng-repeat="Tel in Tels">
+  <span class="input-label">เบอร์โทรทัพท์</span>
+  <input type="number" name="tel" ng-model="Tel.data" placeholder="กรุณากรอกเบอร์โทร" required>
+</label>
+<div class="form-errors" ng-show="Form.tel.$error && Form.$submitted" ng-messages="Form.tel.$error">
+    <div class="form-error" ng-message="required"><b>กรุณากรอกเบอร์โทร</b></div>
+</div>
+
+
+<div class="item item-input" align-title="rigth" >
+  <div class="button button-clear button-assertive" ng-click="Remove()">
+    <i class="icon ion-minus-circled "></i> ลบเบอร์
+  </div>
+  <div class="button button-clear button-balanced" ng-click="addTel()">
+    <i class="icon ion-plus-circled"></i> เพิ่มเบอร์
+  </div>
+</div>
+
+
+
+  <!--<label class="item item-input" ng-show="product.status == true">
+    <input type="date" ng-model="product.date" min="{{product.date | date:'yyyy-MM-dd'}}" value="{{product.date | date:'yyyy-MM-dd'}}" name="expire" required>
+  </label>
+  <div class="form-errors" ng-show="Form.expire.$error && Form.$submitted" ng-messages="Form.expire.$error">
+      <div class="form-error" ng-message="required"><b>กรุณากรอกวันหมดอายุ</b></div>
+  </div>-->
+  <div class="item item-divider text-green">
+    ที่อยู่ติดต่อ
+  </div>
+  <div >
+   <center><img ng-src="img/Map Marker-96.png" ng-click="map();"></br>{{namelatlong.full_name}}</center>
+ </div>
+ </br>
+  <!--<div class="item item-divider text-green">
+      วันหมดอายุของสินค้า (ถ้ามี)
+      <label class="toggle">
+        <input type="checkbox" ng-model="account.status">
+        <div class="track">
+          <div class="handle"></div>
+        </div>
+      </label>
+  </div>-->
+
+
+
+
+  </ion-content>
+
+  <!--<ion-footer-bar align-title="left" class="bar-assertive">
+    <div class="bar bar-footer">
+      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
+    </div></form>
+</ion-footer-bar>-->
+
+<ion-footer-bar>
+  <div class="button-bar">
+     <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">กลับ</button>
+     <button style="min-width: 50%;border-radius: 0px;"  class="button button-positive" >บันทึก</button>
+  </div>
+</ion-footer-bar>
+
+</ion-view>
+</form>

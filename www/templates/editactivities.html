@@ -1,7 +1,7 @@
 <ion-view view-title="แก้ไขกิจกรรมการเพาะปลูก">
-  <form ng-submit="doSummit(Form)" name="Form" novalidate="">
-  <ion-content style="margin-bottom:50px;">
 
+  <ion-content style="margin-bottom:0px;" >
+  <form ng-submit="doSummit(Form)" name="Form">
     <div class="item item-divider text-green">
       รายละเอียดกิจกรรม
     </div>
@@ -56,6 +56,7 @@
         </div>
       </div>
     </div>
+<div class="">
     <div ng-repeat="pic in images">
         <div class="row" ng-if="$even">
             <div class="col col-50">
@@ -76,16 +77,21 @@
             </div>
         </div>
     </div>
+  </div>
   <!--  <div class="bar bar-footer" id="footer">
       <button style="min-width: 50%;" class="button button-stable" ng-click="close();">ยกเลิก</button>
       <button type="submit" style="min-width: 50%;"  class="button button-positive">บันทึก</button>
     </div>-->
+  <!--<button type="submit"   class="button button-positive">บันทึก</button>-->
+  <div class="button-bar">
+     <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+     <button  style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
 
-
-  </ion-content>
- <div class="bar bar-footer">
-    <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
-    <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
   </div>
-</form>
+    </form>
+
+  <!-- </form>-->
+  </ion-content>
+
+
 </ion-view>

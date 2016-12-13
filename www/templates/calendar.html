@@ -1,0 +1,36 @@
+<ion-view view-title="ปฎิทินการเพาะปลูก">
+  <ion-content>
+
+    <div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="eventCalendar" class="padding"></div>
+
+    <div class="row">
+      <div ng-class="class" ng-click="check('groth',$event);">
+        <i class="ion-android-checkbox-blank" style="color:#33CC33;"></i>  ระยะการเจริญเติบโต
+      </div>
+      <div class="col">
+      <i class="ion-android-checkbox-blank" style="color:#9966FF;"></i>  การปฏิบัติดูแลรักษา
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <i class="ion-android-checkbox-blank" style="color:#0066FF;"></i>  การจัดการน้ำ
+      </div>
+      <div class="col">
+      <i class="ion-android-checkbox-blank" style="color:#CC6600;"></i>  ระยะการระบาดของโรค
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <i class="ion-android-checkbox-blank" style="color:#FF3333;"></i>  ระยะการระบาดของแมลง
+      </div>
+      <div class="col">
+      <i class="ion-android-checkbox-blank" style="color:#FF9933;"></i>  ระยะการระบาดของศัตรูพืช
+
+      </div>
+
+    </div>
+    <!--<button class="button button-block button-calm" ng-click="addcalendar();">
+      เพิ่มกิจกรรมลงในปฏิทิน
+    </button>-->
+  </ion-content>
+</ion-view>

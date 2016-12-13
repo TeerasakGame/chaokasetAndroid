@@ -1,0 +1,70 @@
+<ion-view view-title="แก้ไขรูปสินค้า">
+  <ion-content class="has-footer">
+
+    <div class="row padding">
+      <div class="col col-20" ><h1 style="margin-top:15px">1.</h1></div>
+      <div class="col col-50"><h4>กรุณาเลือกรูปสินค้า</h4> <p class="text-red">ใส่รูปได้สูงสุด 5 ภาพ</p></div>
+      <div class="col col-30" >
+        <div class="row" style="margin-top:15px">
+          <div class="col-50 text-right" ng-click="getpic()"  align="right" ng-disabled="cont == 0">
+            <!--<img src="{{image}}" height="10px" width="10px">-->
+            <i class="ion-images" style="font-size: 23px;color:green;" ng-if="cont > 0"></i>
+            <i class="ion-images" style="font-size: 23px;color:gray;" ng-if="cont == 0"></i>
+          </div>
+          <div class="col-50 text-right" ng-click="takepic()" ng-disabled="cont == 0" >
+            <!--<img src="{{image}}" height="10px" width="10px">-->
+            <i class="ion-android-camera" style="font-size: 23px;color:green;" ng-if="cont > 0"></i>
+            <i class="ion-android-camera" style="font-size: 23px;color:gray;" ng-if="cont == 0"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <img class="full-image" src="img/img.png" ng-if="images == ''">
+
+    <div ng-repeat="pic in images">
+        <div class="row" ng-if="$even">
+            <div class="col col-50">
+              <div class="item item-thumbnail-left" ng-if="images[$index] != null">
+                <img src="{{ip+'/'+images[$index].pprd_path}}" ng-if="images[$index].pprd_id != ''">
+                <img src="{{images[$index].pprd_path}}" ng-if="images[$index].pprd_id == ''">
+                <div class="button button-assertive" ng-click="removeItem($index)">
+                  <i class="ion-close-round"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col col-50">
+              <div class="item item-thumbnail-left" ng-if="images[$index + 1] != null">
+                <img src="{{ip+'/'+images[$index+1].pprd_path}}" ng-if="images[$index+1].pprd_id != ''">
+                <img src="{{images[$index+1].pprd_path}}" ng-if="images[$index+1].pprd_id == ''">
+                <div class="button button-assertive" ng-click="removeItem($index+1)">
+                  <i class="ion-close-round"></i>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+  </ion-content>
+  <!--<ion-footer-bar class="bar-stable button-footer-bar bar-positive">
+          <a class="button button-block button-positive" ng-disabled="images == ''"  ng-click="go();">ถัดไป  <i class="ion-chevron-right" ></i></a>
+  </ion-footer-bar>-->
+
+  <ion-footer-bar>
+    <div class="button-bar">
+       <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+       <button style="min-width: 50%;border-radius: 0px;"  class="button button-positive" ng-disabled="images == ''"  ng-click="go();">แก้ไข</button>
+    </div>
+  </ion-footer-bar>
+
+  <!--<div class=" bar bar-footer bar-positive" >
+    <div class="button" ng-disabled="images == ''"  ng-click="go();">ถัดไป  <i class="ion-chevron-right" ></i></div>
+  </div>-->
+  <!--<div class="bar bar-footer bar-positive">
+  <div class="title">ถัดไป</div>
+  <button class="button button-clear pull-right" ng-disabled="images == ''" ng-click="go();"><i class="ion-chevron-right" ></i> &nbsp;</button>
+</div>-->
+
+
+
+</ion-view>
