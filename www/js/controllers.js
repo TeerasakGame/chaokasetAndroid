@@ -3776,7 +3776,7 @@ $scope.map_name = "กำหนดพื้นที่";
 })
 
 .controller('DetailProductCtrl', function($scope,$stateParams,$http){
-  $scope.items = [{src:"img/ionic.png"},{src:"img/ionic.png"}];
+  //$scope.items = [{src:"img/ionic.png"},{src:"img/ionic.png"}];
   var id = $stateParams.id;
 
 //  console.log($scope.data);
@@ -3787,8 +3787,10 @@ $scope.map_name = "กำหนดพื้นที่";
     //  alert(JSON.stringify(data.data));
       $scope.detail = data.data[0];
       $scope.tel = data.tel;
+      $scope.items = data.pic;
       $scope.like = $stateParams.like;
       $scope.comment = $stateParams.comment;
+      $scope.expire = data.expire;
       console.log($scope.like+"  "+$scope.comment);
     //$state.go("app.sell");
    }).error(function (data, status, header, config) {
