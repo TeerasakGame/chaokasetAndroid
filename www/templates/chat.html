@@ -1,0 +1,39 @@
+<ion-view view-title="{{name}}">
+  <ion-content class="has-footer">
+    <ion-refresher
+    pulling-text="อัพเดตข้อมูล"
+    on-refresh="doRefresh()">
+  </ion-refresher>
+    <div class="item item-divider">
+      <i class="icon ion-chatbubbles text-green"></i>   <b class="text-green">ความคิดเห็น</b> ({{count}})
+    </div>
+
+    <ol class="chat" style="margin-top:0;background-color:'';" ng-repeat="chat in chats">
+        <li class="other" style="margin-left:-10px;margin-top:0" ng-if="chat.use_id !== id_user">
+            <div class="avatar"><img src="{{ip_pic}}{{chat.use_pic}}" draggable="false"/></div>
+          <div class="msg">
+            <p>{{chat.prc_data}}</p>
+            <time>{{chat.use_name+" "+chat.use_lname}}</time></br>
+            <time>{{chat.prc_time}}</time>
+          </div>
+        </li>
+        <li class="self" style="margin-top:0em" ng-if="chat.use_id == id_user">
+            <div class="avatar"><img src="{{ip_pic}}{{chat.use_pic}}" draggable="false"/></div>
+          <div class="msg" >
+            <p>{{chat.prc_data}}</p>
+            <time>{{chat.use_name+" "+chat.use_lname}}</time></br>
+            <time>{{chat.prc_time}}</time>
+          </div>
+        </li>
+    </ol>
+    <div style="margin-bottom:10em;background-color:'';" ><font color="#F8FDF8">1</font></div>
+  </ion-content>
+  <div class="bar bar-footer item-input-inset footer-item-input-insert">
+    <label class="item-input-wrapper">
+      <input type="text" placeholder="พิมพ์ข้อความแสดงความคิดเห็น" ng-model="text" >
+    </label>
+    <button class="button button-clear button-positive" ng-disabled="text == ''" ng-click="send()">
+      <i class="ion-android-send" style="font-size: 25px"></i>
+    </button>
+  </div>
+</ion-view>

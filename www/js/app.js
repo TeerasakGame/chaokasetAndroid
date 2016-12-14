@@ -411,6 +411,16 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
     }
   })
 
+  .state('app.chatproduct', {
+    url: '/chatproduct/:id/:comment/:name',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/chat.html',
+        controller: 'ChatProductCtrl'
+      }
+    }
+  })
+
   .state('app.search', {
     url: '/search',
     views: {

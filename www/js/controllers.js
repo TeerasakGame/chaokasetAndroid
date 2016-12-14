@@ -131,7 +131,7 @@ angular.module('starter.controllers', [])
                       localStorage.setItem('id',data.data.idUser);
                       $state.go("app.crop");
                     }else{
-                      alert("FALSE");
+                      //alert("FALSE");
                     }
                 }).error(function (data, status, header, config) {
                     //alert("error: "+JSON.stringify(data) );
@@ -1424,7 +1424,7 @@ $scope.$on('$ionicView.beforeEnter', function () {
   });
 
   $scope.send = function(){
-    alert($scope.text);
+    //alert($scope.text);
     var data = "cropp_id="+id+"&text="+$scope.text+"&use_id="+$scope.id_user;
     var ip = ip_server+'/index.php/services/addansproblem';
     $http.post(ip, data, config).success(function (data, status, headers, config) {
@@ -1869,7 +1869,7 @@ $scope.images =[];
               $scope.date = new Date();
               var date = $filter('date')($scope.date, 'yyyyMMdd_HHmmss');
               $scope.name_pic = 'mul_'+localStorage.getItem('id')+'_'+id+'_'+i+date+'.jpg';
-              alert($scope.name_pic);
+              //alert($scope.name_pic);
               var options = {
                       fileKey: "file",
                       chunkedMode: false,
@@ -2297,7 +2297,7 @@ $scope.eventSources = [$scope.eventSource1];
   }
 
   $scope.addcalendar = function(){
-    alert('ok');
+    //alert('ok');
     var url = ip_server+'/index.php/services/getcalender2/'+localStorage.getItem('id');
     $http.get(url).then(function(response) {
       alert(JSON.stringify(response.data))
@@ -2434,6 +2434,9 @@ $scope.eventSources = [$scope.eventSource1];
     console.log(id);
     console.log(like + comment);
     $state.go("app.detailproduct",{id:id,like:like,comment:comment});
+  }
+  $scope.gocomment = function(id,iddex){
+    $state.go("app.chatproduct",{id:id,comment:$scope.product[iddex].comment,name:$scope.product[iddex].product});
   }
 
   $scope.like = function(id,index){
@@ -3078,6 +3081,14 @@ $scope.map_name = "กำหนดพื้นที่";
 
   $scope.add = function(){
     $state.go("app.addpicservice");
+  }
+
+  $scope.detail = function(id,like,comment){
+    $state.go("app.detailproduct",{id:id,like:like,comment:comment});
+  }
+
+  $scope.gocomment = function(id,iddex){
+    $state.go("app.chatproduct",{id:id,comment:$scope.product[iddex].comment,name:$scope.product[iddex].product});
   }
 
   $scope.like = function(id,index){
@@ -3775,7 +3786,7 @@ $scope.map_name = "กำหนดพื้นที่";
 
 })
 
-.controller('DetailProductCtrl', function($scope,$stateParams,$http){
+.controller('DetailProductCtrl', function($scope,$stateParams,$http,$state){
   //$scope.items = [{src:"img/ionic.png"},{src:"img/ionic.png"}];
   var id = $stateParams.id;
 
@@ -3823,6 +3834,62 @@ $scope.map_name = "กำหนดพื้นที่";
            alert($scope.error);
        })
   }
+  $scope.gocomment = function(){
+    $state.go("app.chatproduct",{id:id,comment:$scope.comment,name:$scope.detail.prd_name});
+  }
+})
+
+.controller('ChatProductCtrl', function($scope,$stateParams,$http){
+  $scope.count = $stateParams.comment;
+  $scope.name = $stateParams.name;
+  $scope.ip_pic = ip_server+"/";
+  var id = $stateParams.id;
+  //alert(id);
+  $scope.text = "";
+  $scope.id_user = localStorage.getItem('id');
+  var data = "id="+id;
+   var ip = ip_server+'/index.php/services/getcommentproduct';
+   $http.post(ip, data, config).success(function (data, status, headers, config) {
+     $scope.chats = data.data;
+   }).error(function (data, status, header, config) {
+     $scope.error = "ติดต่อ server ไม่ได้";
+     alert($scope.error);
+   });
+
+  $scope.send = function(){
+  //  alert($scope.text);
+    var data = "id="+id+"&data="+$scope.text+"&user="+localStorage.getItem('id');
+    //alert(data);
+    var ip = ip_server+'/index.php/services/addcommentproduct';
+    $http.post(ip, data, config).success(function (data, status, headers, config) {
+      $scope.chats = data.data;
+      $scope.count = data.count;
+    }).error(function (data, status, header, config) {
+      $scope.error = "ติดต่อ server ไม่ได้";
+      alert($scope.error);
+    });
+    $scope.text = "";
+  }
+
+  $scope.doRefresh = function() {
+     var data = "id="+id;
+     //alert(data);
+     var ip = ip_server+'/index.php/services/getcommentproduct';
+     $http.post(ip, data, config)
+       .success(function (data, status, headers, config) {
+         $scope.chats = data.data;
+         //$scope.count = data.count;
+       })
+       .error(function (data, status, header, config) {
+           $scope.error = "ติดต่อ server ไม่ได้";
+           alert($scope.error);
+       })
+       .finally(function() {
+      // Stop the ion-refresher from spinning
+      $scope.$broadcast('scroll.refreshComplete');
+    })
+  };
+
 })
 
 

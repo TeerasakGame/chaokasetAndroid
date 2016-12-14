@@ -51,7 +51,7 @@
           <div class=" col col-60">
             <div class="row text-right">
               <a ng-click="like({{p.prd_id}});" class="subdued">{{p.like}} ถูกใจ</a>
-              <a href="#" class="subdued">{{p.comment}} ความคิดเห็น</a>
+              <a ng-click="gocomment({{p.prd_id}},{{$index}});" class="subdued">{{p.comment}} ความคิดเห็น</a>
             </div>
             <div class="row" >
               <i class="ion-ios-location"></i>  {{ p.location.changwat}}
@@ -123,7 +123,7 @@
                <div class=" col col-60">
                  <div class="row text-right">
                    <a ng-click="like({{p.prd_id}},{{$index}});" class="subdued">{{p.like}} ถูกใจ</a>
-                   <a href="#" class="subdued">{{p.comment}} ความคิดเห็น</a>
+                   <a ng-click="gocomment({{p.prd_id}},{{$index}});" class="subdued">{{p.comment}} ความคิดเห็น</a>
                  </div>
                  <div class="row" >
                    <i class="ion-ios-location"></i>  {{ p.location.changwat}}
@@ -189,7 +189,7 @@
                <div class=" col col-60">
                  <div class="row text-right">
                    <a ng-click="like({{p.prd_id}},{{$index}});" class="subdued">{{p.like}} ถูกใจ</a>
-                   <a href="#" class="subdued">{{p.comment}} ความคิดเห็น</a>
+                   <a ng-click="gocomment({{p.prd_id}},{{$index}});" class="subdued">{{p.comment}} ความคิดเห็น</a>
                  </div>
                  <div class="row" >
                    <i class="ion-ios-location"></i>  {{ p.location.changwat}}
@@ -255,7 +255,7 @@
                <div class=" col col-60">
                  <div class="row text-right">
                    <a ng-click="like({{p.prd_id}},{{$index}});" class="subdued">{{p.like}} ถูกใจ</a>
-                   <a href="#" class="subdued">{{p.comment}} ความคิดเห็น</a>
+                   <a ng-click="gocomment({{p.prd_id}},{{$index}});" class="subdued">{{p.comment}} ความคิดเห็น</a>
                  </div>
                  <div class="row" >
                    <i class="ion-ios-location"></i>  {{ p.location.changwat}}
