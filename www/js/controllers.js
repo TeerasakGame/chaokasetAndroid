@@ -122,13 +122,14 @@ angular.module('starter.controllers', [])
               $http.post(ip, data, config)
                 .success(function (data, status, headers, config) {
                     if(data.status === true){
-                    //  alert("TRUE");
+                      alert("TRUE");
                       var check = localStorage.getItem('login');
                     //  alert(data.data.idUser);
                       localStorage.setItem('login',true);
                       localStorage.setItem('name',data.data.name);
                       localStorage.setItem('pic',data.data.pic);
                       localStorage.setItem('id',data.data.idUser);
+                      alert("go");
                       $state.go("app.crop");
                     }else{
                       //alert("FALSE");
@@ -321,7 +322,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('CropCtrl',function($scope, $http, $state,$ionicPopup,$ionicLoading){
+.controller('CropCtrl',function($scope, $http, $state,$ionicPopup,$ionicLoading,$ionicPlatform){
 //$scope.alert = "ไม่มีข้อมูลแปลงเพาะปลูก";
 console.log("crop");
   $scope.doRefresh = function() {
@@ -412,6 +413,14 @@ console.log("crop");
       }
     })
   };
+
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    if($state.current.name=="app.crop"){
+        navigator.app.exitApp(); //<-- remove this line to disable the exit
+    }else {
+      navigator.app.backHistory();
+    }
+  }, 100);
 
 
 })
