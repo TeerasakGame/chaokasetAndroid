@@ -85,7 +85,7 @@
 </div>
 <label class="item item-input" data-ng-repeat="Tel in Tels">
   <span class="input-label">เบอร์โทรทัพท์</span>
-  <input type="number" name="tel" ng-model="Tel.data" placeholder="กรุณากรอกเบอร์โทร" required>
+  <input type="tel" name="tel" ng-model="Tel.data" placeholder="กรุณากรอกเบอร์โทร" required>
 </label>
 <div class="form-errors" ng-show="Form.tel.$error && Form.$submitted" ng-messages="Form.tel.$error">
     <div class="form-error" ng-message="required"><b>กรุณากรอกเบอร์โทร</b></div>

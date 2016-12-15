@@ -3892,7 +3892,6 @@ $scope.map_name = "กำหนดพื้นที่";
 
 })
 
-
 .controller('PlaylistsCtrl', function($scope) {
   $scope.playlists = [
     { title: 'Reggae', id: 1 },
