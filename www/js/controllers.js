@@ -334,7 +334,11 @@ angular.module('starter.controllers', [])
 
 })
 
+<<<<<<< HEAD
 .controller('CropCtrl',function($scope, $http, $state,$ionicPopup,$ionicLoading,$ionicPlatform,$ionicHistory,$ionicSideMenuDelegate,$ionicNavBarDelegate,$cordovaToast){
+=======
+.controller('CropCtrl',function($scope, $http, $state,$ionicPopup,$ionicLoading,$ionicPlatform){
+>>>>>>> cb79e7db8eb0dbca5a19c610c2085bedef6311c7
 //$scope.alert = "ไม่มีข้อมูลแปลงเพาะปลูก";
 $ionicNavBarDelegate.showBackButton(false);
 $scope.toggleLeft = function() {
@@ -444,6 +448,14 @@ console.log("crop");
       }
     }
 
+  }, 100);
+
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    if($state.current.name=="app.crop"){
+        navigator.app.exitApp(); //<-- remove this line to disable the exit
+    }else {
+      navigator.app.backHistory();
+    }
   }, 100);
 
 
