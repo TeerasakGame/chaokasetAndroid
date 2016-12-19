@@ -22,7 +22,7 @@
 
       <div class="item item-avatar">
 
-        <img src="{{'http://188.166.191.211/rest/'+p.profile}}">
+        <img src="{{'http://chaokaset.openservice.in.th/'+p.profile}}">
         <div class="row">
           <div class="col col-60">
             <h2>{{p.name}}</h2>
@@ -38,7 +38,7 @@
         <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search" ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});"></div>
 
         <ion-slide-box>
-          <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://188.166.191.211/rest/'+img.pprd_path}}" height="250"></ion-slide>
+          <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" height="250"></ion-slide>
         </ion-slide-box>
 
         <p ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
@@ -94,7 +94,7 @@
 
            <div class="item item-avatar">
 
-             <img src="{{'http://188.166.191.211/rest/'+p.profile}}">
+             <img src="{{'http://chaokaset.openservice.in.th/'+p.profile}}">
              <div class="row">
                <div class="col col-60">
                  <h2>{{p.name}}</h2>
@@ -110,7 +110,7 @@
              <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search" ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});"></div>
 
              <ion-slide-box>
-               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://188.166.191.211/rest/'+img.pprd_path}}" height="250px"></ion-slide>
+               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" height="250px"></ion-slide>
              </ion-slide-box>
 
              <p ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
@@ -160,7 +160,7 @@
 
            <div class="item item-avatar">
 
-             <img src="{{'http://188.166.191.211/rest/'+p.profile}}">
+             <img src="{{'http://chaokaset.openservice.in.th/'+p.profile}}">
              <div class="row">
                <div class="col col-60">
                  <h2>{{p.name}}</h2>
@@ -176,7 +176,7 @@
              <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search" ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});"></div>
 
              <ion-slide-box>
-               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://188.166.191.211/rest/'+img.pprd_path}}" height="250px"></ion-slide>
+               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" height="250px"></ion-slide>
              </ion-slide-box>
 
              <p ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
@@ -226,7 +226,7 @@
 
            <div class="item item-avatar">
 
-             <img src="{{'http://188.166.191.211/rest/'+p.profile}}">
+             <img src="{{'http://chaokaset.openservice.in.th/'+p.profile}}">
              <div class="row">
                <div class="col col-60">
                  <h2>{{p.name}}</h2>
@@ -242,7 +242,7 @@
              <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search" ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});"></div>
 
              <ion-slide-box>
-               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://188.166.191.211/rest/'+img.pprd_path}}" height="250px"></ion-slide>
+               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" height="250px"></ion-slide>
              </ion-slide-box>
 
              <p ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
@@ -272,8 +272,6 @@
     </ion-tab>
 
   </ion-tabs>
-
-
 
   <nav mfb-menu position="br" resting-icon="ion-plus-round" active-icon="ion-plus-round" ng-click="add();"  menu-state="myVar">
 

@@ -16,7 +16,7 @@
     <ion-list show-delete="shouldShowDelete" show-reorder="shouldShowReorder"  can-swipe="listCanSwipe">
 
       <ion-item  ng-repeat="s in sell" class="item-thumbnail-left"  ng-click="">
-        <img  ng-src="{{'http://188.166.191.211/rest/'+s.pprd_path}}">
+        <img  ng-src="{{'http://chaokaset.openservice.in.th/'+s.pprd_path}}">
         <h2>{{s.prd_name}}</h2>
         <p>ประเภท : {{s.tsell_name}}</p>
         <p>ราคา : {{(s.prd_price | number) +' บาท ต่อ '+s.prd_unit}}</p>

@@ -37,12 +37,14 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
   })
 
   .state('login', {
+    cache: false,
     url: '/login',
     templateUrl: 'templates/login.html',
     controller: 'LoginCtrl'
   })
 
   .state('register', {
+      cache: false,
       url: '/register',
       templateUrl: 'templates/register.html',
       controller: 'RegisterCtrl'
@@ -69,6 +71,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
   })
 
   .state('app.addCrop', {
+      cache: false,
       url: '/addcrop',
       views: {
         'menuContent': {

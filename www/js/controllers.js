@@ -15,7 +15,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('LoginCtrl',function($scope, $cordovaOauth, $http, $state,$ionicViewService){
+.controller('LoginCtrl',function($scope, $cordovaOauth, $http, $state,$ionicViewService, $ionicPlatform){
 /*  $ionicViewService.nextViewOptions({
     disableAnimate: true,
     disableBack: true
@@ -122,13 +122,14 @@ angular.module('starter.controllers', [])
               $http.post(ip, data, config)
                 .success(function (data, status, headers, config) {
                     if(data.status === true){
-                    //  alert("TRUE");
+                      alert("TRUE");
                       var check = localStorage.getItem('login');
                     //  alert(data.data.idUser);
                       localStorage.setItem('login',true);
                       localStorage.setItem('name',data.data.name);
                       localStorage.setItem('pic',data.data.pic);
                       localStorage.setItem('id',data.data.idUser);
+                      alert("go");
                       $state.go("app.crop");
                     }else{
                       //alert("FALSE");
@@ -150,9 +151,17 @@ angular.module('starter.controllers', [])
             alert(error);
         });
   };
+
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    if($state.current.name=="login"){
+        navigator.app.exitApp(); //<-- remove this line to disable the exit
+    }else {
+      navigator.app.backHistory();
+    }
+  }, 100);
 })
 
-.controller('RegisterCtrl',function($scope,$compile,$state,$ionicActionSheet,$cordovaCamera,$http,$cordovaFileTransfer){
+.controller('RegisterCtrl',function($scope,$compile,$state,$ionicActionSheet,$cordovaCamera,$http,$cordovaFileTransfer,$ionicPlatform){
   $scope.Tels = [{id: 'tel1'}];
   $scope.register = { name: '', lname : '',email:'',password:''};
   $scope.pic = "";
@@ -318,11 +327,19 @@ angular.module('starter.controllers', [])
          });
     }
   };
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("login");
+    //navigator.app.backHistory();
+  }, 100);
 
 })
 
-.controller('CropCtrl',function($scope, $http, $state,$ionicPopup,$ionicLoading){
+.controller('CropCtrl',function($scope, $http, $state,$ionicPopup,$ionicLoading,$ionicPlatform,$ionicHistory,$ionicSideMenuDelegate,$ionicNavBarDelegate,$cordovaToast){
 //$scope.alert = "ไม่มีข้อมูลแปลงเพาะปลูก";
+$ionicNavBarDelegate.showBackButton(false);
+$scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
 console.log("crop");
   $scope.doRefresh = function() {
     var data = "use_id="+localStorage.getItem('id');
@@ -347,6 +364,7 @@ console.log("crop");
   };
 
   $scope.$on('$ionicView.beforeEnter', function(){
+
     localStorage.removeItem('crop_id');
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
@@ -412,6 +430,21 @@ console.log("crop");
       }
     })
   };
+  var num = 1;
+
+  $ionicPlatform.onHardwareBackButton(function (event) {
+    if(num < 2){
+       $cordovaToast.showShortBottom('กดอีกครั้งเพื่อออก');
+       num++;
+    }else{
+      if($state.current.name=="app.crop"){
+          navigator.app.exitApp(); //<-- remove this line to disable the exit
+      }else {
+        navigator.app.backHistory();
+      }
+    }
+
+  }, 100);
 
 
 })
@@ -430,7 +463,7 @@ console.log("crop");
    $state.go("login");
 })
 
-.controller('AddCropCtrl',function($state,$ionicModal,$scope,$cordovaGeolocation,$http,$ionicLoading,$ionicHistory){
+.controller('AddCropCtrl',function($state,$ionicModal,$scope,$cordovaGeolocation,$http,$ionicLoading,$ionicHistory,$ionicPlatform){
   /*$scope.$on('$ionicView.beforeEnter', function (event, viewData) {
     viewData.enableBack = true;
   })*/
@@ -564,6 +597,9 @@ console.log("crop");
     });
 
   };
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("app.crop");
+  }, 100);
 
 })
 
@@ -613,7 +649,10 @@ console.log("crop");
     });
 })
 
-.controller('CropTimelineCtrl',function($scope,$state,$http,$ionicActionSheet,$cordovaImagePicker,$filter,$cordovaFileTransfer,$ionicLoading,$cordovaCamera,$ionicPopup,$window){
+.controller('CropTimelineCtrl',function($ionicPlatform,$scope,$state,$http,$ionicActionSheet,$cordovaImagePicker,$filter,$cordovaFileTransfer,$ionicLoading,$cordovaCamera,$ionicPopup,$window){
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("app.crop");
+  }, 100);
   $scope.$on('$ionicView.beforeEnter', function(){
     $ionicLoading.show({
            template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
@@ -926,7 +965,10 @@ console.log("crop");
 
 })
 
-.controller('CropAccountCtrl',function($scope,$http,$state,$ionicHistory,$ionicPopup,$ionicLoading){
+.controller('CropAccountCtrl',function($ionicPlatform,$scope,$http,$state,$ionicHistory,$ionicPopup,$ionicLoading){
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("app.crop");
+  }, 100);
   $scope.shouldShowDelete = false;
   $scope.shouldShowReorder = false;
   $scope.listCanSwipe = true;
@@ -1044,7 +1086,10 @@ $scope.$on('$ionicView.beforeEnter', function () {
 
 })
 
-.controller('CropProblemCtrl',function($scope,$http,$state,$ionicHistory,$ionicPopup,$ionicLoading){
+.controller('CropProblemCtrl',function($ionicPlatform,$scope,$http,$state,$ionicHistory,$ionicPopup,$ionicLoading){
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("app.crop");
+  }, 100);
   $scope.$on("$ionicView.enter", function () {
    $ionicHistory.clearCache();
    //$ionicHistory.clearHistory();
@@ -2186,7 +2231,12 @@ $scope.images =[];
 
 })
 
-.controller('CalendarCtrl', function($scope,$compile,$http,$ionicPopup,uiCalendarConfig,$cordovaCalendar) {
+.controller('CalendarCtrl', function($ionicSideMenuDelegate,$ionicHistory,$ionicPlatform,$state,$scope,$compile,$http,$ionicPopup,uiCalendarConfig,$cordovaCalendar) {
+
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("app.crop");
+  }, 100);
+
 //  $scope.$on('$ionicView.enter', function () {
   //  var date = new Date();
 
@@ -2317,8 +2367,12 @@ $scope.eventSources = [$scope.eventSource1];
 
 })
 
-.controller('ProblemCtrl',function($scope,$http,$ionicLoading){
+.controller('ProblemCtrl',function($scope,$http,$ionicLoading,$ionicPlatform,$state){
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("app.crop");
+  }, 100);
   $scope.$on('$ionicView.beforeEnter', function () {
+    $scope.$root.showMenuIcon = true;
     $ionicLoading.show({
            template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
     });
@@ -2368,9 +2422,12 @@ $scope.eventSources = [$scope.eventSource1];
      };
 })
 
-.controller('ProductCtrl', function($scope,$ionicSideMenuDelegate,$state,$http,$cordovaGeolocation,$ionicLoading) {
-
+.controller('ProductCtrl', function($ionicPlatform,$scope,$ionicSideMenuDelegate,$state,$http,$cordovaGeolocation,$ionicLoading) {
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("app.crop");
+  }, 100);
   $scope.$on('$ionicView.beforeEnter', function(){
+    $scope.$root.showMenuIcon = true;
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กำลังประมวลผลสินค้า'
     });
@@ -3022,9 +3079,12 @@ $scope.map_name = "กำหนดพื้นที่";
 
 })
 
-.controller('ServiceCtrl', function($scope,$ionicSideMenuDelegate,$state,$http,$cordovaGeolocation,$ionicLoading) {
-
+.controller('ServiceCtrl', function($ionicPlatform,$scope,$ionicSideMenuDelegate,$state,$http,$cordovaGeolocation,$ionicLoading) {
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("app.crop");
+  }, 100);
   $scope.$on('$ionicView.beforeEnter', function(){
+    $scope.$root.showMenuIcon = true;
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กำลังประมวลผลบริการ/รับจ้าง'
     });
@@ -3125,11 +3185,15 @@ $scope.map_name = "กำหนดพื้นที่";
 })
 
 
-.controller('SellCtrl', function($scope,$http,$ionicLoading,$ionicPopup,$state) {
+.controller('SellCtrl', function($ionicPlatform,$scope,$http,$ionicLoading,$ionicPopup,$state) {
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    $state.go("app.crop");
+  }, 100);
   $scope.shouldShowDelete = false;
   $scope.shouldShowReorder = false;
   $scope.listCanSwipe = true;
   $scope.$on('$ionicView.beforeEnter', function(){
+    $scope.$root.showMenuIcon = true;
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กำลังโหลดข้อมูล'
     });
