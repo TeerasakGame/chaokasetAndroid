@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout,$cordovaGeolocation) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -12,6 +12,13 @@ angular.module('starter.controllers', [])
     var path = localStorage.getItem('pic');
     $scope.pic = ip_server+path;
   });
+
+var posOptions = {timeout: 10000, enableHighAccuracy: true};
+$cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+  localStorage.setItem('lat',position.coords.latitude);
+  localStorage.setItem('long', position.coords.longitude);
+  console.log("ok");
+ });
 
 })
 
@@ -129,7 +136,7 @@ angular.module('starter.controllers', [])
                       localStorage.setItem('name',data.data.name);
                       localStorage.setItem('pic',data.data.pic);
                       localStorage.setItem('id',data.data.idUser);
-                      alert("go");
+            //          alert("go");
                       $state.go("app.crop");
                     }else{
                       //alert("FALSE");
@@ -338,9 +345,7 @@ angular.module('starter.controllers', [])
 .controller('CropCtrl',function($scope, $http, $state,$ionicPopup,$ionicLoading,$ionicPlatform,$ionicHistory,$ionicSideMenuDelegate,$ionicNavBarDelegate,$cordovaToast){
 //$scope.alert = "ไม่มีข้อมูลแปลงเพาะปลูก";
 $ionicNavBarDelegate.showBackButton(false);
-$scope.toggleLeft = function() {
-    $ionicSideMenuDelegate.toggleLeft();
-  };
+
 console.log("crop");
   $scope.doRefresh = function() {
     var data = "use_id="+localStorage.getItem('id');
@@ -351,7 +356,7 @@ console.log("crop");
             console.log($scope.api);
            if( $scope.api == '' ||  $scope.api == null){
 
-             $scope.alert = "ไม่มีข้อมูลแปลงเพาะปลูก";
+             $scope.alert = "";
            }
        })
        .error(function (data, status, header, config) {
@@ -365,6 +370,21 @@ console.log("crop");
   };
 
   $scope.$on('$ionicView.beforeEnter', function(){
+    var num = 1;
+
+    $ionicPlatform.registerBackButtonAction(function () {
+      if(num < 2){
+         $cordovaToast.showShortBottom('กดอีกครั้งเพื่อออก');
+         num++;
+      }else{
+        if($state.current.name=="app.crop"){
+            navigator.app.exitApp(); //<-- remove this line to disable the exit
+        }else {
+          navigator.app.backHistory();
+        }
+      }
+
+    }, 100);
 
     localStorage.removeItem('crop_id');
     $ionicLoading.show({
@@ -379,7 +399,7 @@ console.log("crop");
           $scope.api = data.data;
           if( $scope.api == '' ||  $scope.api == null){
             console.log("555");
-            $scope.alert = "ไม่มีข้อมูลแปลงเพาะปลูก";
+            $scope.alert = "";
           }
        })
        .error(function (data, status, header, config) {
@@ -431,29 +451,8 @@ console.log("crop");
       }
     })
   };
-  var num = 1;
 
-  $ionicPlatform.onHardwareBackButton(function (event) {
-    if(num < 2){
-       $cordovaToast.showShortBottom('กดอีกครั้งเพื่อออก');
-       num++;
-    }else{
-      if($state.current.name=="app.crop"){
-          navigator.app.exitApp(); //<-- remove this line to disable the exit
-      }else {
-        navigator.app.backHistory();
-      }
-    }
 
-  }, 100);
-
-  $ionicPlatform.registerBackButtonAction(function (event) {
-    if($state.current.name=="app.crop"){
-        navigator.app.exitApp(); //<-- remove this line to disable the exit
-    }else {
-      navigator.app.backHistory();
-    }
-  }, 100);
 
 
 })
@@ -465,6 +464,8 @@ console.log("crop");
    localStorage.removeItem('pic');
    localStorage.removeItem('id');
    localStorage.removeItem('crop_id');
+   localStorage.removeItem('lat');
+   localStorage.removeItem('long');
  /*  localStorage.setItem('name',"");
    localStorage.setItem('login',"");
    localStorage.setItem('pic',"");
@@ -474,33 +475,42 @@ console.log("crop");
 
 .controller('AddCropCtrl',function($state,$ionicModal,$scope,$cordovaGeolocation,$http,$ionicLoading,$ionicHistory,$ionicPlatform){
   /*$scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-    viewData.enableBack = true;
   })*/
+  //alert();
   $scope.$on('$ionicView.beforeEnter', function(){
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กำลังค้นหาพิกัดที่อยู่'
     });
   console.log('add crop');
-  $scope.crop = { name: '',rai:0,nan:0,wa:0};
-  var posOptions = {timeout: 10000, enableHighAccuracy: false};
+  $scope.crop = { name: '',rai:0,nan:0,wa:null};
+  if(localStorage.getItem('lat') == null || localStorage.getItem('long') == null){
+    var posOptions = {timeout: 10000, enableHighAccuracy: true};
 
-  $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
-     $scope.lat = position.coords.latitude
-     $scope.long = position.coords.longitude
-     $scope.location = $scope.lat +"  "+$scope.long;
-     $http.get(ip_server+'/index.php/services/getnamelatlng/'+$scope.lat+"/"+$scope.long).then(function(res){
-       $scope.namelatlong = res.data;
+    $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+       $scope.lat = position.coords.latitude
+       $scope.long = position.coords.longitude
+       $scope.location = $scope.lat +"  "+$scope.long;
+       $http.get(ip_server+'/index.php/services/getnamelatlng/'+$scope.lat+"/"+$scope.long).then(function(res){
+         $scope.namelatlong = res.data;
+         $ionicLoading.hide();
+       });
+
+     }, function(err) {
        $ionicLoading.hide();
+      alert("กรุณาเปิด GPS");
+      cordova.plugins.diagnostic.switchToLocationSettings();
+
+      //$state.go("app.crop");
+      $ionicHistory.clearCache().then(function(){ $state.go('app.crop') })
      });
-
-   }, function(err) {
-     $ionicLoading.hide();
-    alert("กรุณาเปิด GPS");
-    cordova.plugins.diagnostic.switchToLocationSettings();
-
-    //$state.go("app.crop");
-    $ionicHistory.clearCache().then(function(){ $state.go('app.crop') })
-   });
+  }else {
+    $scope.lat = localStorage.getItem('lat');
+    $scope.long = localStorage.getItem('long');
+    $http.get(ip_server+'/index.php/services/getnamelatlng/'+$scope.lat+"/"+$scope.long).then(function(res){
+      $scope.namelatlong = res.data;
+      $ionicLoading.hide();
+    });
+  }
 
   $http.get(ip_server+'/index.php/services/plant').then(function(res){
     $scope.test = res.data;
@@ -550,6 +560,7 @@ console.log("crop");
   $scope.map = function() {
   //  alert("map");
     $scope.modal.show();
+
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
     });
@@ -557,21 +568,24 @@ console.log("crop");
     var options = {timeout: 10000, enableHighAccuracy: true};
 
     $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-      $scope.lat = position.coords.latitude;
-      $scope.long = position.coords.longitude;
 
 
-      var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      var lat = position.coords.latitude;
+      var long = position.coords.longitude;
+
+
+
+      var latLng = new google.maps.LatLng(lat,long);
 
       var mapOptions = {
         center: latLng,
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
-
-      $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      //$scope.map = v2.map;
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
       var marker = new google.maps.Marker({
-          map: $scope.map,
+          map: map,
           animation: google.maps.Animation.DROP,
           position: latLng
       });
@@ -579,17 +593,16 @@ console.log("crop");
       var infoWindow = new google.maps.InfoWindow({
           content: "คุณอยู่ที่นี่ !"
       });
-      infoWindow.open($scope.map, marker);
-      $ionicLoading.hide();
+      infoWindow.open(map, marker);
       $scope.click_map = function(){
-          google.maps.event.addListenerOnce($scope.map,"click",function(position){
+          google.maps.event.addListenerOnce(map,"click",function(position){
             marker.setMap(null);
             marker = new google.maps.Marker({
-              map : $scope.map,
+              map : map,
               anitmation : google.maps.Animation.DROP,
               position : position.latLng
             });
-            $scope.map.panTo(position.latLng);
+            map.panTo(position.latLng);
             $scope.lat = position.latLng.lat();
             $scope.long = position.latLng.lng();
             $scope.location = $scope.lat +"  "+$scope.long ;
@@ -598,14 +611,14 @@ console.log("crop");
             });
           });
         }
-
-
+      $ionicLoading.hide();
     }, function(error){
       console.log("Could not get location");
-    //  alert("กรุณาเปิด GPS");
+      alert("กรุณาเปิด GPS");
     });
 
   };
+
   $ionicPlatform.registerBackButtonAction(function (event) {
     $state.go("app.crop");
   }, 100);
@@ -1209,10 +1222,7 @@ $scope.$on('$ionicView.beforeEnter', function () {
 })
 
 .controller('AddAccountCtrl',function($scope,$ionicHistory,$state,$http){
-  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-    viewData.enableBack = true;
-    $ionicHistory.clearCache();
-  })
+
 
   $scope.account = { status: true,type:"0",num:"",detail:""};
   $scope.close = function(){
@@ -1244,9 +1254,7 @@ $scope.$on('$ionicView.beforeEnter', function () {
 })
 
 .controller('EditAccountCtrl',function($stateParams,$scope,$http,$state){
-  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-    viewData.enableBack = true;
-  })
+
   $scope.id = $stateParams.data;
   var redirect = $stateParams.redirect;
   //alert($scope.data);
@@ -1292,10 +1300,7 @@ $scope.$on('$ionicView.beforeEnter', function () {
 })
 
 .controller('AddActivitiesCtrl',function($scope, $state,$filter,$http,$ionicHistory){
-  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-    viewData.enableBack = true;
-    $ionicHistory.clearCache();
-  })
+
    $scope.date_start = new Date();
    $scope.atv = {name:'',type:1,start:$scope.date_start,end:'',datail:''};
 
@@ -1334,10 +1339,7 @@ $scope.$on('$ionicView.beforeEnter', function () {
  })
 
  .controller('AddProblemCtrl',function($scope, $state, $ionicActionSheet, $cordovaCamera, $http, $cordovaImagePicker,$ionicHistory,$cordovaFileTransfer,$filter,$cordovaCamera){
-   $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-     viewData.enableBack = true;
-     $ionicHistory.clearCache();
-   })
+
    //$scope.$on("$ionicView.enter", function () {
   //  $ionicHistory.clearCache();
     //$ionicHistory.clearHistory();
@@ -1455,10 +1457,11 @@ $scope.$on('$ionicView.beforeEnter', function () {
 
  })
 
- .controller('DetailProblemCtrl',function($scope,$stateParams,$http){
-  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-    viewData.enableBack = true;
-  })
+ .controller('DetailProblemCtrl',function($scope,$stateParams,$http,$ionicPlatform){
+
+  $ionicPlatform.registerBackButtonAction(function () {
+         navigator.app.backHistory();
+   }, 100);
   $scope.text = "";
   $scope.items = [];
   $scope.ip_pic = ip_server;
@@ -1490,13 +1493,14 @@ $scope.$on('$ionicView.beforeEnter', function () {
     });
     $scope.text = "";
   }
+
+
+
  })
 
 .controller('EditProblemCtrl', function($stateParams,$scope,$http,$cordovaImagePicker,$state,$cordovaFileTransfer,$filter,$cordovaCamera){
   //$scope.problems = [{name:''}];
-  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-    viewData.enableBack = true;
-  })
+
   $scope.cropp_id = $stateParams.cropp_id;
   var redirect = $stateParams.redirect;
 $scope.images =[];
@@ -1647,10 +1651,7 @@ $scope.images =[];
 })
 
 .controller('AddNoteCtrl',function($scope,$http,$filter,$state,$ionicHistory){
-  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-    viewData.enableBack = true;
-    $ionicHistory.clearCache();
-  })
+
   $scope.note = {detail:'',start_date:new Date(),end_date:new Date()};
   var crop_id = localStorage.getItem('crop_id');
   $scope.doSummit = function(form){
@@ -1676,10 +1677,7 @@ $scope.images =[];
 })
 
 .controller('AddMultimediaCtrl', function($ionicHistory,$scope,$cordovaImagePicker,$cordovaCamera,$http,$filter,$cordovaFileTransfer,$state){
-  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-    viewData.enableBack = true;
-    $ionicHistory.clearCache();
-  })
+
   $scope.images = [];
   $scope.mul = {detail:'',pic:'',date:new Date()};
   $scope.getpiconphone = function(){
@@ -1803,11 +1801,14 @@ $scope.images =[];
     $scope.error = "ติดต่อ server ไม่ได้";
     alert($scope.error);
   });
+  $scope.close = function(){
+    $state.go("app.tab.cropTimeline");
+  }
   $scope.doSummit = function(form){
     if(form.$valid) {
       //alert(JSON.stringify($scope.note));
-      var start = $filter('date')($scope.note.start_date, 'yyyy-MM-dd');
-      var end = $filter('date')($scope.note.end_date, 'yyyy-MM-dd');
+      var start = $filter('date')(new Date($scope.note.start_date).toISOString(), 'yyyy-MM-dd');
+      var end = $filter('date')(new Date($scope.note.end_date).toISOString(), 'yyyy-MM-dd');
       var ip = ip_server+'/index.php/services/editnote';
       var data = "cropn_id="+id+"&start="+start+"&end="+end+"&data="+$scope.note.detail;
       $http.post(ip, data, config).success(function (data, status, headers, config) {
@@ -2154,7 +2155,7 @@ $scope.images =[];
   $scope.closeMap = function() {
     $scope.modal.hide();
   };
-
+ $scope.map_name = "แก้ไขพื้นที่เพาะปลูก";
   $scope.map = function() {
   //  alert("map");
     $scope.modal.show();
@@ -2179,9 +2180,9 @@ $scope.images =[];
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
 
-      $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
       var marker = new google.maps.Marker({
-          map: $scope.map,
+          map: map,
           animation: google.maps.Animation.DROP,
           position: latLng
       });
@@ -2192,14 +2193,14 @@ $scope.images =[];
       infoWindow.open($scope.map, marker);
       $ionicLoading.hide();
       $scope.click_map = function(){
-          google.maps.event.addListenerOnce($scope.map,"click",function(position){
+          google.maps.event.addListenerOnce(map,"click",function(position){
             marker.setMap(null);
             marker = new google.maps.Marker({
-              map : $scope.map,
+              map : map,
               anitmation : google.maps.Animation.DROP,
               position : position.latLng
             });
-            $scope.map.panTo(position.latLng);
+            map.panTo(position.latLng);
             $scope.lat = position.latLng.lat();
             $scope.long = position.latLng.lng();
             $scope.location = $scope.lat +"  "+$scope.long ;
@@ -2432,6 +2433,7 @@ $scope.eventSources = [$scope.eventSource1];
 })
 
 .controller('ProductCtrl', function($ionicPlatform,$scope,$ionicSideMenuDelegate,$state,$http,$cordovaGeolocation,$ionicLoading) {
+  $scope.product = [];
   $ionicPlatform.registerBackButtonAction(function (event) {
     $state.go("app.crop");
   }, 100);
@@ -2440,31 +2442,51 @@ $scope.eventSources = [$scope.eventSource1];
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กำลังประมวลผลสินค้า'
     });
-  var posOptions = {timeout: 10000, enableHighAccuracy: false};
 
-  $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
-     $scope.lat = position.coords.latitude
-     $scope.long = position.coords.longitude
-     var data = "lat="+$scope.lat+"&long="+$scope.long+"&type=1";
-     var ip = ip_server+'/index.php/services/getproduct';
-      $http.post(ip, data, config)
-        .success(function (data, status, headers, config) {
-            $scope.product = data.data;
-            //alert(JSON.stringify($scope.product));
-            $ionicLoading.hide();
-        })
-        .error(function (data, status, header, config) {
-            $scope.error = "ติดต่อ server ไม่ได้";
-            $ionicLoading.hide();
-            alert($scope.error);
-        })
+    if(localStorage.getItem('lat') == null || localStorage.getItem('long') == null){
+      var posOptions = {timeout: 10000, enableHighAccuracy: false};
 
-   }, function(err) {
-     $ionicLoading.hide();
-     alert("กรุณาเปิด GPS");
-     cordova.plugins.diagnostic.switchToLocationSettings();
-    //$ionicHistory.clearCache().then(function(){ $state.go('app.crop') })
-   });
+      $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+         $scope.lat = position.coords.latitude;
+         $scope.long = position.coords.longitude;
+         var data = "lat="+$scope.lat+"&long="+$scope.long+"&type=1";
+         var ip = ip_server+'/index.php/services/getproduct';
+          $http.post(ip, data, config)
+            .success(function (data, status, headers, config) {
+                $scope.product = data.data;
+                //alert(JSON.stringify($scope.product));
+                $ionicLoading.hide();
+            })
+            .error(function (data, status, header, config) {
+                $scope.error = "ติดต่อ server ไม่ได้";
+                $ionicLoading.hide();
+                alert($scope.error);
+            })
+
+       }, function(err) {
+         $ionicLoading.hide();
+         alert("กรุณาเปิด GPS");
+         cordova.plugins.diagnostic.switchToLocationSettings();
+        //$ionicHistory.clearCache().then(function(){ $state.go('app.crop') })
+       });
+    }else{
+      $scope.lat = localStorage.getItem('lat');
+      $scope.long = localStorage.getItem('long');
+      var data = "lat="+$scope.lat+"&long="+$scope.long+"&type=1";
+      var ip = ip_server+'/index.php/services/getproduct';
+       $http.post(ip, data, config)
+         .success(function (data, status, headers, config) {
+             $scope.product = data.data;
+             //alert(JSON.stringify($scope.product));
+             $ionicLoading.hide();
+         })
+         .error(function (data, status, header, config) {
+             $scope.error = "ติดต่อ server ไม่ได้";
+             $ionicLoading.hide();
+             alert($scope.error);
+         })
+    }
+
  })
 
   $scope.toggleLeft = function() {
@@ -2534,6 +2556,8 @@ $scope.eventSources = [$scope.eventSource1];
   //  $scope.product[index]['like'] = 1;
 
   }
+
+
 
 
 })
@@ -2742,9 +2766,9 @@ $scope.map_name = "กำหนดพื้นที่";
        mapTypeId: google.maps.MapTypeId.ROADMAP
      };
 
-     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+     var map = new google.maps.Map(document.getElementById("map"), mapOptions);
      var marker = new google.maps.Marker({
-         map: $scope.map,
+         map: map,
          animation: google.maps.Animation.DROP,
          position: latLng
      });
@@ -2752,17 +2776,17 @@ $scope.map_name = "กำหนดพื้นที่";
      var infoWindow = new google.maps.InfoWindow({
          content: "คุณอยู่ที่นี่ !"
      });
-     infoWindow.open($scope.map, marker);
+     infoWindow.open(map, marker);
      $ionicLoading.hide();
      $scope.click_map = function(){
-         google.maps.event.addListenerOnce($scope.map,"click",function(position){
+         google.maps.event.addListenerOnce(map,"click",function(position){
            marker.setMap(null);
            marker = new google.maps.Marker({
-             map : $scope.map,
+             map : map,
              anitmation : google.maps.Animation.DROP,
              position : position.latLng
            });
-           $scope.map.panTo(position.latLng);
+           map.panTo(position.latLng);
            $scope.lat = position.latLng.lat();
            $scope.long = position.latLng.lng();
            $scope.location = $scope.lat +"  "+$scope.long ;
@@ -2948,9 +2972,9 @@ $scope.map_name = "กำหนดพื้นที่";
        mapTypeId: google.maps.MapTypeId.ROADMAP
      };
 
-     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+     var map = new google.maps.Map(document.getElementById("map"), mapOptions);
      var marker = new google.maps.Marker({
-         map: $scope.map,
+         map: map,
          animation: google.maps.Animation.DROP,
          position: latLng
      });
@@ -2958,17 +2982,17 @@ $scope.map_name = "กำหนดพื้นที่";
      var infoWindow = new google.maps.InfoWindow({
          content: "คุณอยู่ที่นี่ !"
      });
-     infoWindow.open($scope.map, marker);
+     infoWindow.open(map, marker);
      $ionicLoading.hide();
      $scope.click_map = function(){
-         google.maps.event.addListenerOnce($scope.map,"click",function(position){
+         google.maps.event.addListenerOnce(map,"click",function(position){
            marker.setMap(null);
            marker = new google.maps.Marker({
-             map : $scope.map,
+             map : map,
              anitmation : google.maps.Animation.DROP,
              position : position.latLng
            });
-           $scope.map.panTo(position.latLng);
+           map.panTo(position.latLng);
            $scope.lat = position.latLng.lat();
            $scope.long = position.latLng.lng();
            $scope.location = $scope.lat +"  "+$scope.long ;
@@ -3097,31 +3121,51 @@ $scope.map_name = "กำหนดพื้นที่";
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กำลังประมวลผลบริการ/รับจ้าง'
     });
-  var posOptions = {timeout: 10000, enableHighAccuracy: false};
 
-  $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
-     $scope.lat = position.coords.latitude
-     $scope.long = position.coords.longitude
-     var data = "lat="+$scope.lat+"&long="+$scope.long+"&type=2";
-     var ip = ip_server+'/index.php/services/getproduct';
-      $http.post(ip, data, config)
-        .success(function (data, status, headers, config) {
-            $scope.product = data.data;
-            //alert(JSON.stringify($scope.product));
-            $ionicLoading.hide();
-        })
-        .error(function (data, status, header, config) {
-            $scope.error = "ติดต่อ server ไม่ได้";
-            $ionicLoading.hide();
-            alert($scope.error);
-        })
+  if(localStorage.getItem('lat') == null || localStorage.getItem('long') == null){
+    var posOptions = {timeout: 10000, enableHighAccuracy: false};
 
-   }, function(err) {
-     $ionicLoading.hide();
-     alert("กรุณาเปิด GPS");
-     cordova.plugins.diagnostic.switchToLocationSettings();
-    //$ionicHistory.clearCache().then(function(){ $state.go('app.crop') })
-   });
+    $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+       $scope.lat = position.coords.latitude
+       $scope.long = position.coords.longitude
+       var data = "lat="+$scope.lat+"&long="+$scope.long+"&type=2";
+       var ip = ip_server+'/index.php/services/getproduct';
+        $http.post(ip, data, config)
+          .success(function (data, status, headers, config) {
+              $scope.product = data.data;
+              //alert(JSON.stringify($scope.product));
+              $ionicLoading.hide();
+          })
+          .error(function (data, status, header, config) {
+              $scope.error = "ติดต่อ server ไม่ได้";
+              $ionicLoading.hide();
+              alert($scope.error);
+          })
+
+     }, function(err) {
+       $ionicLoading.hide();
+       alert("กรุณาเปิด GPS");
+       cordova.plugins.diagnostic.switchToLocationSettings();
+      //$ionicHistory.clearCache().then(function(){ $state.go('app.crop') })
+     });
+  }else{
+    console.log("ok gps");
+    $scope.lat = localStorage.getItem('lat');
+    $scope.long = localStorage.getItem('long');
+    var data = "lat="+$scope.lat+"&long="+$scope.long+"&type=2";
+    var ip = ip_server+'/index.php/services/getproduct';
+     $http.post(ip, data, config)
+       .success(function (data, status, headers, config) {
+           $scope.product = data.data;
+           //alert(JSON.stringify($scope.product));
+           $ionicLoading.hide();
+       })
+       .error(function (data, status, header, config) {
+           $scope.error = "ติดต่อ server ไม่ได้";
+           $ionicLoading.hide();
+           alert($scope.error);
+       })
+  }
  })
 
   $scope.toggleLeft = function() {
@@ -3630,9 +3674,9 @@ $scope.map_name = "กำหนดพื้นที่";
          mapTypeId: google.maps.MapTypeId.ROADMAP
        };
 
-       $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+       var map = new google.maps.Map(document.getElementById("map"), mapOptions);
        var marker = new google.maps.Marker({
-           map: $scope.map,
+           map: map,
            animation: google.maps.Animation.DROP,
            position: latLng
        });
@@ -3640,17 +3684,17 @@ $scope.map_name = "กำหนดพื้นที่";
        var infoWindow = new google.maps.InfoWindow({
            content: "คุณอยู่ที่นี่ !"
        });
-       infoWindow.open($scope.map, marker);
+       infoWindow.open(map, marker);
        $ionicLoading.hide();
        $scope.click_map = function(){
-           google.maps.event.addListenerOnce($scope.map,"click",function(position){
+           google.maps.event.addListenerOnce(map,"click",function(position){
              marker.setMap(null);
              marker = new google.maps.Marker({
-               map : $scope.map,
+               map : map,
                anitmation : google.maps.Animation.DROP,
                position : position.latLng
              });
-             $scope.map.panTo(position.latLng);
+             map.panTo(position.latLng);
              $scope.lat = position.latLng.lat();
              $scope.long = position.latLng.lng();
              $scope.location = $scope.lat +"  "+$scope.long ;
@@ -3793,9 +3837,9 @@ $scope.map_name = "กำหนดพื้นที่";
          mapTypeId: google.maps.MapTypeId.ROADMAP
        };
 
-       $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+       var map = new google.maps.Map(document.getElementById("map"), mapOptions);
        var marker = new google.maps.Marker({
-           map: $scope.map,
+           map: map,
            animation: google.maps.Animation.DROP,
            position: latLng
        });
@@ -3803,17 +3847,17 @@ $scope.map_name = "กำหนดพื้นที่";
        var infoWindow = new google.maps.InfoWindow({
            content: "คุณอยู่ที่นี่ !"
        });
-       infoWindow.open($scope.map, marker);
+       infoWindow.open(map, marker);
        $ionicLoading.hide();
        $scope.click_map = function(){
-           google.maps.event.addListenerOnce($scope.map,"click",function(position){
+           google.maps.event.addListenerOnce(map,"click",function(position){
              marker.setMap(null);
              marker = new google.maps.Marker({
-               map : $scope.map,
+               map : map,
                anitmation : google.maps.Animation.DROP,
                position : position.latLng
              });
-             $scope.map.panTo(position.latLng);
+             map.panTo(position.latLng);
              $scope.lat = position.latLng.lat();
              $scope.long = position.latLng.lng();
              $scope.location = $scope.lat +"  "+$scope.long ;
@@ -3859,8 +3903,12 @@ $scope.map_name = "กำหนดพื้นที่";
 
 })
 
-.controller('DetailProductCtrl', function($scope,$stateParams,$http,$state){
+.controller('DetailProductCtrl', function($scope,$stateParams,$http,$state,$ionicPlatform){
   //$scope.items = [{src:"img/ionic.png"},{src:"img/ionic.png"}];
+  $ionicPlatform.registerBackButtonAction(function () {
+      navigator.app.backHistory();
+  }, 100);
+
   var id = $stateParams.id;
 
 //  console.log($scope.data);
@@ -3912,7 +3960,10 @@ $scope.map_name = "กำหนดพื้นที่";
   }
 })
 
-.controller('ChatProductCtrl', function($scope,$stateParams,$http){
+.controller('ChatProductCtrl', function($scope,$stateParams,$http,$ionicPlatform){
+  $ionicPlatform.registerBackButtonAction(function () {
+      navigator.app.backHistory();
+  }, 100);
   $scope.count = $stateParams.comment;
   $scope.name = $stateParams.name;
   $scope.ip_pic = ip_server+"/";
