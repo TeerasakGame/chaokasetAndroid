@@ -1,0 +1,40 @@
+<ion-view view-title="เปลี่ยนรหัสผ่าน">
+  <ion-content>
+
+  <form ng-submit="doChangPW(FormRegister)" name="FormRegister" novalidate="">
+    <label class="item item-input">
+      <span class="input-label">รหัสผ่านปัจจุบัน</span>
+      <input type="password" name="passwordold" id="password" ng-model="register.passwordold" placeholder="กรุณากรอกรหัสผ่านปัจจุบัน" ng-change="check()"required>
+    </label>
+
+    <div class="form-error"><b>{{passchk}}</b></div>
+    <div class="form-errors" ng-show="FormRegister.passwordold.$error && FormRegister.$submitted" ng-messages="FormRegister.passwordold.$error">
+        <div class="form-error" ng-message="required"><b>กรุณากรอกรหัสผ่านปัจจุบัน</b></div>
+    </div>
+    <label class="item item-input">
+      <span class="input-label">รหัสผ่านใหม่</span>
+      <input type="password" name="password" id="password" ng-model="register.password" placeholder="กรุณากรอกรหัสผ่านใหม่" required>
+    </label>
+    <div class="form-errors" ng-show="FormRegister.password.$error && FormRegister.$submitted" ng-messages="FormRegister.password.$error">
+        <div class="form-error" ng-message="required"><b>กรุณากรอกรหัสผ่าน</b></div>
+    </div>
+    <label class="item item-input">
+      <span class="input-label">ยืนยันรหัสผ่าน</span>
+      <input type="password" name="password2" ng-model="register.password2" placeholder="กรุณากรอกรหัสผ่านใหม่อีกครั้ง"  data-password-verify="register.password" required>
+    </label>
+     <div class="form-errors" ng-show="FormRegister.password2.$error.passwordVerify">
+       <div class="form-error"><b>รหัสผ่านไม่ตรงกัน</b></div>
+     </div>
+    <div class="form-errors" ng-show="FormRegister.password2.$error && FormRegister.$submitted" ng-messages="FormRegister.password2.$error">
+        <div class="form-error" ng-message="required"><b>กรุณากรอกยืนยันรหัสผ่าน</b></div>
+    </div>
+    <div class="bar bar-footer">
+      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">แก้ไข</button>
+    </div>
+  </form>
+
+
+
+  </ion-content>
+</ion-view>

@@ -1,0 +1,115 @@
+<ion-view view-title="ข้อมูลส่วนตัว">
+  <div class="bar bar-header  bar-balanced">
+    <button class="button button-icon icon ion-android-arrow-back" ui-sref="login"></button>
+    <div class="title">ข้อมูลส่วนตัว</div>
+    <!--<button class="button button-clear button-positive">Edit</button>-->
+  </div>
+  <ion-content>
+
+  <form ng-submit="doRegister(FormRegister)" name="FormRegister" novalidate="">
+      <div class="pic-profile-container2">
+          <center><img class="pic-profile2" ng-src="{{img}}" ng-click="showDetail()"></center>
+      </div>
+      <input type="hidden" name="pic" ng-model="pic" required>
+      <div class="form-errors" ng-show="FormRegister.pic.$error && FormRegister.$submitted" ng-messages="FormRegister.pic.$error">
+          <div class="form-error" ng-message="required"><b>กรุณาอัพโหลดรูป</b></div>
+      </div>
+    </div>
+      <div class="list">
+        <div class="item item-divider text-green">
+          ข้อมูลส่วนตัว
+        </div>
+        <label class="item item-input">
+          <span class="input-label">อีเมล</span>
+          {{register.email}}
+        </label>
+        <label class="item item-input">
+          <span class="input-label">ชื่อ</span>
+          <input type="text" name="name" ng-model="register.name" placeholder="กรุณากรอกชื่อ" no-special-char required>
+        </label>
+        <div class="form-errors" ng-show="FormRegister.name.$error && FormRegister.$submitted" ng-messages="FormRegister.name.$error">
+            <div class="form-error" ng-message="required"><b>กรุณากรอกชื่อ</b></div>
+        </div>
+        <label class="item item-input">
+          <span class="input-label">นามสกุล</span>
+          <input type="text" name="lname" ng-model="register.lname" placeholder="กรุณากรอกนามสกุล" no-special-char required>
+        </label>
+        <div class="form-errors" ng-show="FormRegister.lname.$error && FormRegister.$submitted" ng-messages="FormRegister.lname.$error">
+            <div class="form-error" ng-message="required"><b>กรุณากรอกนามสกุล</b></div>
+        </div>
+        <!--<div class="item item-divider text-green">
+          การเข้าสู่ระบบ
+        </div>
+        <label class="item item-input">
+          <span class="input-label">อีเมล</span>
+          {{register.email}}
+
+        </label>
+
+        <div class="form-error" ng-if="err != null"><b>{{err}}</b></div>
+        <div class="form-errors" ng-show="FormRegister.email.$error && FormRegister.$submitted" ng-messages="FormRegister.email.$error">
+            <div class="form-error" ng-message="required"><b>กรุณากรอกอีเมล</b></div>
+            <div class="form-error" ng-message="email"><b>รูปแบบข้อมูลไม่ถูกต้อง เช่น test@test.com</b></div>
+        </div>
+        <label class="item item-input">
+          <span class="input-label">รหัสผ่าน</span>
+          <input type="password" name="password" id="password" ng-model="register.password" placeholder="กรุณากรอกรหัสผ่าน" required>
+        </label>
+        <div class="form-errors" ng-show="FormRegister.password.$error && FormRegister.$submitted" ng-messages="FormRegister.password.$error">
+            <div class="form-error" ng-message="required"><b>กรุณากรอกรหัสผ่าน</b></div>
+        </div>
+        <label class="item item-input">
+          <span class="input-label">ยืนยันรหัสผ่าน</span>
+          <input type="password" name="password2" ng-model="register.password2" placeholder="กรุณากรอกรหัสผ่านอีกครั้ง"  data-password-verify="register.password" required>
+        </label>
+         <div class="form-errors" ng-show="FormRegister.password2.$error.passwordVerify">
+           <div class="form-error"><b>รหัสผ่านไม่ตรงกัน</b></div>
+         </div>
+        <div class="form-errors" ng-show="FormRegister.password2.$error && FormRegister.$submitted" ng-messages="FormRegister.password2.$error">
+            <div class="form-error" ng-message="required"><b>กรุณากรอกยืนยันรหัสผ่าน</b></div>
+        </div>-->
+        <div class="item item-divider text-green">
+          ข้อมูลการติดต่อ
+        </div>
+        <!--<ion-item>
+          <ion-label>จังหวัด</ion-label>
+          <ion-select [(ngModel)]="จังหวัด" >
+            <ion-option value="1" >1111111</ion-option>
+            <ion-option value="2" >2222222</ion-option>
+          </ion-select>
+        </ion-item>-->
+
+        <label class="item item-input" data-ng-repeat="Tel in Tels">
+          <span class="input-label">เบอร์โทรทัพท์</span>
+          <input type="tel" name="tel" ng-model="Tel.data" ng-minlength="9" ng-maxlength="10"  number placeholder="กรุณากรอกเบอร์โทร" required>
+        </label>
+
+        <div class="form-errors" ng-show="FormRegister.tel.$error && FormRegister.$submitted" ng-messages="FormRegister.tel.$error">
+            <div class="form-error" ng-message="required"><b>กรุณากรอกเบอร์โทร</b></div>
+            <div class="form-error" ng-message="minlength"><b>กรุณากรอเบอร์โทรอย่างน้อย 9 ตัว</b></div>
+            <div class="form-error" ng-message="maxlength"><b>เบอร์โทรศัพท์เกิน 10 ตัว</b></div>
+        </div>
+
+
+        <div class="item item-input" align-title="rigth" >
+          <div class="button button-clear button-assertive" ng-click="Remove()">
+            <i class="icon ion-minus-circled "></i> ลบเบอร์
+          </div>
+          <div class="button button-clear button-balanced" ng-click="addTel()" >
+            <i class="icon ion-plus-circled"></i> เพิ่มเบอร์
+          </div>
+        </div>
+
+
+      </div>
+
+      <button type="summit" class="button button-full button-positive">
+          อัพเดตข้อมูลส่วนตัว
+      </button>
+
+  </form>
+  <button type="butt" class="button button-full button-assertive" ng-click = "changpw()">
+      เปลี่ยนรหัสผ่าน
+  </button>
+  </ion-content>
+</ion-view>

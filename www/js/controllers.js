@@ -4160,6 +4160,201 @@ $scope.map_name = "กำหนดพื้นที่";
 
 })
 
+.controller('ProfileCtrl', function($scope,$ionicLoading,$http,$cordovaCamera,$ionicActionSheet,$state,$cordovaToast){
+  //$scope.register = { };
+  $scope.Tels = [];
+  $scope.$on('$ionicView.beforeEnter', function(){
+    $ionicLoading.show({
+           template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
+    });
+  $scope.path = ip_server;
+  $scope.use_id = localStorage.getItem('id');
+  console.log($scope.use_id);
+  var data = "id="+$scope.use_id;
+  var ip = ip_server+'/index.php/services/profile';
+   $http.post(ip, data, config)
+     .success(function (data, status, headers, config) {
+         $scope.profile = data.data['profile'];
+         $scope.img = ip_server+$scope.profile[0]['use_pic']
+         $scope.Tel = data.data['tel'];
+         $scope.register = { name: $scope.profile[0]['use_name'], lname : $scope.profile[0]['use_lname'],email:$scope.profile[0]['use_email'],password:''};
+         var i=0;
+         angular.forEach($scope.Tel , function(value, key) {
+            $scope.Tels.push({id:'tel'+key,data:$scope.Tel[key]['con_name']});
+            //console.log(i+" : "+key+$scope.Tels);
+         });
+        console.log($scope.Tels);
+         $ionicLoading.hide();
+     })
+     .error(function (data, status, header, config) {
+        $ionicLoading.hide();
+         $scope.error = "ติดต่อ server ไม่ได้";
+         alert($scope.error);
+     });
+   });
+
+   $scope.addTel = function(){
+     if ($scope.Tels.length < 3){
+       var newItemNo = $scope.Tels.length+1;
+       $scope.Tels.push({'id':'choice'+newItemNo});
+     }else {
+       console.log("no add");
+     }
+   };
+   $scope.Remove = function(){
+     if($scope.Tels.length <= 1){
+       console.log("no remove");
+     }else {
+       var newItemNo = $scope.Tels.length-1;
+       console.log("remove: "+newItemNo);
+       $scope.Tels.pop();
+     }
+
+   };
+
+   $scope.showDetail = function() {
+     $ionicActionSheet.show({
+       //titleText: 'การนำเข้ารูป',
+       buttons: [
+         { text: '<center>จากเครื่อง</center>' },
+         { text: '<center>จากกล้อง</center>' },
+       ],
+       cancelText: 'ยกเลิก',
+       cancel: function() {
+         console.log('CANCELLED');
+       },
+       buttonClicked: function(index) {
+           switch (index) {
+             case 0:
+               var options = {
+                     destinationType: Camera.DestinationType.FILE_URI,
+                     sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
+                     correctOrientation: true,
+                     quality: 30,
+                     allowEdit: true,
+                     popoverOptions: CameraPopoverOptions,
+                     targetWidth: 400,
+                     targetHeight: 400,
+
+                   }
+               $cordovaCamera.getPicture(options).then(function(imageData){
+                 $scope.image = imageData;
+                 $scope.pic = imageData;
+               },function(err){
+
+               });
+               break;
+             case 1:
+                 var options = {
+                     quality: 30,
+                     destinationType: Camera.DestinationType.FILE_URI,
+                     sourceType: Camera.PictureSourceType.CAMERA,
+                     allowEdit: true,
+                     targetWidth: 400,
+                     targetHeight: 400,
+                     popoverOptions: CameraPopoverOptions,
+                     saveToPhotoAlbum: true,
+                     correctOrientation:true,
+
+                     };
+
+                 $cordovaCamera.getPicture(options).then(function(imageData) {
+                 var image = document.getElementById('myImage');
+                 $scope.image = imageData;
+                 $scope.pic = imageData;
+                 }, function(err) {
+                 // error
+                 });
+               break;
+           }
+         console.log('BUTTON CLICKED', index);
+         return true;
+       },
+     });
+   };
+
+   $scope.doRegister = function(form){
+     if(form.$valid) {
+       console.log($scope.register);
+       console.log($scope.Tels);
+       var tel = [];
+       var datatel = "";
+       for (i = 0; i < $scope.Tels.length; i++) {
+         tel[i] =  $scope.Tels[i].data;
+         datatel = datatel+"&tel["+i+"]="+tel[i];
+       }
+       console.log(tel);
+       var data = "name="+$scope.register.name+"&lname="+$scope.register.lname+datatel+"&id="+$scope.use_id;
+       console.log(data);
+       var ip = ip_server+'/index.php/services/updateprofile';
+       console.log(ip);
+        $http.post(ip, data, config).success(function (data, status, headers, config) {
+          localStorage.setItem('name',$scope.register.name+" "+$scope.register.lname);
+          $cordovaToast.showLongBottom('อัพเดตข้อมูลส่วนตัวเรียบร้อยแล้ว')
+          $state.go("app.crop");
+        }).error(function (data, status, header, config) {
+              console.log("login error");
+              $scope.error = "ติดต่อ server ไม่ได้";
+              alert($scope.error);
+        });
+     }
+   };
+
+   $scope.changpw = function(id){
+     console.log($scope.use_id);
+     $state.go("app.changpw",{id:$scope.use_id});
+   }
+
+})
+
+.controller('ChangPwCtrl', function($scope,$state,$stateParams,$http,$cordovaToast){
+  $scope.register = {passwordold:"",password:""};
+  $scope.check = function(){
+    console.log($scope.register.passwordold);
+    var data = "id="+$stateParams.id+"&pass="+$scope.register.passwordold;
+    var ip = ip_server+'/index.php/services/checkpass';
+    $http.post(ip, data, config).success(function (data, status, headers, config) {
+       if(data == "true" || data == true){
+         $scope.passchk = "";
+       }else{
+         if($scope.register.passwordold == ""){
+           $scope.passchk = "";
+         }else {
+           $scope.passchk = "รหัสผ่านไม่ถูก";
+         }
+       }
+     });
+
+     $scope.doChangPW = function(form){
+       if(form.$valid) {
+         console.log($scope.register);
+         var data = "id="+$stateParams.id+"&pass_old="+$scope.register.passwordold+"&pass_new="+$scope.register.password;
+         console.log(data);
+         var ip = ip_server+'/index.php/services/changepass';
+          $http.post(ip, data, config).success(function (data, status, headers, config) {
+            console.log(data);
+            if(data == "true" || data == true){
+              $cordovaToast.showLongBottom('อัพเดตรหัสผ่านเรียบร้อยแล้ว')
+              $state.go("app.crop");
+            }else{
+              $cordovaToast.showLongBottom('อัพเดตรหัสผ่านไม่สำเร็จกรุณาลองอีกครั้ง')
+            }
+          }).error(function (data, status, header, config) {
+                console.log("login error");
+                $scope.error = "ติดต่อ server ไม่ได้";
+                alert($scope.error);
+          });
+
+       }
+     };
+  }
+
+  $scope.close = function(){
+     $state.go("app.profile");
+  }
+
+})
+
 .controller('PlaylistsCtrl', function($scope) {
   $scope.playlists = [
     { title: 'Reggae', id: 1 },

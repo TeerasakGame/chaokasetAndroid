@@ -434,6 +434,28 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
     }
   })
 
+  .state('app.profile', {
+    cache: false,
+    url: '/profile',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/profile.html',
+        controller: 'ProfileCtrl'
+      }
+    }
+  })
+
+  .state('app.changpw', {
+    cache: false,
+    url: '/changpw/:id',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/changpw.html',
+        controller: 'ChangPwCtrl'
+      }
+    }
+  })
+
   .state('app.search', {
     url: '/search',
     views: {
