@@ -1,11 +1,23 @@
 
-<ion-view view-title="แผนการเพาะปลูก">
+<ion-view view-title="รายละเอียดการเพาะปลูก">
   <ion-content>
     <ion-refresher
 	    pulling-text="อัพเดตข้อมูล"
 	    on-refresh="doRefresh()">
   	</ion-refresher>
-
+    <label class="item item-input item-select">
+      <div class="input-label">
+        การแสดงผล
+      </div>
+      <select ng-model="select" ng-init="select=''">
+        <option value="">ทั้งหมด</option>
+        <option value="plan">การเพาะปลูก</option>
+        <option value="account">ปัญชีการเพาะปลูก</option>
+        <option value="problem">ปัญหาการเพาะปลูก</option>
+        <option value="note">บันทึก</option>
+        <option value="multimedia">รูปภาพ</option>
+      </select>
+    </label>
 
     <ion-scroll zooming="true" direction="y">
     <section  id="cd-timeline" class="cd-container">
@@ -35,28 +47,37 @@
                 <h5 class="marginTop5 cd-author" style="margin-left:5px">{{activity.date}}</h5>
                 <div style="margin-left:5px" class="timelineText">{{activity.text}}</div>
                 <ion-gallery ion-gallery-items="activity.pic" ion-zoom-events="true" ng-if="activity.pic != null"></ion-gallery>
-                <div align="right">
-                  <!--<a  onclick="window.open('https://www.youtube.com/watch?v=j3-8gLCYhQY', '_system', 'location=yes'); return false;">
-                    <button class="button button-outline button-small button-positive" >
-                     วิดิโอแนะนำ
-                   </button>
-                 </a>-->
-
-                  <button class="button button-clear button-small button-positive" ng-click="openvdo(activity.vdo);" ng-if="activity.status_vdo=='true'">
-                    <i class="ion-social-youtube" style="font-size: 25px;color:gray;"></i>
-                  </button>
-
-                 <button class="button button-clear button-small button-positive" ng-click="getpiccamera({{activity.id}},{{$index}});">
-                    <i class="ion-android-camera" style="font-size: 25px;color:gray;"></i>
-                  </button>
-                  <button class="button button-clear button-small button-positive" ng-click="getpic({{activity.id}},{{$index}});">
-                     <i class="ion-images" style="font-size: 25px;color:gray;"></i>
-                   </button>
-                </div>
+              
               </div>
               </div>
             </div>
+            <div ng-if="activity.data =='account'">
+              <div class="cd-timeline-icon" ng-click="event({{$index}},activity.status_show,activity.id,activity.data);">
+                <i class="ion-social-bitcoin timelineIcon energized"></i>
+              </div>
+              <div class="cd-timeline-content energized">
+                <div class="row">
+                  <div class="col-90">
+                    <h4 class="marginBottom0 marginTop0" ng-if="activity.type =='0'" style="color:green;">+ {{activity.text | number:2}} บาท</h4>
+                    <h4 class="marginBottom0 marginTop0" ng-if="activity.type =='1'" style="color:red;">- {{activity.text | number:2}} บาท</h4>
+                  </div>
+                  <div class="col-10">
+                    <div align="right" style="margin-top:-10px">
+                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'account',activity.status_show,{{$index}});">
+                        <i class="ion-chevron-down" style="color:gray;"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
+                <div style="margin-left:5px" ng-show="activity.status_show==='true'">
+
+                <h5 class="marginTop5 cd-author">{{activity.date}}</h5>
+                <div class="timelineText">{{activity.title}}</div>
+              </div>
+
+              </div>
+            </div>
             <div ng-if="activity.data =='problem'">
               <div class="cd-timeline-icon" ng-click="event({{$index}},activity.status_show,activity.id,activity.data);">
                 <i class="ion-help assertive timelineIcon "></i>
@@ -135,12 +156,6 @@
               </div>
               </div>
             </div>
-
-
-
-
-          </div>
-
 
 
       </div>

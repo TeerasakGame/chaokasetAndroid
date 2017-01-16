@@ -896,7 +896,7 @@ console.log("seve");
       //  alert('set_data');
     }, function(err) {
     // error
-      alert("ERROR TAKE PIC : "+JSON.stringify(err));
+      //alert("ERROR TAKE PIC : "+JSON.stringify(err));
     });
 
   }
@@ -4099,6 +4099,64 @@ $scope.map_name = "กำหนดพื้นที่";
       $scope.$broadcast('scroll.refreshComplete');
     })
   };
+
+})
+
+.controller('ProductTimelineCtrl', function($stateParams,$scope,$ionicLoading,$http,$ionicActionSheet){
+  $scope.$on('$ionicView.beforeEnter', function(){
+    $ionicLoading.show({
+           template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
+    });
+
+  $scope.crop_id = $stateParams.id;
+  var data = "crop_id="+$scope.crop_id;
+  var ip = ip_server+'/index.php/services/getproducttimeline';
+   $http.post(ip, data, config)
+     .success(function (data, status, headers, config) {
+         $scope.timeline= data.data;
+
+         $ionicLoading.hide();
+     })
+     .error(function (data, status, header, config) {
+        $ionicLoading.hide();
+         $scope.error = "ติดต่อ server ไม่ได้";
+         alert($scope.error);
+     });
+   });
+
+   $scope.showDetail = function(id,data,status,i) {
+     if (status === 'false' || status === false){
+       $scope.botton = [{ text: '<center><div>แสดงข้อมูล</div></center>' },];
+     }else{
+       $scope.botton = [{ text: '<center><div>ซ่อนข้อมูล</div></center>' },];
+     }
+     $ionicActionSheet.show({
+
+       buttons:  $scope.botton ,
+
+       cancelText: 'ยกเลิก',
+       cancel: function() {
+         console.log('CANCELLED');
+       },
+       buttonClicked: function(index) {
+           switch (index) {
+             case 0:
+               $scope.event(i,status,id,data);
+               break;
+           }
+         console.log('BUTTON CLICKED', index);
+         return true;
+       },
+     });
+   };
+
+   $scope.event = function(index,status,id,topic){
+     if (status === 'false' || status === false){
+        $scope.timeline[index].status_show = 'true';
+     }else{
+       $scope.timeline[index].status_show = 'false';
+     }
+   };
 
 })
 

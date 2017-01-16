@@ -414,6 +414,16 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
     }
   })
 
+  .state('app.producttimeline', {
+    url: '/producttimeline/:id',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/timeline.html',
+        controller: 'ProductTimelineCtrl'
+      }
+    }
+  })
+
   .state('app.chatproduct', {
     url: '/chatproduct/:id/:comment/:name',
     views: {
