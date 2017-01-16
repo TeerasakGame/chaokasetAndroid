@@ -2,21 +2,33 @@
   <ion-content>
 
     <div class="padding">
-      <div class="row">
-        <div class="col-90">
+      <div class="row" ng-if="detail.crop_id != null">
+        <div class="col-80">
           <h3  class="text-green"><center>{{detail.prd_name}}</center></h3>
+        </div>
+        <div class="col-10 text-right" >
+          <a href=""><i class="ion-ios-list" style="font-size: 30px;"></i></a>
         </div>
         <div class="col-10 text-right">
           <a href="geo:{{detail.prd_lat}},{{detail.prd_long}}?q={{detail.prd_lat}},{{detail.prd_long}}"><i class="ion-map" style="font-size: 30px;"></i></a>
         </div>
       </div>
+      <div class="row" ng-if="detail.crop_id == null">
+        <div class="col-90">
+          <h3  class="text-green"><center>{{detail.prd_name}}</center></h3>
+        </div>
 
-      <ion-gallery ion-gallery-items="items" ion-zoom-events="true" ng-if="items != null"></ion-gallery>
+        <div class="col-10 text-right">
+          <a href="geo:{{detail.prd_lat}},{{detail.prd_long}}?q={{detail.prd_lat}},{{detail.prd_long}}"><i class="ion-map" style="font-size: 30px;"></i></a>
+        </div>
+      </div>
+
+      <ion-gallery ion-gallery-items="items" ion-gallery-row="3" ion-zoom-events="true"  ion-gallery-toggle="true" ng-if="items != null"></ion-gallery>
     </div>
 
     <ul class="list">
       <div class="item item-divider">
-        <b class="text-green">ราคา</b>
+        <b class="text-green">ราคา {{detail.crop_id}}</b>
       </div>
       <li class="item">
         {{detail.prd_price}} บาท ต่อ {{detail.prd_unit}}

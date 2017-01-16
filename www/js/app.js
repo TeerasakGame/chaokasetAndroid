@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCordova','ngMessages','MyApp.Directives','ng-mfb','ion-gallery','ui.calendar'])
+angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCordova','ngMessages','MyApp.Directives','ng-mfb','ion-gallery','ui.calendar','MyApp.Directives2','MyApp.noSpecialChar','MyApp.number'])
 
 .run(function($ionicPlatform,$state) {
   $ionicPlatform.ready(function() {
@@ -92,7 +92,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
   })
 
   .state('app.tab.cropTimeline', {
-     cache: false,
+    cache: false,
     url: '/croptimeline',
     views: {
       'tab-timeline': {
@@ -298,7 +298,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
 
   .state('app.addpic', {
     cache: false,
-    url: '/addpic/:img',
+    url: '/addpic/:img/:id',
     views: {
      'menuContent': {
        templateUrl: 'templates/addpic.html',
@@ -331,7 +331,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
 
   .state('app.addproduct', {
     cache: false,
-    url: '/addproduct/:pic',
+    url: '/addproduct/:pic/:crop_id',
     views: {
      'menuContent': {
        templateUrl: 'templates/addproduct.html',

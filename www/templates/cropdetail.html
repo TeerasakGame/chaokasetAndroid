@@ -1,4 +1,4 @@
-<ion-view view-title="ภาพรวมการเพาะปลูก {{crop_id}}">
+<ion-view view-title="ภาพรวมการเพาะปลูก">
 
   <ion-content>
     <div class="list">
@@ -6,8 +6,9 @@
       <h1 class="text-center text-nameCrop">{{crop.crop_name}}</h1>
       <center><h2 class="text-center">{{crop.plat_name}} {{crop.seed_name}}</h2></center>
       <div class="col col-bottom">
-        <center><img src="img/chaokaset_logo.png" width="150px" height="150px" ></center>
+        <center><img src="{{'http://chaokaset.openservice.in.th/' + plan.ptem_pic}}" width="150px" height="150px" ></center>
       </div>
+      <center><h2 class="text-center">{{plan.ptem_name}}</h2></center>
     </ion-item>
 
     <ion-item class="item area-card">
@@ -29,6 +30,58 @@
         <h3 class="text-center text-green ">{{crop.end_name}}</h3>
       </ion-item>
     </div>
+    <div ng-if="show == true">
+    <form ng-submit="doSummit(Form)" name="Form" >
+    <ion-item class="item area-card">
+      <h2 class="text-center">ผลผลิตที่ได้ (กิโลกรัม)</h2>
+      <label class="item item-input">
+        <input type="number" name="value" placeholder="กรุณากรอกจำนวนผลผลิต" ng-model="detail.value" required>
+      </label>
+      <div class="form-errors" ng-show="Form.value.$error && Form.$submitted" ng-messages="Form.value.$error">
+          <div class="form-error" ng-message="required"><b>กรุณากรอกจำนวนผลผลิต</b></div>
+      </div>
+      <!--<div class="row">
+        <div class="col col-70">
+          <label class="item item-input item-stacked-label">
+           <span class="input-label">จำนวน</span>
+             <input type="number" name="value" placeholder="กรุณากรอกจำนวนผลผลิต">
+         </label>
+        </div>
+        <div class="col col-30">
+          <label class="item item-input item-stacked-label">
+           <span class="input-label">ต่อ</span>
+           <input type="number" name="nan" placeholder="หน่วยผลผลิต">
+         </label>
+        </div>
+    </div>-->
+
+    </ion-item>
+    <ion-item class="item area-card">
+      <h2 class="text-center">วันที่เก็บเกี่ยว</h2>
+    <!--  <input type="date" name="date"  ng-model="detail.deteend" value="{{detail.deteend | date:'yyyy-MM-dd'}}"required>-->
+    <label class="item item-input">
+      <!--<input type="date" ng-model="detail.deteend" name="deteend"  ng-value="{{detail.deteend | date:'yyyy-MM-dd'}}" required>-->
+
+      <input type="date"  ng-model="detail.dateend"  value="{{detail.dateend| date:'yyyy-MM-dd'}}">
+    </label>
+      <div class="form-errors" ng-show="Form.deteend.$error && Form.$submitted" ng-messages="Form.deteend.$error">
+          <div class="form-error" ng-message="required"><b>กรุณากรอกวันที่เก็บเกี่ยว</b></div>
+      </div>
+    </ion-item>
+    <ion-item>
+      <button type="summit" class="button button-full button-assertive" ng-if="crop.crop_status == 0">
+        อัพเดตข้อมูลสิ้นสุดการเพาะปลูกของแปลง{{crop.crop_name}}
+      </button>
+      <button type="summit" class="button button-full button-assertive" ng-if="crop.crop_status != 0">
+        สิ้นสุดการเพาะปลูกของแปลง{{crop.crop_name}}
+      </button>
+      <button type="button" class="button button-full button-positive" ng-click="sell({{crop.crop_id}})">
+        ขายผลผลิต
+      </button>
+    </ion-item>
+  </form>
+  </div>
+
   </div>
   </ion-content>
 

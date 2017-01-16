@@ -14,7 +14,8 @@
 			  <p>{{a.Seed}}</p>
 			</div>
 		</div>-->
-    <center ng-if="alert == ''"></br><h3>{{alert}}</h3></center>
+
+    <img class="full-image" src="img/add.gif" ng-if="alert == ''">
     <ion-list show-delete="shouldShowDelete" show-reorder="shouldShowReorder"  can-swipe="listCanSwipe">
 
       <ion-item ng-repeat="a in api" class="item-thumbnail-left"  ng-click="cropTimeline({{a.crop_id}})">

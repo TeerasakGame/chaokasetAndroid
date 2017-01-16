@@ -1,7 +1,7 @@
 {
-  "name": "chaokaset",
+  "name": "newchaokaset",
   "version": "1.1.1",
-  "description": "chaokaset: An Ionic project",
+  "description": "newChaokaset: An Ionic project",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",
@@ -20,23 +20,10 @@
     "cordova-plugin-whitelist",
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
-    "ionic-plugin-keyboard",
-    {
-      "locator": "https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git",
-      "id": "cordova-plugin-inappbrowser"
-    },
-    "cordova-plugin-camera",
-    "cordova-plugin-compat",
-    "cordova-plugin-file-transfer",
-    "cordova-plugin-file",
-    "cordova-plugin-geolocation"
+    "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
-    {
-      "platform": "android",
-      "version": "",
-      "locator": "android"
-    },
+    "ios",
     {
       "platform": "ios",
       "version": "",

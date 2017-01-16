@@ -1,6 +1,16 @@
+<form ng-submit="doSummit(Form)" name="Form" novalidate="">
+  <ion-header-bar class="bar bar-header bar-balanced" align-title="left">
+
+    <div class="buttons buttons-left header-item">
+      <span class="left-buttons">
+          <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+          </button>
+        </span>
+    </div>
+    <div class="title title-left header-item" style="left: 50px;">แก้ไขบัญชี</div>
+    </ion-header-bar>
 <ion-view view-title="แก้ไขบัญชี">
   <ion-content>
-    <form ng-submit="doSummit(Form)" name="Form" novalidate="">
     <div class="item item-toggle">
      สถานะ
      <label class="toggle">
@@ -14,7 +24,8 @@
       <div class="input-label">
         ประเภทบัญชี
       </div>
-      <select  name="select" data-ng-model="edit[0].cropa_type" ng-init="select={{edit[0].cropa_type}}">
+
+      <select  name="select" data-ng-model="edit[0].cropa_type" ng-init="select=edit[0].cropa_type">
         <option value="0">รายรับ</option>
         <option value="1">รายจ่าย</option>
       </select>
@@ -33,11 +44,8 @@
     <div class="form-errors" ng-show="Form.detail.$error && Form.$submitted" ng-messages="Form.detail.$error">
         <div class="form-error" ng-message="required"><b>กรุณากรอกรายละเอียด</b></div>
     </div>
-    <div id="footer" class="button-bar"  >
-      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close()">ยกเลิก</button>
-      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">แก้ไข</button>
-    </div>
-  </form>
+
+
     <!--<button class="button button-full button-stable" ng-click="summit()">
       <center>ยกเลิก</center>
     </button>
@@ -45,7 +53,16 @@
       <center>บันทึกบัญชี</center>
     </button>-->
   </ion-content>
+
+  <ion-footer-bar>
+    <div class="button-bar">
+      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close()">ยกเลิก</button>
+      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">แก้ไข</button>
+    </div>
+  </ion-footer-bar>
+
   <!--<ion-footer-bar  class="bar-positive" ng-click="summit()">
       <div class="title">บันทึกบัญชี</div>
   </ion-footer-bar>-->
 </ion-view>
+</form>

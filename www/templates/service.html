@@ -37,8 +37,8 @@
       <div class="item item-body">
         <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search" ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});"></div>
 
-        <ion-slide-box>
-          <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" height="250"></ion-slide>
+        <ion-slide-box ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
+          <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" ></ion-slide>
         </ion-slide-box>
 
         <p ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
@@ -66,9 +66,12 @@
 
 
 
+    <ion-infinite-scroll
+      on-infinite="loadMore()"
+      distance="1%">
+    </ion-infinite-scroll>
 
-
-    <div style="margin-bottom:10%;"><font color="white">5</font></div>
+    <!--<div style="margin-bottom:10%;"><font color="white">5</font></div>-->
   </ion-content>
 
   <ion-tabs class="tabs-icon-top tabs-background-stable tabs-color-balanced">
@@ -109,8 +112,8 @@
            <div class="item item-body">
              <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search" ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});"></div>
 
-             <ion-slide-box>
-               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" height="250px"></ion-slide>
+             <ion-slide-box ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
+               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" ></ion-slide>
              </ion-slide-box>
 
              <p ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
@@ -134,7 +137,10 @@
            </div>
 
          </div>
-
+         <ion-infinite-scroll
+           on-infinite="loadMore()"
+           distance="1%">
+         </ion-infinite-scroll>
        </ion-content>
      </ion-view>
     </ion-tab>
@@ -175,8 +181,8 @@
            <div class="item item-body">
              <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search" ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});"></div>
 
-             <ion-slide-box>
-               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" height="250px"></ion-slide>
+             <ion-slide-box ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
+               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" ></ion-slide>
              </ion-slide-box>
 
              <p ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
@@ -200,7 +206,10 @@
            </div>
 
          </div>
-
+         <ion-infinite-scroll
+           on-infinite="loadMore()"
+           distance="1%">
+         </ion-infinite-scroll>
        </ion-content>
      </ion-view>
     </ion-tab>
@@ -241,8 +250,8 @@
            <div class="item item-body">
              <div style="font-size:20px" ng-bind-html="p.product | searchfilter:search" ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});"></div>
 
-             <ion-slide-box>
-               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" height="250px"></ion-slide>
+             <ion-slide-box ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
+               <ion-slide ng-repeat="img in p.pic"><img class="full-image" src="{{'http://chaokaset.openservice.in.th/'+img.pprd_path}}" ></ion-slide>
              </ion-slide-box>
 
              <p ng-click="detail({{p.prd_id}},{{p.like}},{{p.comment}});">
@@ -266,7 +275,10 @@
            </div>
 
          </div>
-
+         <ion-infinite-scroll
+           on-infinite="loadMore()"
+           distance="1%">
+         </ion-infinite-scroll>
        </ion-content>
      </ion-view>
     </ion-tab>

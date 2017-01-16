@@ -1,7 +1,4 @@
-angular.module('MyApp.Directives', []);
-
-    angular.module('MyApp.Directives', [])
-    .directive("passwordVerify", function() {
+angular.module('MyApp.Directives2', []).directive("passwordVerify", function() {
    return {
       require: "ngModel",
       scope: {
@@ -10,6 +7,7 @@ angular.module('MyApp.Directives', []);
       link: function(scope, element, attrs, ctrl) {
         scope.$watch(function() {
             var combined;
+
             if (scope.passwordVerify || ctrl.$viewValue) {
                combined = scope.passwordVerify + '_' + ctrl.$viewValue;
             }
@@ -42,3 +40,41 @@ angular.module('MyApp.Directives', []).filter('searchfilter', function() {
 
         }
   })
+
+angular.module('MyApp.noSpecialChar', []).directive('noSpecialChar', function() {
+     return {
+       require: 'ngModel',
+       restrict: 'A',
+       link: function(scope, element, attrs, modelCtrl) {
+         modelCtrl.$parsers.push(function(inputValue) {
+           if (inputValue == null)
+             return ''
+           cleanInputValue = inputValue.replace(/[^a-zA-Z_0-9ก-๙]|^[0-9]/, '');
+           if (cleanInputValue != inputValue) {
+             modelCtrl.$setViewValue(cleanInputValue);
+             modelCtrl.$render();
+           }
+           return cleanInputValue;
+         });
+       }
+     }
+   });
+
+   angular.module('MyApp.number', []).directive('number', function() {
+        return {
+          require: 'ngModel',
+          restrict: 'A',
+          link: function(scope, element, attrs, modelCtrl) {
+            modelCtrl.$parsers.push(function(inputValue) {
+              if (inputValue == null)
+                return ''
+              cleanInputValue = inputValue.replace(/[^0-9]/gim, '');
+              if (cleanInputValue != inputValue) {
+                modelCtrl.$setViewValue(cleanInputValue);
+                modelCtrl.$render();
+              }
+              return cleanInputValue;
+            });
+          }
+        }
+      });

@@ -1,7 +1,18 @@
+<form ng-submit="doSummit(Form)" name="Form" novalidate="">
 <ion-view view-title="แก้ไขบันทึก">
-  <ion-content>
-    <form ng-submit="doSummit(Form)" name="Form" novalidate="">
+  <ion-header-bar class="bar bar-header bar-balanced" align-title="left">
 
+    <div class="buttons buttons-left header-item">
+      <span class="left-buttons">
+          <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+          </button>
+        </span>
+    </div>
+    <div class="title title-left header-item" style="left: 50px;">แก้ไขบันทึก</div>
+    </ion-header-bar>
+  <ion-content class="has-footer">
+
+<!--
     <label class="item item-input">
       <span class="input-label">วันที่เริ่ม</span>
       <input type="date" name="start" ng-model="note.start_date" required>
@@ -17,7 +28,7 @@
     <div class="form-errors" ng-show="Form.end.$error && Form.$submitted" ng-messages="Form.end.$error">
         <div class="form-error" ng-message="required"><b>กรุณาเลือกวันที่สิ้นสุด</b></div>
         <div class="form-error" ng-message="min"><b>กรุณาเลือกว้นสิ้นสุดที่มีค่ามากกว่าหรือเท่ากับวันเริ่มต้น</b></div>
-    </div>
+    </div>-->
 
     <label class="item item-input item-stacked-label">
       <span class="input-label">รายละเอียด</span>
@@ -26,12 +37,16 @@
     <div class="form-errors" ng-show="Form.detail.$error && Form.$submitted" ng-messages="Form.detail.$error">
         <div class="form-error" ng-message="required"><b>กรุณากรอกรายละเอียดของปัญหา</b></div>
     </div>
-{{note}}
-    <div class="bar bar-footer">
-      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
-      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
-    </div></form>
+
+
 
   </ion-content>
+  <ion-footer-bar>
+    <div class="button-bar">
+      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
+    </div>
+  </ion-footer-bar>
 
 </ion-view>
+  </form>

@@ -1,7 +1,13 @@
-<ion-view view-title="แก้ไขกิจกรรมการเพาะปลูก">
-
-  <ion-content style="margin-bottom:0px;" >
+<ion-view  view-title="แก้ไขกิจกรรมการเพาะปลูก">
+  <ion-header-bar class="bar bar-header bar-balanced" align-title="left"><button ng-click="$ionicGoBack()" class="button back-button hide buttons  button-clear header-item"><i class="icon ion-android-arrow-back"></i>
+    <span class="back-text"></span></button><div class="buttons buttons-left header-item"><span class="left-buttons">
+      <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+      </button>
+    </span></div><div class="title title-left header-item" style="left: 50px;">แก้ไขกิจกรรมการเพาะปลูก</div></ion-header-bar>
   <form ng-submit="doSummit(Form)" name="Form">
+  <ion-content>
+
+    <div class="list">
     <div class="item item-divider text-green">
       รายละเอียดกิจกรรม
     </div>
@@ -56,7 +62,7 @@
         </div>
       </div>
     </div>
-<div class="">
+
     <div ng-repeat="pic in images">
         <div class="row" ng-if="$even">
             <div class="col col-50">
@@ -78,20 +84,14 @@
         </div>
     </div>
   </div>
-  <!--  <div class="bar bar-footer" id="footer">
-      <button style="min-width: 50%;" class="button button-stable" ng-click="close();">ยกเลิก</button>
-      <button type="submit" style="min-width: 50%;"  class="button button-positive">บันทึก</button>
-    </div>-->
-  <!--<button type="submit"   class="button button-positive">บันทึก</button>-->
-  <div class="button-bar">
-     <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
-     <button  style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
 
-  </div>
-    </form>
-
-  <!-- </form>-->
   </ion-content>
+  <ion-footer-bar>
+    <div class="button-bar">
+      <button style="min-width: 50%;border-radius: 0px;" class="button button-stable" ng-click="close();">ยกเลิก</button>
+      <button type="submit" style="min-width: 50%;border-radius: 0px;"  class="button button-positive">บันทึก</button>
+    </div>
+  </ion-footer-bar>
+</form>
 
-
-</ion-view>
+</ion-view>-->

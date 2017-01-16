@@ -67,21 +67,21 @@
   <div class="item item-toggle">
    วันหมดอายุของสินค้า
    <label class="toggle">
-     <input type="checkbox" ng-model="product.status"  >
+     <input type="checkbox" ng-model="product.status" >
      <div class="track">
        <div class="handle"></div>
      </div>
    </label>
 </div>
 <label class="item item-input" ng-show="product.status == true">
-  <input type="date" ng-model="product.date" min="{{product.date | date:'yyyy-MM-dd'}}" value="{{product.date | date:'yyyy-MM-dd'}}" name="expire" required>
+  <input type="date" ng-model="product.date" min="{{product.date | date:'yyyy-MM-dd'}}" value="{{product.date | date:'yyyy-MM-dd'}}" name="expire" autofocus required>
 </label>
 <div class="form-errors" ng-show="Form.expire.$error && Form.$submitted" ng-messages="Form.expire.$error">
     <div class="form-error" ng-message="required"><b>กรุณากรอกวันหมดอายุ</b></div>
 </div>
 
 <div class="item item-divider text-green">
-  เบอร์ติดต่อ (ใส่ได้ 3 เบอร์)
+  เบอร์ติดต่อ
 </div>
 <label class="item item-input" data-ng-repeat="Tel in Tels">
   <span class="input-label">เบอร์โทรทัพท์</span>
