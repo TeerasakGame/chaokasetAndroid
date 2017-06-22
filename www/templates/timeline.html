@@ -1,6 +1,6 @@
 
 <ion-view view-title="รายละเอียดการเพาะปลูก">
-  <ion-content>
+  <ion-content class="ios">
     <ion-refresher
 	    pulling-text="อัพเดตข้อมูล"
 	    on-refresh="doRefresh()">
@@ -47,7 +47,7 @@
                 <h5 class="marginTop5 cd-author" style="margin-left:5px">{{activity.date}}</h5>
                 <div style="margin-left:5px" class="timelineText">{{activity.text}}</div>
                 <ion-gallery ion-gallery-items="activity.pic" ion-zoom-events="true" ng-if="activity.pic != null"></ion-gallery>
-              
+
               </div>
               </div>
             </div>

@@ -13,6 +13,7 @@
       <div class="form-errors" ng-show="myForm.username.$error && myForm.$submitted" ng-messages="myForm.username.$error">
           <div class="form-error" ng-message="required"><b>กรุณากรอกอีเมล</b></div>
           <div class="form-error" ng-message="email"><b>รูปแบบข้อมูลไม่ถูกต้อง เช่น test@test.com</b></div>
+
       </div>
       <label class="item item-input" ng-class="{ 'has-error-lr' : myForm.password.$invalid  && myForm.$submitted, 'valid-lr' : myForm.password.$valid  && myForm.$submitted}">
           <span class="input-label">รหัสผ่าน</span>

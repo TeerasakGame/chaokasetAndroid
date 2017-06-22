@@ -8,7 +8,7 @@
 
   <form ng-submit="doRegister(FormRegister)" name="FormRegister" novalidate="">
       <div class="pic-profile-container2">
-          <center><img class="pic-profile2" ng-src="{{img}}" ng-click="showDetail()"></center>
+          <center><img class="pic-profile2" ng-src="{{image}}" ng-click="showDetail()"></center>
       </div>
       <input type="hidden" name="pic" ng-model="pic" required>
       <div class="form-errors" ng-show="FormRegister.pic.$error && FormRegister.$submitted" ng-messages="FormRegister.pic.$error">

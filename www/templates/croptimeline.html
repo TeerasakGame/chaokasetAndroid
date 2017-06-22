@@ -1,5 +1,17 @@
-
 <ion-view view-title="แผนการเพาะปลูก">
+<style>
+  .popup{
+    width : 95% !important;
+    height: 90%;
+  }
+  .popup-body{
+  height: 100%;
+  }
+  iframe{
+    width: 100%;
+    height: 100%;
+  }
+</style>
   <nav mfb-menu position="br" resting-icon="ion-plus-round" active-icon="ion-close-round"  toggling-method="click" effect="slidein">
     <button mfb-button icon="ion-image timelineIcon" label="เพิ่มรูปภาพ" ng-click="addMul();"></button>
     <button mfb-button icon="ion-document timelineIcon" style="color:brown" label="เพิ่มบันทึก" ng-click="addNote();"></button>
@@ -25,7 +37,6 @@
         <option value="multimedia">รูปภาพ</option>
       </select>
     </label>
-
     <ion-scroll zooming="true" direction="y">
     <section  id="cd-timeline" class="cd-container">
       <div class="cd-timeline-block" >
@@ -44,8 +55,11 @@
                   </div>
                   <div class="col-10">
                     <div align="right" style="margin-top:-10px">
-                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                      <button ng-if="activity.status_show != 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
                         <i class="ion-chevron-down" style="color:gray;"></i>
+                      </button>
+                      <button ng-if="activity.status_show == 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                        <i class="ion-chevron-up" style="color:gray;"></i>
                       </button>
                     </div>
                   </div>
@@ -61,7 +75,7 @@
                    </button>
                  </a>-->
 
-                  <button class="button button-clear button-small button-positive" ng-click="openvdo(activity.vdo);" ng-if="activity.status_vdo=='true'">
+                <button class="button button-clear button-small button-positive" ng-if="activity.status_vdo=='true'" ng-click="showPopupVdo('{{activity.vdo}}','{{activity.title}}')">
                     <i class="ion-social-youtube" style="font-size: 25px;color:gray;"></i>
                   </button>
 
@@ -87,8 +101,11 @@
                   </div>
                   <div class="col-10">
                     <div align="right" style="margin-top:-10px">
-                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'account',activity.status_show,{{$index}});">
+                      <button ng-if="activity.status_show != 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
                         <i class="ion-chevron-down" style="color:gray;"></i>
+                      </button>
+                      <button ng-if="activity.status_show == 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                        <i class="ion-chevron-up" style="color:gray;"></i>
                       </button>
                     </div>
                   </div>
@@ -113,8 +130,11 @@
                   </div>
                   <div class="col-10">
                     <div align="right" style="margin-top:-10px">
-                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'problem',activity.status_show,{{$index}});">
+                      <button ng-if="activity.status_show != 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
                         <i class="ion-chevron-down" style="color:gray;"></i>
+                      </button>
+                      <button ng-if="activity.status_show == 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                        <i class="ion-chevron-up" style="color:gray;"></i>
                       </button>
                     </div>
                   </div>
@@ -141,8 +161,11 @@
                   </div>
                   <div class="col-10">
                     <div align="right" style="margin-top:-10px">
-                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'note',activity.status_show,{{$index}});">
+                      <button ng-if="activity.status_show != 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
                         <i class="ion-chevron-down" style="color:gray;"></i>
+                      </button>
+                      <button ng-if="activity.status_show == 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                        <i class="ion-chevron-up" style="color:gray;"></i>
                       </button>
                     </div>
                   </div>
@@ -167,8 +190,11 @@
                   </div>
                   <div class="col-10">
                     <div align="right" style="margin-top:-10px">
-                      <button class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'multimedia',activity.status_show,{{$index}});">
+                      <button ng-if="activity.status_show != 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
                         <i class="ion-chevron-down" style="color:gray;"></i>
+                      </button>
+                      <button ng-if="activity.status_show == 'true'" class="button button-clear button-small button-positive " ng-click="showDetail({{activity.id}},'plan',activity.status_show,{{$index}});">
+                        <i class="ion-chevron-up" style="color:gray;"></i>
                       </button>
                     </div>
                   </div>
@@ -181,19 +207,14 @@
               </div>
             </div>
 
-            <!--<div class="cd-timeline-block" ng-if="activity.data == 'note'">
-            <div class="list" >
-              <div class="cd-timeline-icon2 ">
-                <i class="ion-android-time timelineIcon royal"></i>
-              </div>
-              <div class="cd-timeline-content2">
-              </div>
-            </div>
-          </div>-->
+
+
+
 
 
 
           </div>
+
 
           <!--<div class="cd-timeline-block">
 
@@ -249,7 +270,21 @@
 
           </div>-->
 
+
+
       </div>
+
+      <div class="list" style="margin-top:-20px">
+        <div class="cd-timeline-icon2 assertive">
+          <i class="ion-flag timelineIcon assertive"></i>
+        </div>
+        <div class="cd-timeline-content2">
+        </div>
+      </div>
+
+    </div>
+
+
       </section >
     </ion-scroll>
     <div style="margin-bottom:10%;"><font color="white">5</font></div>

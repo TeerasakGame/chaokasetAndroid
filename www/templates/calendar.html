@@ -1,10 +1,19 @@
 <ion-view view-title="ปฎิทินการเพาะปลูก">
-  <ion-content>
+  <ion-content class="ios">
+    <label class="item item-input item-select">
+      <div class="input-label">
+        แปลงเพาะปลูก
+      </div>
+      <select ng-model="a.select" ng-init="select=ids" ng-change=update()>
+        <option value="">ทั้งหมด</option>
+        <option ng-repeat="c in crop" value="{{c.crop_id}}">{{c.crop_name}}</option>
+      </select>
+    </label>
 
-    <div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="eventCalendar" class="padding"></div>
+    <div ui-calendar="uiConfig.calendar"  ng-model="eventSources1" calendar="eventCalendar" class="padding"></div>
 
     <div class="row">
-      <div ng-class="class" ng-click="check('groth',$event);">
+      <div class="col">
         <i class="ion-android-checkbox-blank" style="color:#33CC33;"></i>  ระยะการเจริญเติบโต
       </div>
       <div class="col">
@@ -25,7 +34,6 @@
       </div>
       <div class="col">
       <i class="ion-android-checkbox-blank" style="color:#FF9933;"></i>  ระยะการระบาดของศัตรูพืช
-
       </div>
 
     </div>

@@ -291,6 +291,10 @@ Main components
   border-color: #8a6de9;
 }
 
+.red i {
+  border-color: red;
+}
+
 .royal i {
   color: #8a6de9;
 }

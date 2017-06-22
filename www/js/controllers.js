@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout,$cordovaGeolocation) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout,$cordovaGeolocation,$ionicPopup,$state) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -21,6 +21,33 @@ angular.module('starter.controllers', [])
     console.log("get gps "+localStorage.getItem('lat')+"/"+localStorage.getItem('long'));
    });
 
+   $scope.logout = function(){
+
+     var confirmPopup = $ionicPopup.confirm({
+       title: 'ออกจากระบบ',
+       template: 'คุณต้องการออกจากระบบ ?',
+       cancelText: 'ยกเลิก',
+       okText: 'ตกลง'
+     });
+
+     confirmPopup.then(function(res) {
+       if(res) {
+       //  alert('You are sure'+id)
+       localStorage.removeItem('name');
+       localStorage.removeItem('login');
+       localStorage.removeItem('pic');
+       localStorage.removeItem('id');
+       localStorage.removeItem('crop_id');
+       localStorage.removeItem('lat');
+       localStorage.removeItem('long');
+       $state.go("login");
+
+       } else {
+         console.log('You are not sure');
+       }
+     })
+   }
+
 
 
 })
@@ -35,18 +62,29 @@ angular.module('starter.controllers', [])
   })
 
   $scope.error="";
+  $scope.erroremail="";
   $scope.user = { username: '', password : ''};
 
   $scope.check = function(){
     var data = "email="+$scope.user.username;
+    if(data == "email=undefined"){
+      data = 'email=null';
+    }
     var ip = ip_server+'/index.php/services/checkemaillogin';
+    console.log(data);
     $http.post(ip, data, config)
       .success(function (data, status, headers, config) {
-        console.log(data.status);
-          if(data.status == true){
-            if(data.data == 1){
+        console.log(data);
+          if(data.status == true || data.status == 'true'){
+            if(data.data == 1 || data.data == '1'){
+              console.log("facebook");
               $scope.erroremail = "อีเมลนี้สมัครสมาชิกผ่าน facebook กรุณาเข้าสู่ระบบด้วย facebook";
+            }else{
+              console.log("no");
+              $scope.erroremail = '';
             }
+          }else {
+            $scope.erroremail = '';
           }
       })
       .error(function (data, status, header, config) {
@@ -118,7 +156,7 @@ angular.module('starter.controllers', [])
                     alert($scope.error);
                 });
             },function(error) {
-              alert("error API : "+JSON.stringify(error));
+              //alert("error API : "+JSON.stringify(error));
             });
         }, function(error) {
             alert(error);
@@ -292,7 +330,6 @@ console.log("crop");
            $scope.api = data.data;
             console.log($scope.api);
            if( $scope.api == '' ||  $scope.api == null){
-
              $scope.alert = "";
            }
        })
@@ -385,24 +422,44 @@ console.log("crop");
     })
   };
 
-
-
-
 })
 
-.controller('LogoutCtrl', function($state) {
-   alert("logout");
-   localStorage.removeItem('name');
-   localStorage.removeItem('login');
-   localStorage.removeItem('pic');
-   localStorage.removeItem('id');
-   localStorage.removeItem('crop_id');
-   localStorage.removeItem('lat');
-   localStorage.removeItem('long');
-   $state.go("login");
+.controller('LogoutCtrl', function($state,$ionicPopup,$scope) {
+  //$scope.$on('$ionicView.beforeEnter', function(){
+  $scope.logout = function(){
+
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'ออกจากระบบ',
+      template: 'คุณต้องการออกจากระบบ ?',
+      cancelText: 'ยกเลิก',
+      okText: 'ตกลง'
+    });
+
+    confirmPopup.then(function(res) {
+      if(res) {
+      //  alert('You are sure'+id)
+      localStorage.removeItem('name');
+      localStorage.removeItem('login');
+      localStorage.removeItem('pic');
+      localStorage.removeItem('id');
+      localStorage.removeItem('crop_id');
+      localStorage.removeItem('lat');
+      localStorage.removeItem('long');
+      $state.go("login");
+
+      } else {
+        console.log('You are not sure');
+      }
+    })
+
+
+};
+   //alert("logout");
+
 })
 
 .controller('AddCropCtrl',function($state,$ionicModal,$scope,$cordovaGeolocation,$http,$ionicLoading,$ionicHistory,$ionicPlatform){
+  $scope.path = ip_server;
   $scope.$on('$ionicView.beforeEnter', function(){
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กำลังค้นหาพิกัดที่อยู่'
@@ -484,7 +541,48 @@ console.log("crop");
     $ionicLoading.show({
       template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
     });
-    var options = {timeout: 10000, enableHighAccuracy: true};
+
+    var lat = $scope.lat
+    var long = $scope.long;
+    var latLng = new google.maps.LatLng(lat,long);
+
+    var mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    var marker = new google.maps.Marker({
+        map: map,
+        animation: google.maps.Animation.DROP,
+        position: latLng
+    });
+
+    var infoWindow = new google.maps.InfoWindow({
+        content: "คุณอยู่ที่นี่ !"
+    });
+    infoWindow.open(map, marker);
+    $scope.click_map = function(){
+        google.maps.event.addListenerOnce(map,"click",function(position){
+          marker.setMap(null);
+          marker = new google.maps.Marker({
+            map : map,
+            anitmation : google.maps.Animation.DROP,
+            position : position.latLng
+          });
+          map.panTo(position.latLng);
+          $scope.lat = position.latLng.lat();
+          $scope.long = position.latLng.lng();
+          $scope.location = $scope.lat +"  "+$scope.long ;
+          $http.get(ip_server+'/index.php/services/getnamelatlng/'+$scope.lat+"/"+$scope.long).then(function(res){
+            $scope.namelatlong = res.data;
+          });
+        });
+      }
+    $ionicLoading.hide();
+
+  /*  var options = {timeout: 10000, enableHighAccuracy: true};
 
     $cordovaGeolocation.getCurrentPosition(options).then(function(position){
       var lat = position.coords.latitude;
@@ -496,7 +594,7 @@ console.log("crop");
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
-      //$scope.map = v2.map;
+
       var map = new google.maps.Map(document.getElementById("map"), mapOptions);
       var marker = new google.maps.Marker({
           map: map,
@@ -529,7 +627,7 @@ console.log("crop");
     }, function(error){
       console.log("Could not get location");
       alert("กรุณาเปิด GPS");
-    });
+    });*/
 
   };
 
@@ -620,9 +718,11 @@ console.log("seve");
 })
 
 .controller('CropTimelineCtrl',function($ionicPlatform,$scope,$state,$http,$ionicActionSheet,$cordovaImagePicker,$filter,$cordovaFileTransfer,$ionicLoading,$cordovaCamera,$ionicPopup,$window){
+
   $ionicPlatform.registerBackButtonAction(function (event) {
     $state.go("app.crop");
   }, 100);
+
   $scope.$on('$ionicView.beforeEnter', function(){
     $ionicLoading.show({
            template: '<ion-spinner icon="android"></ion-spinner> กรุณารอสักครู่'
@@ -644,10 +744,14 @@ console.log("seve");
          alert($scope.error);
      });
 });
+
+
    $scope.addActivities = function(){
      console.log("add Act");
      $state.go("app.addActivities");
    };
+
+
 
    $scope.addAccount = function(){
      $state.go("app.addAccount");
@@ -900,6 +1004,22 @@ console.log("seve");
     });
 
   }
+
+  $scope.showPopupVdo = function(src,title) {
+  //  alert(src);
+    var vdo = '<iframe src="'+src+'" frameborder="0" allowfullscreen> </iframe>';
+    var myPopup = $ionicPopup.show({
+      template: vdo,
+      title: 'วิดิโอความรู้',
+      subTitle: title,
+      scope: $scope,
+      buttons: [
+        { text: 'ออก' },
+
+      ]
+    });
+
+ };
 
 
 
@@ -2164,25 +2284,41 @@ $scope.images =[];
 
 })
 
-.controller('CalendarCtrl', function($ionicSideMenuDelegate,$ionicHistory,$ionicPlatform,$state,$scope,$compile,$http,$ionicPopup,uiCalendarConfig,$cordovaCalendar) {
-
+.controller('CalendarCtrl', function($ionicPlatform,$state,$scope,$http,uiCalendarConfig,$cordovaCalendar,$ionicPopup) {
+  $scope.a = {select:'',data:[]};
   $ionicPlatform.registerBackButtonAction(function (event) {
     $state.go("app.crop");
   }, 100);
 
-//  $scope.$on('$ionicView.enter', function () {
-  //  var date = new Date();
+  var data = "use_id="+localStorage.getItem('id');
+  var ip = ip_server+'/index.php/services/getcrop';
+   $http.post(ip, data, config).success(function (data, status, headers, config) {
+       if(data.status == false){
+         $scope.data = "ไม่มีข้อมูล";
+       }else{
+         $scope.crop = data.data;
+      }
+     }).error(function (data, status, header, config) {
+         console.log(" error");
+         $scope.error = "ติดต่อ server ไม่ได้";
+         alert($scope.error);
+     });
 
-    $scope.eventSource1 = {
-        url: ip_server+'/index.php/services/getcalender2/'+localStorage.getItem('id'),
-     };
-    // alert(JSON.stringify($scope.eventSource1));
 
 
-$scope.eventSources = [$scope.eventSource1];
+    $scope.eventSource2 = {
+       url: ip_server+'/index.php/services/getcalender2/'+localStorage.getItem('id'),
+    };
+    $scope.eventSources1 = [];
+
+    $scope.eventSources1.push($scope.eventSource2);
+
+    /* config object */
+
+
+
   $scope.alertOnEventClick = function( date, jsEvent, view){
-  //  $scope.alertMessage = (date.title);
-    //alert($scope.alertMessage+"  "+date.start+' '+date.end);
+  //  alert("ssssss");
     if(date.detail==''){
       var detail= 'ไม่มี';
     }else {
@@ -2193,112 +2329,76 @@ $scope.eventSources = [$scope.eventSource1];
     $scope.detail = date.detail;
     $scope.start = date.start;
     $scope.end = date.end;
-    //alert($scope.start+" "+$scope.end);
 
-  /*  var alertPopup = $ionicPopup.alert({
-     title: '<i class="ion-android-pin" style="font-size: 20px;color:#FF0080;"></i>   <font size="4">'+date.name_crop+'</font></br>',
-     template: 'กิจกรรม : '+date.title+'</br> <p>รายละเอียด : '+detail+'</p>',
-     okText: 'ตกลง',
-   });
+    var confirmPopup = $ionicPopup.confirm({
+      title: '<i class="ion-android-pin" style="font-size: 20px;color:#FF0080;"></i>   <font size="4">'+date.name_crop+'</font></br>',
+      template: 'กิจกรรม : '+date.title+'</br> <p>รายละเอียด : '+detail+'</p>',
+      cancelText: 'ยกเลิก',
+      okText: 'เพิ่มในปฏิทิน'
+    });
 
-   alertPopup.then(function(res) {
-     console.log('Thank you for not eating my delicious ice cream cone');
-   });*/
-
-
-  var confirmPopup = $ionicPopup.confirm({
-    title: '<i class="ion-android-pin" style="font-size: 20px;color:#FF0080;"></i>   <font size="4">'+date.name_crop+'</font></br>',
-    template: 'กิจกรรม : '+date.title+'</br> <p>รายละเอียด : '+detail+'</p>',
-    cancelText: 'ยกเลิก',
-    okText: 'เพิ่มในปฏิทิน'
-  });
-
-  confirmPopup.then(function(res) {
-    if(res) {
-      //alert('ddd '+$scope.title);
-      console.log('You are sure');
-      console.log($scope.title+" "+$scope.start+" "+$scope.end);
-      $cordovaCalendar.createEvent({
-      title: $scope.title ,
-      location: $scope.name,
-      notes: $scope.detail,
-      startDate:  new Date($scope.start),
-      endDate: new Date($scope.end),
-      }).then(function (result) {
-        // success
-        alert("เพิ่มลงในปฏิทินเรียบร้อยแล้ว");
-      }, function (err) {
-        // error
-        console.log("not createEvent");
-        alert(err);
-      });
-    } else {
-      console.log('You are not sure');
-    }
-  });
+    confirmPopup.then(function(res) {
+      if(res) {
+        //alert('ddd '+$scope.title);
+        console.log('You are sure');
+        console.log($scope.title+" "+$scope.start+" "+$scope.end);
+        $cordovaCalendar.createEvent({
+        title: $scope.title ,
+        location: $scope.name,
+        notes: $scope.detail,
+        startDate:  new Date($scope.start),
+        endDate: new Date($scope.end),
+        }).then(function (result) {
+          alert("เพิ่มลงในปฏิทินเรียบร้อยแล้ว");
+        }, function (err) {
+          // error
+          console.log("not createEvent");
+          alert(err);
+        });
+      } else {
+        console.log('You are not sure');
+      }
+    });
 
 
   };
 
-  /* config object */
   $scope.uiConfig = {
     calendar:{
-      height: 500,
+      editable: true,
+      height: 550,
       editable: true,
       header:{
         left: 'title',
         center: '',
         right: 'today prev,next'
       },
-      eventClick: $scope.alertOnEventClick,
       lang: 'th',
+      eventClick: $scope.alertOnEventClick,
     }
   };
 
-   /* event sources array*/
-
-
-  $scope.class = 'col';
-  $scope.check = function(type,$event){
-    var classList = $event.target.className.split(/\s+/);
-  //  alert(classList[1]);
-  console.log(classList[1]);
-    if(classList[1] == 'text-gray'){
-      console.log('ok');
-      //var myEl = angular.element( document.querySelector($event ) );
-      $scope.class = 'col';
-    }else{
-      $scope.class = 'col text-gray';
-      console.log('change');
-      angular.forEach($scope.eventSource1, function(value, key) {
-        //this.push(key + ': ' + value);
-        console.log(key + ': ' + value);
-        //if($scope.eventSources[key]['type'] == 1){
-          //$scope.eventSources.splice(key,1);
-          //console.log('del');
-          $scope.events.splice(key,1);
-        //}
-      });
-    }
-  }
-
   $scope.addcalendar = function(){
-    //alert('ok');
     var url = ip_server+'/index.php/services/getcalender2/'+localStorage.getItem('id');
     $http.get(url).then(function(response) {
       alert(JSON.stringify(response.data))
     })
-  /*  $cordovaCalendar.createEvent({
-    title: 'Space Race',
-    location: 'The Moon',
-    notes: 'Bring sandwiches',
-    startDate: new Date(2015, 0, 6, 18, 30, 0, 0, 0),
-    endDate: new Date(2015, 1, 6, 12, 0, 0, 0, 0)
-    }).then(function (result) {
-      // success
-    }, function (err) {
-      // error
-    });*/
+  }
+
+
+  $scope.update = function(){
+    var id = $scope.a.select;
+    if(id == ''){
+      id = '';
+    }else{
+      id = '/'+id;
+    }
+    $scope.eventSourceNew = {
+       url: ip_server+'/index.php/services/getcalender2/'+localStorage.getItem('id')+id,
+    };
+
+    $scope.eventSources1.splice(0,$scope.eventSources1.length)
+    $scope.eventSources1.push($scope.eventSourceNew)
   }
 
 })
@@ -2626,9 +2726,9 @@ $scope.count = null;
 
   $scope.close = function(){
     if($stateParams.id != null || $stateParams.id != ''){
-      $state.go("app.tab.cropDetail");
-    }else{
       $state.go("app.product");
+    }else{
+      $state.go("app.tab.cropDetail");
     }
 
   }
@@ -4160,7 +4260,7 @@ $scope.map_name = "กำหนดพื้นที่";
 
 })
 
-.controller('ProfileCtrl', function($scope,$ionicLoading,$http,$cordovaCamera,$ionicActionSheet,$state,$cordovaToast){
+.controller('ProfileCtrl', function($scope,$ionicLoading,$http,$cordovaCamera,$ionicActionSheet,$state,$cordovaToast,$cordovaFileTransfer){
   //$scope.register = { };
   $scope.Tels = [];
   $scope.$on('$ionicView.beforeEnter', function(){
@@ -4175,7 +4275,8 @@ $scope.map_name = "กำหนดพื้นที่";
    $http.post(ip, data, config)
      .success(function (data, status, headers, config) {
          $scope.profile = data.data['profile'];
-         $scope.img = ip_server+$scope.profile[0]['use_pic']
+         //$scope.ip = ip_server;
+         $scope.image = ip_server+$scope.profile[0]['use_pic']
          $scope.Tel = data.data['tel'];
          $scope.register = { name: $scope.profile[0]['use_name'], lname : $scope.profile[0]['use_lname'],email:$scope.profile[0]['use_email'],password:''};
          var i=0;
@@ -4238,10 +4339,11 @@ $scope.map_name = "กำหนดพื้นที่";
 
                    }
                $cordovaCamera.getPicture(options).then(function(imageData){
+                 $scope.getpic = true;
                  $scope.image = imageData;
                  $scope.pic = imageData;
                },function(err){
-
+                 $scope.getpic = false;
                });
                break;
              case 1:
@@ -4260,10 +4362,12 @@ $scope.map_name = "กำหนดพื้นที่";
 
                  $cordovaCamera.getPicture(options).then(function(imageData) {
                  var image = document.getElementById('myImage');
+                 $scope.getpic = true;
                  $scope.image = imageData;
                  $scope.pic = imageData;
                  }, function(err) {
                  // error
+                   $scope.getpic = false;
                  });
                break;
            }
@@ -4290,8 +4394,35 @@ $scope.map_name = "กำหนดพื้นที่";
        console.log(ip);
         $http.post(ip, data, config).success(function (data, status, headers, config) {
           localStorage.setItem('name',$scope.register.name+" "+$scope.register.lname);
-          $cordovaToast.showLongBottom('อัพเดตข้อมูลส่วนตัวเรียบร้อยแล้ว')
-          $state.go("app.crop");
+          if($scope.getpic == true || $scope.getpic == 'true'){
+            var options = {
+                    fileKey: "file",
+                    fileName: "image.jpg",
+                    chunkedMode: false,
+                    mimeType: "image/jpg",
+                    headers:{'headerParam':'headerValue'},
+                    httpMethod:"POST",
+                    params : {'id':$scope.use_id}
+                };
+            var server = ip_server+"/upload/profile/upload.php";
+            var filePath = $scope.pic;
+            $cordovaFileTransfer.upload(encodeURI(server), filePath, options)
+                .then(function(result) {
+                  // Success!
+                  localStorage.setItem('pic','/upload/profile/profile_'+$scope.use_id+'.jpg');
+                  console.log(localStorage.getItem('pic'));
+                  $cordovaToast.showLongBottom('อัพเดตข้อมูลส่วนตัวเรียบร้อยแล้ว')
+                  $state.go("app.crop");
+                }), function(err) {
+                  // Error
+                  $cordovaToast.showLongBottom('กรุณาอัพเดตข้อมูลส่วนตัวใหม่อีกครั้ง')
+                //  alert("ERROR : "+JSON.stringify(err));
+                }
+          }else{
+            $cordovaToast.showLongBottom('อัพเดตข้อมูลส่วนตัวเรียบร้อยแล้ว')
+            $state.go("app.crop");
+          }
+
         }).error(function (data, status, header, config) {
               console.log("login error");
               $scope.error = "ติดต่อ server ไม่ได้";
@@ -4352,6 +4483,11 @@ $scope.map_name = "กำหนดพื้นที่";
   $scope.close = function(){
      $state.go("app.profile");
   }
+
+})
+
+.controller('VdoCtrl', function($scope) {
+
 
 })
 

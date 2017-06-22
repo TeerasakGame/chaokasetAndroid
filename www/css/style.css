@@ -259,3 +259,7 @@ label.item.valid-lr {
   border-bottom: 3px solid transparent;
   border-top: 3px solid #79A70A;
 }
+
+.ios {
+  margin-top:4%;
+}

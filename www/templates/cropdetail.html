@@ -1,14 +1,14 @@
 <ion-view view-title="ภาพรวมการเพาะปลูก">
 
-  <ion-content>
+  <ion-content class="">
     <div class="list">
     <ion-item class="item">
       <h1 class="text-center text-nameCrop">{{crop.crop_name}}</h1>
       <center><h2 class="text-center">{{crop.plat_name}} {{crop.seed_name}}</h2></center>
-      <div class="col col-bottom">
+      <div class="col col-bottom" ng-if="plan.ptem_pic != ''">
         <center><img src="{{'http://chaokaset.openservice.in.th/' + plan.ptem_pic}}" width="150px" height="150px" ></center>
       </div>
-      <center><h2 class="text-center">{{plan.ptem_name}}</h2></center>
+      <center><h2 class="text-center assertive">{{plan.ptem_name}}</h2></center>
     </ion-item>
 
     <ion-item class="item area-card">

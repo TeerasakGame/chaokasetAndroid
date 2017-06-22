@@ -1,7 +1,7 @@
 <ion-view view-title="จัดการแปลงเพาะปลูก">
 
 
-  <ion-content>
+  <ion-content class="ios">
   	<ion-refresher
 	    pulling-text="อัพเดตข้อมูล"
 	    on-refresh="doRefresh()">
@@ -19,8 +19,9 @@
     <ion-list show-delete="shouldShowDelete" show-reorder="shouldShowReorder"  can-swipe="listCanSwipe">
 
       <ion-item ng-repeat="a in api" class="item-thumbnail-left"  ng-click="cropTimeline({{a.crop_id}})">
-        <img ng-if="a.seed_id == 1 || a.seed_id == 2" ng-src="img/wheat.png">
-        <img ng-if="a.seed_id == 3 " ng-src="img/bamboo.png">
+        <!--<img ng-if="a.plat_pic === '' || a.plat_pic === 'null'" ng-src="img/leaf.png">-->
+        <img ng-if="a.plat_pic !== '' || a.plat_pic !== 'null' " ng-src="{{'http://chaokaset.openservice.in.th/'+a.plat_pic}}">
+
         <h2>{{a.crop_name}}</h2>
         <p>{{a.plat_name}}</p>
         <p>{{a.seed_name}}</p>

@@ -25,7 +25,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
+  $ionicConfigProvider.tabs.position("top");
+  //StatusBar.overlaysWebView(false)
   $stateProvider
 
   .state('app', {
@@ -61,6 +63,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
   })
 
   .state('logout',{
+    cache: true,
       url: '/logout',
       controller: 'LogoutCtrl'
   })
@@ -471,6 +474,16 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordovaOauth','ngCo
     url: "/tab",
     abstract: true,
     templateUrl: "templates/menuproduct.html"
+  })
+
+  .state('app.vdo', {
+    url: '/vdo/:id',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/vdo.html',
+        controller: 'VdoCtrl'
+      }
+    }
   })
 
   .state('app.browse', {
